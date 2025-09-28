@@ -2,13 +2,16 @@
 
 Informações básicas do projeto.
 
-* **Projeto:** [NOME DO PROJETO]
-* **Repositório GitHub:** [LINK PARA O REPOSITÓRIO NO GITHUB]
+* **Projeto:** [FizcalizaPlus]
+* **Repositório GitHub:** [https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus]
 * **Membros da equipe:**
 
-  * [Fulano](https://github.com/fulano) ⚠️ EXEMPLO ⚠️
-  * [Beltrano](https://github.com/beltrano) ⚠️ EXEMPLO ⚠️
-  * [Cicrano](https://github.com/cicrano) ⚠️ EXEMPLO ⚠️
+  * [Ítalo Eduardo Carneiro da Silva](https://github.com/italocnr)
+  * [Luiz Rithiely Barbosa Silva](https://github.com/Luiz-Rithiely)
+  * [Vinicius Gabriel Vaz Lomba](https://github.com/viniciusgvaz)
+  * [Ulisses Miguel de Freitas Gonçalves](https://github.com/ulissesgoncalvess)
+  * [Bernardo Prado](https://github.com/Bzinnnn)
+  * [João Paulo Aguiar Prado](https://github.com/jotaaguiar)
 
 A documentação do projeto é estruturada da seguinte forma:
 
@@ -28,90 +31,61 @@ Detalhes sobre o espaço de problema, os objetivos do projeto, sua justificativa
 
 ## Problema
 
-**✳️✳️✳️ COLOQUE AQUI O SEU TEXTO ✳️✳️✳️**
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Nesse momento você deve apresentar o problema que a sua aplicação deve resolver. No entanto, não é a hora de comentar sobre a aplicação. Descreva também o contexto em que essa aplicação será usada, se houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de fato existir, pois ainda não é a hora de apresentar requisitos detalhados ou projetos.
->
-> **Orientações**:
->
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+As más condições das vias públicas constituem um problema recorrente na sociedade brasileira. Buracos, trincas, sinalização deficiente, faixas de pedestres comprometidas e falta de acessibilidade para pessoas com necessidades específicas são exemplos frequentemente observados por pedestres, motoristas e ciclistas. Esse cenário gera impactos significativos na vida dos cidadãos, como a sensação de insegurança, a maior frequência de manutenções em veículos, as dificuldades de mobilidade e acessibilidade, o aumento no risco de acidentes de trânsito e até mesmo a vulnerabilidade em situações de furtos.
+Um dos principais desafios é a ausência de canais claros e eficientes de comunicação entre a população e os órgãos públicos responsáveis. Muitas vezes, os cidadãos não sabem como notificar os problemas ou acreditam que, mesmo realizando a notificação, não terão retorno ou solução. Soma-se a isso a falta de transparência na gestão e na execução das manutenções. Portanto, é necessário buscar soluções inovadoras que possibilitem maior eficiência, segurança, transparência e participação social na resolução dessa problemática.
 
 ## Objetivos
 
-**✳️✳️✳️ COLOQUE AQUI O SEU TEXTO ✳️✳️✳️**
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
->
-> **Orientações**:
->
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+O objetivo central deste projeto é desenvolver uma plataforma digital inovadora que possibilite a comunicação direta e transparente entre os cidadãos e os órgãos públicos responsáveis pela manutenção das vias urbanas. A solução busca atuar como um canal oficial e acessível para o registro, acompanhamento e gestão de ocorrências relacionadas a problemas de infraestrutura viária, como buracos, falhas na sinalização, falta de acessibilidade e demais situações que comprometam a segurança e a mobilidade.
+De forma mais detalhada, o projeto visa facilitar a participação cidadã por meio de uma ferramenta intuitiva que permita o registro de problemas de forma simples, rápida e georreferenciada. Também pretende ampliar a transparência e a confiança ao possibilitar que o cidadão acompanhe em tempo real o andamento das solicitações e das ações tomadas pelos órgãos competentes. Além disso, o sistema deverá auxiliar na tomada de decisão dos gestores públicos, disponibilizando relatórios e estatísticas que permitam priorizar manutenções com base em critérios técnicos e demandas da população. Outro objetivo importante é contribuir para a redução de acidentes e prejuízos, garantindo que problemas estruturais sejam resolvidos com maior agilidade. A plataforma ainda deve promover inclusão e acessibilidade, oferecendo recursos que permitam a participação de pessoas com deficiência, além de fomentar a cidadania ativa e incentivar a colaboração da sociedade na melhoria do espaço urbano.
 
 ## Justificativa
 
-**✳️✳️✳️ COLOQUE AQUI O SEU TEXTO ✳️✳️✳️**
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
->
-> O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
->
-> **Orientações**:
->
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+A implementação do software justifica-se pela necessidade urgente de enfrentar a problemática apresentada. De acordo com a Pesquisa CNT de Rodovias 2023, divulgada em 29 de novembro de 2023 pela Confederação Nacional do Transporte (CNT), 67,5% das rodovias brasileiras encontram-se em más condições de conservação. Esse dado evidencia a gravidade da situação e reforça a importância de buscar soluções inovadoras e tecnológicas que contribuam para melhorar a infraestrutura viária.
+As más condições das vias públicas não apenas comprometem a mobilidade urbana, mas também impactam diretamente na segurança, na acessibilidade, nos custos de transporte e na qualidade de vida dos cidadãos. Além disso, influenciam na percepção da população em relação à eficiência da gestão pública. Nesse contexto, o desenvolvimento de um software que facilite a comunicação entre sociedade e órgãos responsáveis representa uma alternativa estratégica para aumentar a transparência, a agilidade na resolução de problemas e a confiança da população nos serviços prestados.
 
 ## Público-Alvo
 
-**✳️✳️✳️ COLOQUE AQUI O SEU TEXTO ✳️✳️✳️**
+O sistema foi pensado para atender pessoas que convivem todos os dias com as más condições das vias públicas e que sentem, de maneira direta, os impactos disso em sua rotina. Esse público é bastante variado, mas todos compartilham o mesmo desejo: se locomover com mais segurança, rapidez e tranquilidade pela cidade.
+Entre os usuários estão motoristas de carros, motociclistas, ciclistas e pedestres. Em geral, já utilizam aplicativos de mobilidade como Waze, Google Maps e WhatsApp, e possuem facilidade em lidar com tecnologias simples no celular. Para eles, a grande expectativa é poder registrar problemas de forma rápida, sem burocracia, e ter a certeza de que sua reclamação não ficará esquecida.
+Outro grupo essencial são os profissionais que dependem da estrada para trabalhar: motoristas de aplicativo, caminhoneiros e motoristas de ônibus. No dia a dia, eles não podem perder tempo com processos complicados, pois trabalham sob pressão de prazos e precisam garantir a segurança de passageiros ou cargas. Para esse público, a solução representa uma forma de evitar atrasos, reduzir prejuízos e trabalhar com mais confiança.
+Além dos cidadãos, também é importante considerar os gestores públicos e as equipes de manutenção. Hoje, esses profissionais enfrentam dificuldades para organizar informações, priorizar as demandas mais urgentes e dar respostas rápidas à população. O sistema surge como uma ferramenta que facilita o trabalho, organiza dados em um só lugar e ajuda na prestação de contas de forma mais transparente.
+Por último, existem ainda os atores indiretos, como associações de bairro, sindicatos de transporte, ONGs ligadas à mobilidade e até a imprensa local. Eles podem não usar o sistema diretamente, mas exercem forte influência, dando visibilidade aos problemas e pressionando por melhorias.
+Em resumo, o público-alvo da solução vai do cidadão comum até o gestor público, passando pelos profissionais do transporte. Cada um deles se relaciona de forma diferente com a tecnologia, mas todos compartilham a mesma necessidade: ter um canal confiável para relatar problemas, acompanhar o andamento dos reparos e contribuir para uma cidade mais segura e eficiente
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Descreva o mercado para o qual a solução está sendo desenvolvida, detalhando um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações hierárquicas, etc. Adicione informações sobre o público-alvo por meio de uma descrição textual ou por meio do mapa de stakeholders, ou como o grupo achar mais conveniente.
->
-> **Orientações**:
->
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
 
 # Product Discovery
 
 ## Etapa de Entendimento
 
-**✳️✳️✳️ APRESENTE OS ARTEFATOS DA ETAPA  ✳️✳️✳️**
+## Matriz CSD
+![Matriz CSD](images/matriz_csd.png)
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Nessa etapa, vamos trabalhar com a metdologia de Design Thinking para compreender com maior profundidade o problema a ser tratado. Nesse processo, vamos elaborar:
->
-> * **Matriz CSD**: também conhecida por Matriz de Alinhamento, é uma ferramenta utilizada no Design Thinking para organizar informações e facilitar o processo de tomada de decisão e solução de problemas;
-> * **Mapa de stakeholders**: ferramenta que nos permite compreender o grupo de pessoas e entidades que devemos estudar e conversar para entender mais sobre o problema
-> * **Entrevistas qualitativas**: série de entrevistas qualitativas para validar suposições e solucionar as dúvidas com as principais pessoas envolvidas;
-> * **Highlights de pesquisa**: um compilado do levantamento realizado por meio das entrevistas.
+## Mapa de stakeholders
+![Mapa de stakeholders](images/mapa_stakeholders.png)
+
+## Entrevistas qualitativas
+![Entrevistas qualitativas](images/entrevistas_qualitativas.png)
+
+## Highlights de pesquisa
+![Highlights de pesquisa](images/highlights_de_pesquisa.png)
+
 
 ## Etapa de Definição
 
 ### Personas
 
-**✳️✳️✳️ APRESENTE OS DIAGRAMAS DE PERSONAS ✳️✳️✳️**
+| Persona 1 | Persona 2 |
+| --------- | --------- |
+| ![Persona1](images/persona_aldair_junior.png)| ![Persona2](images/persona_maria_souza.png) |
 
-![Exemplo de proposta de valor](images/exemplo-persona.png)
+| Persona 3 | Persona 4 |
+| --------- | --------- |
+| ![Persona3](images/persona_pedro_almeida.png)| ![Persona4](images/persona_geraldo_teixeira.png) |
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Relacione as personas identificadas no seu projeto e os respectivos mapas de empatia. Lembre-se que você deve ser enumerar e descrever precisamente e de forma personalizada todos os principais envolvidos com a solução almeja.
->
-> **Orientações**:
->
-> - [Persona x Público-alvo](https://flammo.com.br/blog/persona-e-publico-alvo-qual-a-diferenca/)
-> - [O que é persona?](https://resultadosdigitais.com.br/blog/persona-o-que-e/)
-> - [Rock Content](https://rockcontent.com/blog/personas/)
-> - [Criar personas (Hotmart)](https://blog.hotmart.com/pt-br/como-criar-persona-negocio/)
+| Persona 5 | Persona 6 |
+| --------- | --------- |
+| ![Persona5](images/persona_ana_paula.png) | ![Persona6](images/persona_gustavo_oliveira.png) |
 
 # Product Design
 
@@ -123,29 +97,37 @@ Com base na análise das personas foram identificadas as seguintes histórias de
 
 | EU COMO...`PERSONA` | QUERO/PRECISO ...`FUNCIONALIDADE`        | PARA ...`MOTIVO/VALOR`               |
 | --------------------- | ------------------------------------------ | -------------------------------------- |
-| Usuário do sistema   | Registrar minhas tarefas ⚠️ EXEMPLO ⚠️ | Não esquecer de fazê-las             |
-| Administrador         | Alterar permissões ⚠️ EXEMPLO ⚠️      | Permitir que possam administrar contas |
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão das necessidades de cada persona. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
->
-> **Orientações**:
->
-> - [Histórias de usuários com exemplos e template](https://www.atlassian.com/br/agile/project-management/user-stories)
-> - [Como escrever boas histórias de usuário (User Stories)](https://medium.com/vertice/como-escrever-boas-users-stories-hist%C3%B3rias-de-usu%C3%A1rios-b29c75043fac)
+| Usuário:  Pedro Almeida - (Design Gráfico e ciclista)  | Registrar e compartilhar informações sobre buracos, falta de ciclo faixas e outros riscos que comprometem o meu trajeto diária. | Eu e outros ciclistas possamos pedalar com mais segurança |
+| Usuário: Pedro Almeida - (Design Gráfico e ciclista)  |  Como um defensor da mobilidade sustentável eu quero ter acesso a rotas mais seguras e bem conservadas para ciclistas. | Eu poder planejar meus deslocamentos e incentivar mais pessoas a andarem de bicicleta|
+| Usuário:  Pedro Almeida - (Design Gráfico e ciclista) | Como um cidadão engajado, eu quero um canal de comunicação que seja transparente e mostre que minha opnião faz a diferença. | Me sentir motivado a continuar contribuindo para uma cidade melhor |
+| Usuário: Aldair Junior (Motorista de Aplicativo)  | Como motorista de aplicativo, eu quero reportar buracos, falta de sinalização e iluminação precária de forma rápida e segura enquanto trabalho.| Evitar danos ao meu veículo e garantir a segurança dos meus passageiros |
+| Usuário: Aldair Junior (Motorista de Aplicativo)   | Como motorista de aplicativo, eu quero ter acesso à vias perigosas ou com muitos problemas em minha rota. | Escolher um caminho alternativo e economizar com manutenções periódicas do carro. |
+| Usuário: Aldair Junior (Motorista de Aplicativo)   | Como motorista de aplicativo, eu quero visualizar um mapa com a classificação das ruas com base na quantidade de problemas | Oferecer uma viajem mais confortável e segura aos meus passageiros, melhorando a minha avaliação |
+| Usuário: Maria Souza (Professora de Escola Pública)  | Como pedestre, eu quero uma forma simples de comunicar sobre calçadas quebradas, falta de faixas e lixo acumulado. | Poder caminhar pelo meu bairro com mais segurança e evitar acidentes. |
+| Usuário: Maria Souza (Professora de Escola Pública)  | Como moradora, eu quero receber um retorno sobre os problemas que eu relatei | Sentir que minha participação está ajudando a melhorar a cidade |
+| Usuário: Maria Souza (Professora de Escola Pública)   | Como cidadã preocupada com a comunidade, eu quero poder ver os problemas já relatados por outras pessoas na minha região. | Poder apoiar essas reclamações e fortalecer a demanda por melhorias junto aos órgãos públicos. |
 
 ## Proposta de Valor
 
-**✳️✳️✳️ APRESENTE O DIAGRAMA DA PROPOSTA DE VALOR PARA CADA PERSONA ✳️✳️✳️**
+##### Proposta de valor para Persona Aldair Junior 
 
-##### Proposta de valor para Persona XPTO ⚠️ EXEMPLO ⚠️
+![Proposta de valor persona Aldair Junior](images/mapa_de_valor_do_aldair.png)
 
-![Exemplo de proposta de valor](images/exemplo-proposta-valor.png)
+##### Proposta de valor para Persona Maria Souza
+![Proposta de valor Persona Maria Souza](images/mapa_de_valor_da_maria_souza.png)
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> O mapa da proposta de valor é uma ferramenta que nos ajuda a definir qual tipo de produto ou serviço melhor atende às personas definidas anteriormente.
+##### Proposta de valor para Pedro Almeida
+![Proposta de valor Persona Pedro Almeida](images/mapa_de_valor_do_pedro_almeida.png)
+
+##### Proposta de valor para Geraldo Teixeira
+![Proposta de valor Persona Geraldo Teixeira](images/mapa_de_valor_do_geraldo_teixeira.png)
+
+##### Proposta de valor para Ana Paula Ribeiro
+![Proposta de valor Persona Ana Paula Ribeiro](images/mapa_de_valor_ana_paula.png)
+
+##### Proposta de valor para Gustavo Oliveira
+![Proposta de valor Persona Gustavo Oliveira](images/mapa_de_valor_gustavo_oliveira.png)
+
 
 ## Requisitos
 
@@ -155,84 +137,68 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 | ID     | Descrição do Requisito                                   | Prioridade |
 | ------ | ---------------------------------------------------------- | ---------- |
-| RF-001 | Permitir que o usuário cadastre tarefas ⚠️ EXEMPLO ⚠️ | ALTA       |
-| RF-002 | Emitir um relatório de tarefas no mês ⚠️ EXEMPLO ⚠️ | MÉDIA     |
+| RF-1 | Módulo de Usuário (Cidadão) | ALTA     |
+| RF-1.1 | O sistema deve permitir que um novo usuário se cadastre fornecendo informações básocas (nome, e-mail, senha) | ALTA    |
+| RF-1.2 | O sistema deve permitir que usuários cadastrados acessem a plataforma por meio de e-mail e senha. | ALTA       |
+| RF-1.3 | O sistema deve oferecer uma funcionalidade para que o usuário possa redefinir sua senha caso a esqueça | BAIXA     |
+| RF-1.4 | O usuário logado deve poder criar um novo relato de problema de infraestrutura | ALTA     |
+| RF-1.4.1 | O formulário de relato deve permitir a inserção de um título e descrição | ALTA    |
+| RF-1.4.2 | O usuário deve poder classificar o tipo de problema (ex: buraco, falta de iluminação, má sinalização, calçada quebrada, lixo acumulado) | MÉDIA     |
+| RF-1.4.3 | O sistema deve permitir anexar fotos ou vídeos do problema | BAIXA     |
+| RF-1.4.4 | A localização do problema deve ser adicionada, preferencialmente usando o GPS do dispositivo ou selecionando um ponto no mapa | MÉDIA     |
+| RF-1.5 | O usuário deve poder visualizar em um mapa todos os relatos de problemas abertos por ele e por outros usuários | MÉDIA     |
+| RF-1.6 | O sistema deve exibir uma lista de relatos que pode ser filtrada por tipo de problema, status (aberto, em andamento, resolvido) e localização (proximidade) | MÉDIA     |
+| RF-1.7 | O usuário deve poder visualizar o status atual de seus próprios relatos e receber notificações quando houver uma atualização | MÉDIA     |
+| RF-1.8 | O usuário deve poder interagir com relatos existentes, adicionando votos de "também sofro com esse problema" | MÉDIA     |
+| RF-1.9 | O usuário deve ter uma tela de perfil onde possa ver seus dados e um histórico de todos os seus relatos | ALTA     |
+| RF-1.10 | O usuário deve poder acessar uma comunidade para interagir com outros usuários, trocar informações sobre denúncias em andamento e coloborar na resolução de problemas locais | MÉDIA     |
+| RF-2 | Módulo de Administrador (Servidores) | ALTA    |
+| RF-2.1 | O sistema deve possuir uma tela de login segura e separada para os usuários administradores | ALTA     |
+| RF-2.2 | O administrador, ao logar, deve ser direcionado a um painel de controle (Dashboard) com estatísticas gerais | ALTA     |
+| RF-2.2.1 | Número total de relatos | ALTA     |
+| RF-2.2.2 | Relatos por status (abertos, em andamento, resolvidos) | ALTA     |
+| RF-2.2.3 | Relatos por tipo de problema | ALTA     |
+| RF-1.2.4 | Mapa de calor mostrando as áreas com maior concentração de problemas. | BAIXA     |
+| RF-2.3 | O administrador deve poder visualizar todos os relatos enviados pelos usuários em formato de lista ou em um mapa | ALTA     |
+| RF-2.4 | O administrador deve ter a permissão para alterar o status de um relato | ALTA     |
+| RF-2.5 | O sistema deve permitir que um administrador atribua um relato a uma equipe ou departamento específico para resolução | BAIXA     |
+| RF-2.6 | O administrador deve poder adicionar comentários a um relato | BAIXA     |
+| RF-2.7 | O sistema deve permitir a geração de relatórios com base em filtros | BAIXA     |
 
 ### Requisitos não Funcionais
 
 | ID      | Descrição do Requisito                                                              | Prioridade |
 | ------- | ------------------------------------------------------------------------------------- | ---------- |
-| RNF-001 | O sistema deve ser responsivo para rodar em um dispositivos móvel ⚠️ EXEMPLO ⚠️ | MÉDIA     |
-| RNF-002 | Deve processar requisições do usuário em no máximo 3s ⚠️ EXEMPLO ⚠️          | BAIXA      |
+| RNF-1 | A interface, tanto para cidadão quanto para o administrador, deve ser intuitiva e de fácil utilização | ALTA     |
+| RNF-1.2 | O sistema deve carregar mapas e listas de relatos de forma rápida | MEDIA      |
+| RNF-1.3 | A autenticação de usuários e administradores deve ser segura | MEDIA      |
+| RNF-1.3.1 | Os dados pessoais dos usuários devem ser protegidos conforme a LGPD | BAIXA      |
+| RNF-1.3.2 | Apenas administradores autorizados podem alterar o status dos relatos | ALTO      |
+| RNF-1.4 | O sistema deve estar disponível para uso 24 horas por dia, 7 dias por semana. | MEDIO      |
+| RNF-1.5 | A aplicação do cidadão deve ser compatível com os principais navegadores web e sistemas operacionais de smartphones | MEDIA      |
+| RNF-1.6 | O sistema deve ser capaz de suportar um aumento no número de usuários e relatos | BAIXA      |
+| RNF-1.7 | O sistema deve ser desenvolvido usando as tecnologias: HTML, CSS E JS | ALTA      |
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Os requisitos de um projeto são classificados em dois grupos:
->
-> - [Requisitos Funcionais (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
->   correspondem a uma funcionalidade que deve estar presente na plataforma (ex: cadastro de usuário).
-> - [Requisitos Não Funcionais (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
->   correspondem a uma característica técnica, seja de usabilidade, desempenho, confiabilidade, segurança ou outro (ex: suporte a dispositivos iOS e Android).
->
-> Lembre-se que cada requisito deve corresponder à uma e somente uma característica alvo da sua solução. Além disso, certifique-se de que todos os aspectos capturados nas Histórias de Usuário foram cobertos.
->
-> **Orientações**:
->
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
 
 ## Projeto de Interface
 
 Artefatos relacionados com a interface e a interacão do usuário na proposta de solução.
 
-### Wireframes
+### Wireframes (NONE)
 
-Estes são os protótipos de telas do sistema.
-
-**✳️✳️✳️ COLOQUE AQUI OS PROTÓTIPOS DE TELAS COM TÍTULO E DESCRIÇÃO ✳️✳️✳️**
-
-##### TELA XPTO ⚠️ EXEMPLO ⚠️
-
-Descrição para a tela XPTO
-
-![Exemplo de wireframe](images/exemplo-wireframe.png)
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Wireframes são protótipos das telas da aplicação usados em design de interface para sugerir a estrutura de um site web e seu relacionamentos entre suas páginas. Um wireframe web é uma ilustração semelhante ao layout de elementos fundamentais na interface.
->
-> **Orientações**:
->
-> - [Ferramentas de Wireframes](https://rockcontent.com/blog/wireframes/)
-> - [Figma](https://www.figma.com/)
-> - [Adobe XD](https://www.adobe.com/br/products/xd.html#scroll)
-> - [MarvelApp](https://marvelapp.com/developers/documentation/tutorials/)
 
 ### User Flow
 
-**✳️✳️✳️ COLOQUE AQUI O DIAGRAMA DE FLUXO DE TELAS ✳️✳️✳️**
 
-![Exemplo de fluxo de telas](images/exemplo-userflow.png)
+![Exemplo de fluxo de telas Cidadão](images/fluxo_telas_cidadao.png)
+![Exemplo de fluxo de telas Servidor](images/fluxo_de_telas_servidor.png)
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Fluxo de usuário (User Flow) é uma técnica que permite ao desenvolvedor mapear todo fluxo de telas do site ou app. Essa técnica funciona para alinhar os caminhos e as possíveis ações que o usuário pode fazer junto com os membros de sua equipe.
->
-> **Orientações**:
->
-> - [User Flow: O Quê É e Como Fazer?](https://medium.com/7bits/fluxo-de-usu%C3%A1rio-user-flow-o-que-%C3%A9-como-fazer-79d965872534)
-> - [User Flow vs Site Maps](http://designr.com.br/sitemap-e-user-flow-quais-as-diferencas-e-quando-usar-cada-um/)
-> - [Top 25 User Flow Tools &amp; Templates for Smooth](https://www.mockplus.com/blog/post/user-flow-tools)
 
 ### Protótipo Interativo
 
-**✳️✳️✳️ COLOQUE AQUI UM IFRAME COM SEU PROTÓTIPO INTERATIVO ✳️✳️✳️**
 
-✅ [Protótipo Interativo (MarvelApp)](https://marvelapp.com/prototype/4hd6091?emb=1&iosapp=false&frameless=false)  ⚠️ EXEMPLO ⚠️
+✅ [Protótipo Interativo (Figma)](https://www.figma.com/design/z23RymazaezGjc2zokwrtj/Portal-de-Den%C3%BAncias?node-id=0-1&t=ZomV0knojSzHPvgR-1) 
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Um protótipo interativo apresenta o projeto de interfaces e permite ao usuário navegar pelas funcionalidades como se estivesse lidando com o software pronto. Utilize as mesmas ferramentas de construção de wireframes para montagem do seu protótipo interativo. Inclua o link para o protótipo interativo do projeto.
 
 # Metodologia
 
@@ -244,15 +210,11 @@ Relação de ferramentas empregadas pelo grupo durante o projeto.
 
 | Ambiente                    | Plataforma | Link de acesso                                     |
 | --------------------------- | ---------- | -------------------------------------------------- |
-| Processo de Design Thinking | Miro       | https://miro.com/XXXXXXX ⚠️ EXEMPLO ⚠️        |
-| Repositório de código     | GitHub     | https://github.com/XXXXXXX ⚠️ EXEMPLO ⚠️      |
-| Hospedagem do site          | Render     | https://site.render.com/XXXXXXX ⚠️ EXEMPLO ⚠️ |
-| Protótipo Interativo       | MarvelApp  | https://marvelapp.com/XXXXXXX ⚠️ EXEMPLO ⚠️   |
+| Processo de Design Thinking | Miro       |  https://miro.com/app/board/uXjVJSvRF1s=/?share_link_id=902482489676   |
+| Repositório de código     | GitHub     | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus.git  |
+| Protótipo Interativo       | Figma  |  https://www.figma.com/design/z23RymazaezGjc2zokwrtj/Portal-de-Den%C3%BAncias?node-id=0-1&t=ZomV0knojSzHPvgR-1  |
 |                             |            |                                                    |
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Liste as ferramentas empregadas no desenvolvimento do projeto, justificando a escolha delas, sempre que possível. Inclua itens como: (1) Editor de código, (2) )ferramentas de comunicação, (3) )ferramentas de diagramação, (4) )plataformas de hospedagem, entre outras.
 
 ## Gerenciamento do Projeto
 
