@@ -5,21 +5,55 @@
       "login": "admin",
       "senha": "123",
       "nome": "Administrador do Sistema",
-      "email": "admin@abc.com"
+      "email": "admin@abc.com",
+      "cidadeId": 1,
+      "bairroId": 1
+      
     },
     {
       "id": 2,
       "login": "user",
       "senha": "123",
       "nome": "Usuario Comum",
-      "email": "user@abc.com"
+      "email": "user@abc.com",
+      "cidadeId": 1,
+      "bairroId": 2
     },
     {
       "login": "rommel",
       "senha": "123",
       "nome": "Rommel",
       "email": "rommel@gmail.com",
-      "id": 3
+      "id": 3,
+      "cidadeId": 1,
+      "bairroId": 1
     }
+  ],
+  "cidades": [
+    { "id": 1, "nome": "Belo Horizonte", "uf": "MG", "lat": -19.9191, "lng": -43.9386 }
+  ],
+  "bairros": [
+    { "id": 1, "nome": "Savassi", "lat": -19.9366, "lng": -43.9332, "raio": 800 },
+    { "id": 2, "nome": "Funcionários", "lat": -19.9295, "lng": -43.9222, "raio": 800 },
+    { "id": 3, "nome": "Lourdes", "lat": -19.9290, "lng": -43.9405, "raio": 800 },
+    { "id": 4, "nome": "Santo Antônio", "lat": -19.9540, "lng": -43.9500, "raio": 800 }
+  ],
+  "localidades": [
+    { "id": 1, "titulo": "Buraco na Savassi", "lat": -19.9360, "lng": -43.9330, "bairroId": 1 },
+    { "id": 2, "titulo": "Sinalização apagada na Savassi", "lat": -19.9372, "lng": -43.9341, "bairroId": 1 },
+    { "id": 3, "titulo": "Calçada quebrada na Savassi", "lat": -19.9355, "lng": -43.9325, "bairroId": 1 },
+    { "id": 4, "titulo": "Lixo acumulado na Savassi", "lat": -19.9370, "lng": -43.9318, "bairroId": 1 },
+    { "id": 5, "titulo": "Buraco nos Funcionários", "lat": -19.9290, "lng": -43.9220, "bairroId": 2 },
+    { "id": 6, "titulo": "Sinalização apagada nos Funcionários", "lat": -19.9300, "lng": -43.9230, "bairroId": 2 },
+    { "id": 7, "titulo": "Calçada quebrada nos Funcionários", "lat": -19.9285, "lng": -43.9215, "bairroId": 2 },
+    { "id": 8, "titulo": "Lixo acumulado nos Funcionários", "lat": -19.9298, "lng": -43.9240, "bairroId": 2 },
+    { "id": 9, "titulo": "Buraco em Lourdes", "lat": -19.9295, "lng": -43.9400, "bairroId": 3 },
+    { "id": 10, "titulo": "Sinalização apagada em Lourdes", "lat": -19.9280, "lng": -43.9410, "bairroId": 3 },
+    { "id": 11, "titulo": "Calçada quebrada em Lourdes", "lat": -19.9300, "lng": -43.9395, "bairroId": 3 },
+    { "id": 12, "titulo": "Lixo acumulado em Lourdes", "lat": -19.9290, "lng": -43.9385, "bairroId": 3 },
+    { "id": 13, "titulo": "Buraco em Santo Antônio", "lat": -19.9545, "lng": -43.9505, "bairroId": 4 },
+    { "id": 14, "titulo": "Sinalização apagada em Santo Antônio", "lat": -19.9530, "lng": -43.9490, "bairroId": 4 },
+    { "id": 15, "titulo": "Calçada quebrada em Santo Antônio", "lat": -19.9550, "lng": -43.9510, "bairroId": 4 },
+    { "id": 16, "titulo": "Lixo acumulado em Santo Antônio", "lat": -19.9540, "lng": -43.9485, "bairroId": 4 }
   ]
 }
