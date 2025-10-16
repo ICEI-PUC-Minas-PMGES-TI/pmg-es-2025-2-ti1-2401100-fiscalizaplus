@@ -16,41 +16,138 @@ body{
     border-radius: 12px;
     background-color: #4f4f4f !important;
 }
+.navbar-nav .nav-item .nav-link{
+    color: white;
+    padding: 20px;
+}
+/* Painel do usuário*/
+.name-user{
+    color: yellow !important;
+}
+.icon{
+    margin: 10px auto;
+}
+.user-icon{
+    color: aliceblue;
+    font-size: 40px;
+}
 
 
-/*Conteiners principais */
+/*Conteiners principais da página Home*/
 .conteiner-main{
     margin-top: 20px;
-
+    color:white;
 }
 
-#recent-reports{
+/* Painel de pré visualização do painel do usuário*/
+.user-preview{
+    background-color: #4f4f4f;
+    height: 400px;
+    border-radius: 12px;
+}
+
+.user-panel{
+    margin: 0 auto;
+    padding: 10px 16px;
+}
+
+/* Conteiner de informações sobre ultima denúncia*/
+.conteiner-last-reports{
+    background-color: #6a6a6a;
+    margin: 50px auto;
+    border-radius: 6px;
+    display: flex;
+    height: 44px;
+}
+
+/* Icone do indice do relato*/
+.number-report-icon{
+    border-radius: 50%;
+    border: solid black;
+    width: 24px;
+    height: 24px;
+    margin: 10px auto;
+}
+
+.number-report-icon p{
+    text-align: center;
+    margin: 0px auto;
+    font-size: 12px;
+}
+
+/* Informações sobre o relato*/
+.report-information{
+    margin: 4px auto;
+    width: 50%;
+}
+
+.report-information p{
+    margin: 0;
+    font-size: small;
+}
+
+.content-status{
+    color: #d1d1d1;
+}
+
+/* Circulo de status do relato*/
+.circle-status{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: yellow;
+    margin: 6px auto;
+}
+
+
+
+/* Botão de criar um novo relato*/
+.btn-create-report{
+    background-color: #c1121f;
+    color: white;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.btn-create-report p{
+    margin: 0 auto;
+}
+
+.btn-create-report:hover{
+    background-color: #a70f1a;
+}
+
+
+/* Painel de impacto do usuário*/
+.user-impact{
+    background-color: #4f4f4f;
+    height: 400px;
+    border-radius: 12px;
+}
+
+/* Painel do mapa de ocorrências da cidade*/
+.occurrence-map{
+    background-color: #f4f4f4;
+    height: 400px;
+    border-radius: 12px;
+    color: brown;
+}
+
+/* Painel de denúncias em destaques*/
+.users-highlights{
+    background-color: #f4f4f4;
+    height: 400px;
+    border-radius: 12px;
+    color: brown;
+}
+
+
+/* Painel de denúncias recentes da cidade*/
+.recent-reports{
     background-color: #4f4f4f;
     height: 800px;
-    border-radius: 12px;
-}
-
-
-#user-preview{
-    background-color: #4f4f4f;
-    height: 400px;
-    border-radius: 12px;
-}
-
-#user-impact{
-    background-color: #4f4f4f;
-    height: 400px;
-    border-radius: 12px;
-}
-
-#occurrence-map{
-    background-color: #f4f4f4;
-    height: 400px;
-    border-radius: 12px;
-}
-
-#user-highlights{
-    background-color: #f4f4f4;
-    height: 400px;
     border-radius: 12px;
 }
