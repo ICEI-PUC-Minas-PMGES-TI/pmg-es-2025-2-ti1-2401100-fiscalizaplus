@@ -11,18 +11,26 @@ body{
 }
  /* Barra de navegação*/
 .navbar{
-    width: 98%;
-    margin: 0 auto;
-    border-radius: 12px;
-    background-color: #4f4f4f !important;
+    width: 100%;
+    margin: 0;
+    border-radius: 4px;
+    background-color: #737373 !important;
 }
 .navbar-nav .nav-item .nav-link{
     color: white;
     padding: 20px;
 }
+.navbar-nav .nav-item .nav-link:hover{
+    color: #d3d3d3;
+}
+.navbar-nav .nav-item .nav-link.active{
+    color: #700303;
+    padding: 20px;
+}
+
 /* Painel do usuário*/
 .name-user{
-    color: yellow !important;
+    color: #700303 !important;
 }
 .icon{
     margin: 10px auto;
