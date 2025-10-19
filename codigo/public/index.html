@@ -10,6 +10,8 @@
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet CSS para o mapa -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 </head>
 
 <body>
@@ -76,23 +78,15 @@
               <h3 id="user-name">Olá, Joãozinho</h3>
               <p id="user-email">joaozinho@gmail.com</p>
               <hr>
-              <p>Minha última denúncia</p>
-              <div class="conteiner-last-reports">
-                <div class="number-report-icon">
-                  <p>1</p>
-                </div>
-                <div class="report-information">
-                  <p id="report-title">Buraco na Rua X</p>
-                  <p id="report-status" class="content-status">Status: em andamento</p>
-                </div>
-                <div class="circle-status" id="color-circle-status"></div>
+              <p>Minhas últimas denúncias</p>
+              <div id="ultimas-denuncias" class="ultimas-denuncias-container">
+                <p class="text-muted small">Carregando...</p>
               </div>
               <button class="btn-create-report">
                 <p>Reportar um novo problema</p>
               </button>
             </div>
           </div>
-
 
           <div class="p-2 border mt-2 user-impact">
             User impact
@@ -102,7 +96,8 @@
 
         <div class="col-md-4">
           <div class="p-2 border occurrence-map">
-            Ocurrence Map
+            <h6 class="mb-2">Occurrence Map</h6>
+            <div id="occurrence-map-canvas" style="height:360px; width:100%; border-radius:8px; overflow:hidden;"></div>
           </div>
           <div class="p-2 border mt-2 users-highlights">
             User Hightlights
@@ -116,6 +111,8 @@
           </div>
         </div>
 
+
+
       </div>
     </div>
   </main>
@@ -124,6 +121,28 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="assets/js/login.js"></script>
+  <script src="assets/js/occurrence-map.js"></script>
+  <script src="assets/js/painel-usuario.js"></script>
+  <script>
+    // Initialize dashboard with user data
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(sessionStorage.getItem('usuarioCorrente') || '{}');
+      if (user.nome) {
+        // Update navbar user name
+        const nameUser = document.getElementById('name-user');
+        if (nameUser) nameUser.textContent = `Olá, ${user.nome}`;
+        
+        // Update user panel
+        const userName = document.getElementById('user-name');
+        const userEmail = document.getElementById('user-email');
+        if (userName) userName.textContent = `Olá, ${user.nome}`;
+        if (userEmail) userEmail.textContent = user.email || '';
+      }
+    });
+  </script>
 </body>
 
 </html>

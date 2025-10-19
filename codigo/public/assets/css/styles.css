@@ -59,6 +59,11 @@ body{
     padding: 10px 16px;
 }
 
+.user-panel{
+    margin: 0 auto;
+    padding: 10px 16px;
+}
+
 /* Conteiner de informações sobre ultima denúncia*/
 .conteiner-last-reports{
     background-color: #6a6a6a;
@@ -144,6 +149,11 @@ body{
     color: brown;
 }
 
+#occurrence-map-canvas {
+    border: 2px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Painel de denúncias em destaques*/
 .users-highlights{
     background-color: #f4f4f4;
@@ -158,4 +168,52 @@ body{
     background-color: #4f4f4f;
     height: 800px;
     border-radius: 12px;
+}
+
+#recent-reports-list .list-group-item {
+    background-color: #5a5a5a;
+    border-color: #6a6a6a;
+    color: white;
+}
+
+#recent-reports-list .list-group-item:hover {
+    background-color: #656565;
+}
+
+/* Últimas denúncias do usuário */
+.ultimas-denuncias-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.denuncia-item {
+    background-color: #5a5a5a;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    border-left: 4px solid #6c757d;
+    font-size: 12px;
+}
+
+.denuncia-item.status-aberto {
+    border-left-color: #ffc107;
+}
+
+.denuncia-item.status-em_andamento {
+    border-left-color: #0dcaf0;
+}
+
+.denuncia-item.status-resolvido {
+    border-left-color: #198754;
+}
+
+.denuncia-titulo {
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: white;
+}
+
+.denuncia-meta {
+    color: #d1d1d1;
+    font-size: 10px;
 }
