@@ -7,11 +7,114 @@
   <title>FiscalizaPlus</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="shortcut icon" href="/codigo/public/assets/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="shortcut icon" href="/codigo/public/assets/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/codigo/public/assets/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    
+  <!--Barra de navegação principal-->
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/codigo/public/assets/images/logo.png" alt="" style="width: 180px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active active-color" aria-current="page" href="/codigo/public/index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Comunidade</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Dashboard de Ocorrências</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Guia do cidadão</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"> Painel do usuário</a>
+          </li>
+        </ul>
+      </div>
+      <div class="collapse navbar-collapse navbar-user">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link name-user" href="" id="name-user">Olá, Joãozinho</a>
+          </li>
+          <li class="nav-item">
+            <a clas="nav-link" href="">
+              <div class="icon">
+                <div class="user-icon-circle">
+                </div>
+                <i class="fa-solid fa-circle-user user-icon "></i>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <!--Conteúdo da página de novos relatos-->
+
+  <!-- Main Content -->
+  <div class="report-container">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+          <!-- Header -->
+          <div class="report-header">
+            <h1>Relatar um Novo Problema</h1>
+            <p>Ajude a melhorar nossa cidade reportando problemas que você encontrou</p>
+          </div>
+
+          <!-- Form -->
+          <form id="reportForm" class="report-form">
+            <!-- Card de informações básicas -->
+            <div class="form-card">
+              <h3 class="card-title">Informações Básicas</h3>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="titulo">Título do Problema *</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control"
+                      placeholder="Ex: Buraco na Rua das Flores" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="categoria">Categoria *</label>
+                    <select id="categoria" name="categoria" class="form-control" required>
+                      <option value="">Selecione...</option>
+                      <option value="infraestrutura">Infraestrutura</option>
+                      <option value="seguranca">Segurança</option>
+                      <option value="limpeza">Limpeza</option>
+                      <option value="transito">Trânsito</option>
+                      <option value="iluminacao">Iluminação</option>
+                      <option value="saude">Saúde</option>
+                      <option value="educacao">Educação</option>
+                      <option value="outros">Outros</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="descricao">Descrição Detalhada *</label>
+                <textarea id="descricao" name="descricao" class="form-control" rows="4"
+                  placeholder="Descreva o problema em detalhes. Quanto mais informações, melhor será nossa capacidade de resolver..."
+                  required></textarea>
+              </div>
+            </div>
 </body>
+
 </html>
