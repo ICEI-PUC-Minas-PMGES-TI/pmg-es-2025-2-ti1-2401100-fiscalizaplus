@@ -1,25 +1,18 @@
 {
-  "usuarios": [
+  "cidadaos": [
     {
       "id": 1,
-      "login": "admin",
+      "login": "joaozinho",
       "senha": "123",
-      "nome": "Administrador do Sistema",
-      "email": "admin@abc.com"
+      "nome": "Joao Pedro",
+      "email": "joaozinho@gmai.com"
     },
     {
       "id": 2,
-      "login": "user",
+      "login": "Maria00",
       "senha": "123",
-      "nome": "Usuario Comum",
-      "email": "user@abc.com"
-    },
-    {
-      "login": "rommel",
-      "senha": "123",
-      "nome": "Rommel",
-      "email": "rommel@gmail.com",
-      "id": 3
+      "nome": "Maria Luiza",
+      "email": "marialuiza@gmail.com"
     }
   ]
 }
