@@ -284,7 +284,7 @@ textarea.form-control {
     color: white;
 }
 
-/* Leaflet Map Customization */
+/* Estilização do Mapa Leaflet */
 .leaflet-container {
     background-color: #2a2a2a;
 }
@@ -308,6 +308,11 @@ textarea.form-control {
 .leaflet-control-zoom a:hover {
     background-color: #4a4a4a;
 }
+
+/* Estilização do card de anexo de imagens */
+
+
+
 
 
 /* Painel de impacto do usuário*/
