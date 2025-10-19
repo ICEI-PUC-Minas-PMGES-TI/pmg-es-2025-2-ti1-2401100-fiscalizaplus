@@ -136,7 +136,7 @@ body{
     background-color: #4d4d4d;
     min-height: calc(100vh - 100px);
     padding: 30px 0;
-    margin-top: 10px;
+    margin-top: 2px;
 }
 
 .report-header {
@@ -354,7 +354,6 @@ textarea.form-control {
 }
 
 /* Estilização do card de informações adicionais*/
-
 /* Estilização dos checkbox de informações adicionais */
 .form-check {
     margin-bottom: 15px;
@@ -424,6 +423,239 @@ textarea.form-control {
     background-color: #666;
     cursor: not-allowed;
 }
+
+/* Estilização das ações do formulário */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #555;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #ce2828;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #a02020;
+    color: white;
+}
+
+.btn-primary:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}
+
+/* Design reponsivo */
+@media (max-width: 768px) {
+    .report-container {
+        padding: 15px 0;
+        margin-top: 2px;
+    }
+    
+    .report-header h1 {
+        font-size: 2rem;
+    }
+    
+    .report-header p {
+        font-size: 1rem;
+    }
+    
+    .form-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-card .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .image-preview-item {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .report-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .form-card {
+        padding: 15px;
+    }
+    
+    .map-container {
+        height: 250px;
+    }
+}
+
+/* Loading status */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #ce2828;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Successo/Mensagem de erro */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: none;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border-left: 4px solid #ffc107;
+}
+
+/* Custom File Input */
+.form-control[type="file"] {
+    padding: 8px 15px;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+    background-color: #ce2828;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #a02020;
+}
+
+/* Required Field Indicator */
+.form-group label::after {
+    content: '';
+}
+
+.form-group label[for*="titulo"]::after,
+.form-group label[for*="categoria"]::after,
+.form-group label[for*="descricao"]::after {
+    content: ' *';
+    color: #ce2828;
+}
+
+/* Focus States */
+.form-control:focus,
+.form-check-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(206, 40, 40, 0.25);
+}
+
+/* Hover Effects */
+.form-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Animação dos formulários */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.form-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.form-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.form-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.form-card:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
 
 /* Painel de impacto do usuário*/
 .user-impact{
