@@ -14,5 +14,56 @@
       "nome": "Maria Luiza",
       "email": "marialuiza@gmail.com"
     }
-  ]
+  ],
+
+
+"ocorrenciasCidadao": {
+    "ocorrencias": [
+      {
+        "id": 1,
+        "titulo": "OCOR-002021",
+        "tipo": "Poste queimado na rua X",
+        "bairro": "Centro",
+        "status": "Não iniciado",
+        "data": "2025-09-21",
+        "autor": "Cidadão3"
+      },
+      {
+        "id": 2,
+        "titulo": "OCOR-002022",
+        "tipo": "Buraco na avenida Y",
+        "bairro": "Santa Efigênia",
+        "status": "Não iniciado",
+        "data": "2025-09-21",
+        "autor": "Cidadão1"
+      },
+      {
+        "id": 3,
+        "titulo": "OCOR-002023",
+        "tipo": "Lixo acumulado no bairro Z",
+        "bairro": "Savassi",
+        "status": "Não iniciado",
+        "data": "2025-09-22",
+        "autor": "Cidadão5"
+      },
+      {
+        "id": 4,
+        "titulo": "OCOR-002024",
+        "tipo": "Semáforo apagado na Rua A",
+        "bairro": "São João Batista",
+        "status": "Não iniciado",
+        "data": "2025-09-23",
+        "autor": "Cidadão2"
+      },
+      {
+        "id": 5,
+        "titulo": "OCOR-002025",
+        "tipo": "Entulho acumulado na praça B",
+        "bairro": "Alipio de Melo",
+        "status": "Não iniciado",
+        "data": "2025-09-24",
+        "autor": "Cidadão3"
+      }
+    ]
+  }
 }
