@@ -116,6 +116,87 @@
               </div>
             </div>
 
+            <!-- Card de Localização -->
+            <div class="form-card">
+              <h3 class="card-title">Localização</h3>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="endereco">Buscar Endereço</label>
+                    <div class="input-group">
+                      <input type="text" id="endereco" name="endereco" class="form-control"
+                        placeholder="Ex: Rua das Flores, 123 - Centro, Belo Horizonte">
+                      <button type="button" class="btn btn-outline-primary">
+                        🔍 Buscar
+                      </button>
+                    </div>
+                    <p class="form-text">Digite o endereço e clique em "Buscar" para localizar no mapa</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Selecione a localização exata no mapa *</label>
+                <div class="alert alert-info mb-2"
+                  style="background-color: rgba(206, 40, 40, 0.1); border-left: 4px solid #ce2828; color: #ce2828; padding: 10px;">
+                  <strong>📍 Área Restrita: Este mapa está limitado aos limites de <span id="user-city">Belo
+                      Horizonte</span></strong>
+                </div>
+                <div class="map-controls mb-2">
+                  <button type="button" class="btn btn-sm btn-outline-primary">
+                    📍 Usar minha localização atual
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">
+                    🔄 Resetar mapa
+                  </button>
+                </div>
+                <div id="map" class="map-container"></div>
+                <small class="form-text">Clique no mapa para marcar a localização exata do problema em Belo
+                  Horizonte</small>
+              </div>
+            </div>
+
+            <!-- Card de prioridade e urgência -->
+            <div class="form-card">
+              <h3 class="card-title">Prioridade e Urgência</h3>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="prioridade">Prioridade</label>
+                    <select id="prioridade" name="prioridade" class="form-control">
+                      <option value="baixa">Baixa</option>
+                      <option value="media" selected>Média</option>
+                      <option value="alta">Alta</option>
+                      <option value="critica">Crítica</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="urgencia">Urgência</label>
+                    <select id="urgencia" name="urgencia" class="form-control">
+                      <option value="baixa">Baixa</option>
+                      <option value="media" selected>Média</option>
+                      <option value="alta">Alta</option>
+                      <option value="emergencia">Emergência</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="impacto">Impacto na Comunidade</label>
+                <select id="impacto" name="impacto" class="form-control">
+                  <option value="individual">Individual</option>
+                  <option value="local" selected>Local (rua/bairro)</option>
+                  <option value="regional">Regional</option>
+                  <option value="municipal">Municipal</option>
+                </select>
+              </div>
+            </div>
+
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
               integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
