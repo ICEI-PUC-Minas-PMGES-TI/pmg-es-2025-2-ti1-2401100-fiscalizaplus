@@ -83,9 +83,20 @@ function initMap() {
             }).addTo(map);
 
             selectedLocation = { lat: lat, lng: lng };
+
+            //Atualizar campos de endereço se possível
+            updateAdress(lat, lng);
         } else {
             alert('Por favor, selecione uma localização dentro dos limites de Belo Horizonte.');
         }
     });
 }
 initMap();
+
+function updateAdress(lat, lng) {
+    console.log(`Coordenadas selecionadas: ${lat}, ${lng}`);
+
+    const enderecoField = document.querySelector("#endereco");
+
+    enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+}
