@@ -4,6 +4,34 @@ let selectedLocation = null;
 let imageInput = null;
 let selectedFilesList = [];
 let selectedFileDataUrls = [];
+let currentUser = null; // Variável global para armazenar o usuário logado
+
+
+// Função para carregar dados do usuário do arquivo JSON
+async function loadUserData() {
+    try {
+        const response = await fetch('/codigo/db/db.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Simula o login pegando o primeiro usuário da lista
+        if (data.cidadaos && data.cidadaos.length > 0) {
+            currentUser = data.cidadaos[0]; 
+            console.log("Usuário carregado com sucesso:", currentUser.nome);
+        } else {
+            console.error("Nenhum cidadão encontrado no arquivo JSON.");
+        }
+        
+    } catch (error) {
+        console.error("Erro ao carregar dados do usuário:", error);
+        // Define um usuário de fallback caso a carga falhe
+        currentUser = { nome: "Usuário de Teste (Fallback)" };
+    }
+}
 
 // Variável do centro do mapa
 const bhCenter = [-19.9167, -43.9345];
@@ -305,11 +333,9 @@ function removeImage(index){
     renderPreview();
 }
 
-// ======================================================================
-// FUNÇÃO DE SUBMISSÃO E ARMAZENAMENTO LOCAL
-// ======================================================================
+// Função de armazenamento Local dos Dados
 
-const STORAGE_KEY = 'relatosFiscalizaPlus';
+const STORAGE_KEY = 'relatosCidadão';
 
 function handleSubmit(event) {
     event.preventDefault();
@@ -319,19 +345,94 @@ function handleSubmit(event) {
         alert("Por favor, selecione a localização exata do problema no mapa antes de enviar.");
         return;
     }
+
+    // Lógica de nome de usuário (correntUser ou anonimato)
+    const isAnonimo = document.getElementById('anonimo').checked;
+    
+    // Pega o nome do usuário carregado (ou fallback)
+    const nomeReal = currentUser?.nome || 'Usuário Desconhecido';
+    
+    // Define o nome que será salvo no relato
+    const nomeCidadao = isAnonimo ? 'Anônimo' : nomeReal;
+    
+    // Obtém o valor booleano do checkbox de notificações
+    const recebeNotificacoes = document.getElementById('notificacoes').checked;
+
+    // Coleta todos os dados do formulário e transforma em um objeto json
+    const reportData = {
+        // Informações Básicas
+        titulo: document.getElementById('titulo').value,
+        categoria: document.getElementById('categoria').value,
+        descricao: document.getElementById('descricao').value,
+        
+        // Nome do Cidadão (Anonimo ou Real)
+        nomeCidadao: nomeCidadao,
+
+        // Localização
+        localizacao: {
+            endereco: document.getElementById('endereco').value,
+            lat: selectedLocation.lat,
+            lng: selectedLocation.lng
+        },
+
+        // Classificação
+        prioridade: document.getElementById('prioridade').value,
+        urgencia: document.getElementById('urgencia').value,
+        impacto: document.getElementById('impacto').value,
+
+        // Imagens (salva as Data URLs)
+        imagens: selectedFileDataUrls,
+        
+        // Informações Adicionais
+        observacoes: document.getElementById('observacoes').value,
+        contato: document.getElementById('contato').value,
+        
+        // Status dos Checkboxes
+        isAnonimo: isAnonimo,
+        recebeNotificacoes: recebeNotificacoes,
+        
+        // Metadata do Relato
+        data_envio: new Date().toISOString(),
+        status: 'Pendente'
+    };
+
+    // Salva no localStorage
+    let relatos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    relatos.push(reportData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(relatos));
+
+    console.log("Relato salvo no localStorage:", reportData);
+    alert("Relato enviado com sucesso, obrigado por denúnciar!");
+    
+    // Limpeza após envio
+    document.getElementById('reportForm').reset();
+    resetMap(); 
+    
+    // Limpa o gerenciamento de imagens e o preview
+    selectedFilesList = [];
+    selectedFileDataUrls = [];
+    renderPreview();
 }
 
+// ORQUESTRAÇÃO DE INICIALIZAÇÃO
 
-// Inicializa o mapa ao carregar o script
-initMap();
+async function initializeApp() {
+    // 1. Carrega os dados do usuário
+    await loadUserData(); 
+    
+    // 2. Inicializa o mapa
+    initMap();
 
-// Anexa os listeners
-const form = document.getElementById('reportForm');
-if (form) {
-    form.addEventListener('submit', handleSubmit);
+    // 3. Anexa os listeners (agora que os dados estão carregados)
+    const form = document.getElementById('reportForm');
+    if (form) {
+        form.addEventListener('submit', handleSubmit);
+    }
+
+    const fileInput = document.querySelector("#imagens");
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => previewImages(e.target));
+    }
 }
-
-const fileInput = document.querySelector("#imagens");
-if (fileInput) {
-    fileInput.addEventListener('change', (e) => previewImages(e.target));
-}
+// Inicia o aplicativo
+initializeApp();
