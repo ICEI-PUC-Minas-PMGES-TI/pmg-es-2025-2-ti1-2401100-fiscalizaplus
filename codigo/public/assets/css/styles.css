@@ -312,8 +312,77 @@ textarea.form-control {
 /* Estilização do card de anexo de imagens */
 
 
+/* Estilização do card de informações adicionais*/
 
+/* Estilização dos checkbox de informações adicionais */
+.form-check {
+    margin-bottom: 15px;
+}
 
+.form-check-input {
+    background-color: #4a4a4a;
+    border: 1px solid #555;
+}
+
+.form-check-input:checked {
+    background-color: #ce2828;
+    border-color: #ce2828;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(206, 40, 40, 0.25);
+}
+
+.form-check-label {
+    color: white;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+/* Estilização do formulario de envio*/
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #555;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #ce2828;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #a02020;
+    color: white;
+}
+
+.btn-primary:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}
 
 /* Painel de impacto do usuário*/
 .user-impact{
