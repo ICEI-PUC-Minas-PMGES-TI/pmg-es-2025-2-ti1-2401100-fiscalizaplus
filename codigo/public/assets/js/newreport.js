@@ -117,9 +117,9 @@ function searchAdress() {
         enderecoCompleto = endereco + ', Belo Horizonte, MG, Brasil';
     }
 
-    const buscarBtn = document.querySelector('#buscar-btn'); 
+    const buscarBtn = document.querySelector('#buscar-btn');
     const originalText = buscarBtn.innerHTML;
-    
+
     // Mostrar loading
     buscarBtn.innerHTML = '⏳ Buscando...';
     buscarBtn.disabled = true;
@@ -134,7 +134,7 @@ function searchAdress() {
                 const resultado = data[0];
                 const lat = parseFloat(resultado.lat);
                 const lng = parseFloat(resultado.lon);
-                
+
                 if (bhBounds.contains([lat, lng])) {
                     // Mover o mapa para a localização encontrada
                     map.setView([lat, lng], 16);
@@ -159,10 +159,10 @@ function searchAdress() {
                             </div>
                         `)
                         .openOn(map);
-                        
+
                     // Se a busca foi bem-sucedida, atualize a localização selecionada
                     selectedLocation = { lat: lat, lng: lng };
-                    
+
                 } else {
                     alert('O endereço encontrado está fora dos limites de Belo Horizonte. Por favor, tente um endereço dentro da cidade.');
                 }
@@ -179,6 +179,90 @@ function searchAdress() {
             buscarBtn.disabled = false;
         });
 }
-
 // Inicializa o mapa ao carregar o script
 initMap();
+
+// Função para usar localização atual do usuário e marcar no mapa
+
+function getCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                // Verificar se a localização está dentro dos limites de BH
+                const bhBounds = L.latLngBounds(
+                    [-19.98, -44.10],
+                    [-19.75, -43.80] 
+                );
+
+                if (bhBounds.contains([lat, lng])) {
+                    // Mover o mapa para a localização atual
+                    map.setView([lat, lng], 15);
+
+                    // Remover marcador anterior se existir
+                    if (marker) {
+                        map.removeLayer(marker);
+                    }
+
+                    // Criar novo marcador na localização atual
+                    marker = L.marker([lat, lng], {
+                        icon: L.divIcon({
+                            className: 'custom-marker',
+                            html: `
+                    <div style="
+                      background-color: #ce2828;
+                      width: 30px;
+                      height: 30px;
+                      border-radius: 50%;
+                      border: 2px solid white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      color: white;
+                      font-weight: bold;
+                      font-size: 16px;
+                      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">!</div>
+                  `,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 15]
+                        })
+                    }).addTo(map);
+
+                    selectedLocation = { lat: lat, lng: lng };
+                    updateAddressFromCoordinates(lat, lng);
+
+                    alert('Localização atual encontrada em Belo Horizonte!');
+                } else {
+                    alert('Sua localização atual está fora dos limites de Belo Horizonte. Por favor, selecione uma localização dentro da cidade.');
+                }
+            },
+            function (error) {
+                alert('Erro ao obter localização: ' + error.message);
+            }
+        );
+    } else {
+        alert('Geolocalização não é suportada por este navegador.');
+    }
+}
+
+// Função para resetar o mapa
+
+function resetMap(){
+    //Voltar para o centro de Belo Horizonte
+    const bhCenter = [-19.9167, -43.9345];
+    map.setView(bhCenter,13);
+
+    // Remover o marcador
+    if (marker){
+        map.removeLayer(marker);
+        marker = null;
+    }
+
+    selectedLocation = null;
+
+    // Limpar o campo de endereço
+    document.querySelector("#endereco"). value = '';
+}
