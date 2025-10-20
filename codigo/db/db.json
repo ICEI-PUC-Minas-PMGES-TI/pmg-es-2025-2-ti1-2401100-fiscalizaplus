@@ -26,46 +26,34 @@
     { "id": 7, "nome": "Cidade Industrial", "cidadeId": 2, "lat": -19.9500, "lng": -44.0800, "raio": 1500 },
     { "id": 8, "nome": "Eldorado", "cidadeId": 2, "lat": -19.9200, "lng": -44.0400, "raio": 900 }
   ],
-  "ocorrencias": [
-    { "id": 1,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Buraco na Rua X",            "descricao": "Buraco grande na esquina.", "status": "em_andamento", "lat": -19.9362, "lng": -43.9329, "createdAt": "2025-10-18T10:00:00Z" },
-    { "id": 2,  "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "sinalizacao", "titulo": "Sinalização apagada",       "descricao": "Faixa apagada.",          "status": "aberto",       "lat": -19.9302, "lng": -43.9226, "createdAt": "2025-10-18T09:00:00Z" },
-    { "id": 3,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "calcada",     "titulo": "Calçada quebrada",         "descricao": "Trinca extensa.",         "status": "aberto",       "lat": -19.9357, "lng": -43.9322, "createdAt": "2025-10-17T14:30:00Z" },
-    { "id": 4,  "usuarioId": 1, "cidadeId": 1, "bairroId": 1, "tipo": "lixo",        "titulo": "Lixo acumulado",           "descricao": "Sacos na calçada.",       "status": "resolvido",    "lat": -19.9371, "lng": -43.9340, "createdAt": "2025-10-16T11:20:00Z", "resolvedAt": "2025-10-17T08:00:00Z" },
-    { "id": 5,  "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "buraco",      "titulo": "Asfalto afundando",        "descricao": "Depressão no leito.",     "status": "em_andamento", "lat": -19.9293, "lng": -43.9218, "createdAt": "2025-10-16T12:00:00Z" },
-    { "id": 6,  "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "iluminacao",  "titulo": "Poste apagado",            "descricao": "Rua escura.",             "status": "aberto",       "lat": -19.9292, "lng": -43.9398, "createdAt": "2025-10-15T19:00:00Z" },
-    { "id": 7,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Tampa de bueiro solta",    "descricao": "Risco a pedestres.",      "status": "aberto",       "lat": -19.9369, "lng": -43.9326, "createdAt": "2025-10-15T08:45:00Z" },
-    { "id": 8,  "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "calcada",     "titulo": "Desnível em calçada",      "descricao": "Altura perigosa.",        "status": "aberto",       "lat": -19.9306, "lng": -43.9234, "createdAt": "2025-10-14T10:15:00Z" },
-    { "id": 9,  "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "sinalizacao", "titulo": "Placa caída",              "descricao": "Placa no chão.",          "status": "em_andamento", "lat": -19.9287, "lng": -43.9411, "createdAt": "2025-10-14T17:40:00Z" },
-    { "id": 10, "usuarioId": 1, "cidadeId": 1, "bairroId": 4, "tipo": "buraco",      "titulo": "Buraco próximo à praça",   "descricao": "Buraco médio.",           "status": "aberto",       "lat": -19.9548, "lng": -43.9503, "createdAt": "2025-10-13T09:00:00Z" },
-    { "id": 11, "usuarioId": 3, "cidadeId": 1, "bairroId": 4, "tipo": "lixo",        "titulo": "Entulho em calçada",       "descricao": "Resíduos de obra.",       "status": "aberto",       "lat": -19.9537, "lng": -43.9492, "createdAt": "2025-10-12T13:25:00Z" },
-    { "id": 12, "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "iluminacao",  "titulo": "Lâmpada piscando",         "descricao": "Falha intermitente.",     "status": "resolvido",    "lat": -19.9311, "lng": -43.9241, "createdAt": "2025-10-11T22:10:00Z", "resolvedAt": "2025-10-12T07:00:00Z" },
-    { "id": 13, "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "calcada",     "titulo": "Raiz levantando piso",     "descricao": "Árvore elevou piso.",     "status": "aberto",       "lat": -19.9296, "lng": -43.9404, "createdAt": "2025-10-11T08:00:00Z" },
-    { "id": 14, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "sinalizacao", "titulo": "Semáforo intermitente",    "descricao": "Oscilando amarelo.",      "status": "aberto",       "lat": -19.9364, "lng": -43.9344, "createdAt": "2025-10-10T18:30:00Z" },
-    { "id": 15, "usuarioId": 1, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Asfalto esfarelando",      "descricao": "Pavimento degradado.",    "status": "em_andamento", "lat": -19.9353, "lng": -43.9336, "createdAt": "2025-10-10T09:15:00Z" },
-    { "id": 16, "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "lixo",        "titulo": "Lixeira quebrada",         "descricao": "Suporte danificado.",     "status": "aberto",       "lat": -19.9299, "lng": -43.9214, "createdAt": "2025-10-09T16:05:00Z" },
-    { "id": 17, "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "buraco",      "titulo": "Afundamento próximo à escola", "descricao": "Risco a veículos.",  "status": "aberto",       "lat": -19.9289, "lng": -43.9396, "createdAt": "2025-10-08T07:45:00Z" },
-    { "id": 18, "usuarioId": 3, "cidadeId": 1, "bairroId": 4, "tipo": "sinalizacao", "titulo": "Faixa de pedestre apagada", "descricao": "Precisa de pintura.",   "status": "aberto",       "lat": -19.9551, "lng": -43.9511, "createdAt": "2025-10-07T12:30:00Z" },
-    { "id": 19, "usuarioId": 1, "cidadeId": 1, "bairroId": 2, "tipo": "iluminacao",  "titulo": "Poste com fiação exposta", "descricao": "Risco elétrico.",     "status": "aberto",       "lat": -19.9304, "lng": -43.9228, "createdAt": "2025-01-15T14:20:00Z" },
-    { "id": 20, "usuarioId": 2, "cidadeId": 1, "bairroId": 1, "tipo": "calcada",     "titulo": "Buraco em calçada",      "descricao": "Dificulta passagem.", "status": "em_andamento", "lat": -19.9359, "lng": -43.9331, "createdAt": "2025-01-15T11:45:00Z" },
-    { "id": 21, "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "lixo",        "titulo": "Container transbordando", "descricao": "Lixo espalhado.",    "status": "aberto",       "lat": -19.9294, "lng": -43.9402, "createdAt": "2025-01-14T16:30:00Z" },
-    { "id": 22, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Cratera na via principal", "descricao": "Buraco muito grande.", "status": "aberto",   "lat": -19.9365, "lng": -43.9335, "createdAt": "2025-01-14T08:15:00Z" },
-    { "id": 23, "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "sinalizacao", "titulo": "Placa de trânsito danificada", "descricao": "Não legível.",   "status": "aberto",       "lat": -19.9298, "lng": -43.9220, "createdAt": "2025-01-13T13:40:00Z" },
-    { "id": 24, "usuarioId": 1, "cidadeId": 1, "bairroId": 4, "tipo": "calcada",     "titulo": "Degrau irregular",       "descricao": "Risco de queda.",     "status": "resolvido",    "lat": -19.9545, "lng": -43.9498, "createdAt": "2025-01-12T09:25:00Z", "resolvedAt": "2025-01-13T10:00:00Z" },
-    { "id": 25, "usuarioId": 4, "cidadeId": 1, "bairroId": 3, "tipo": "iluminacao",  "titulo": "Área escura no parque",  "descricao": "Falta de iluminação.", "status": "em_andamento", "lat": -19.9291, "lng": -43.9408, "createdAt": "2025-01-11T20:00:00Z" },
-    { "id": 26, "usuarioId": 5, "cidadeId": 1, "bairroId": 2, "tipo": "buraco",      "titulo": "Cratera na Av. Afonso Pena", "descricao": "Buraco profundo causando danos a veículos.", "status": "aberto", "lat": -19.9289, "lng": -43.9215, "createdAt": "2025-01-15T15:30:00Z" },
-    { "id": 27, "usuarioId": 6, "cidadeId": 1, "bairroId": 4, "tipo": "lixo",        "titulo": "Entulho na calçada", "descricao": "Materiais de construção abandonados.", "status": "aberto", "lat": -19.9535, "lng": -43.9485, "createdAt": "2025-01-15T12:45:00Z" },
-    { "id": 28, "usuarioId": 7, "cidadeId": 1, "bairroId": 1, "tipo": "sinalizacao", "titulo": "Semáforo com defeito", "descricao": "Sinal amarelo intermitente há 3 dias.", "status": "em_andamento", "lat": -19.9360, "lng": -43.9328, "createdAt": "2025-01-14T16:20:00Z" },
-    { "id": 29, "usuarioId": 8, "cidadeId": 1, "bairroId": 3, "tipo": "calcada",     "titulo": "Calçada irregular", "descricao": "Desnível perigoso para idosos.", "status": "aberto", "lat": -19.9285, "lng": -43.9395, "createdAt": "2025-01-14T09:10:00Z" },
-    { "id": 30, "usuarioId": 9, "cidadeId": 1, "bairroId": 2, "tipo": "iluminacao",  "titulo": "Poste quebrado", "descricao": "Poste caído após temporal.", "status": "resolvido", "lat": -19.9305, "lng": -43.9235, "createdAt": "2025-01-13T18:40:00Z", "resolvedAt": "2025-01-14T14:00:00Z" },
-    { "id": 31, "usuarioId": 10, "cidadeId": 1, "bairroId": 4, "tipo": "buraco",     "titulo": "Asfalto afundado", "descricao": "Depressão no asfalto próximo ao mercado.", "status": "aberto", "lat": -19.9542, "lng": -43.9495, "createdAt": "2025-01-13T11:25:00Z" },
-    { "id": 32, "usuarioId": 5, "cidadeId": 1, "bairroId": 5, "tipo": "lixo",        "titulo": "Lixo acumulado no centro", "descricao": "Sacos de lixo espalhados na praça.", "status": "aberto", "lat": -19.9240, "lng": -43.9345, "createdAt": "2025-01-12T14:15:00Z" },
-    { "id": 33, "usuarioId": 6, "cidadeId": 1, "bairroId": 6, "tipo": "sinalizacao", "titulo": "Placa de trânsito danificada", "descricao": "Placa de velocidade ilegível.", "status": "aberto", "lat": -19.8620, "lng": -43.9648, "createdAt": "2025-01-12T08:30:00Z" },
-    { "id": 34, "usuarioId": 7, "cidadeId": 1, "bairroId": 1, "tipo": "calcada",     "titulo": "Calçada com buraco", "descricao": "Risco para pedestres na Savassi.", "status": "em_andamento", "lat": -19.9370, "lng": -43.9338, "createdAt": "2025-01-11T17:50:00Z" },
-    { "id": 35, "usuarioId": 8, "cidadeId": 1, "bairroId": 3, "tipo": "iluminacao",  "titulo": "Lâmpada queimada", "descricao": "Rua escura à noite em Lourdes.", "status": "aberto", "lat": -19.9295, "lng": -43.9412, "createdAt": "2025-01-11T19:20:00Z" },
-    { "id": 36, "usuarioId": 9, "cidadeId": 2, "bairroId": 7, "tipo": "buraco",      "titulo": "Buraco grande em Contagem", "descricao": "Buraco na entrada da Cidade Industrial.", "status": "aberto", "lat": -19.9495, "lng": -44.0790, "createdAt": "2025-01-10T13:40:00Z" },
-    { "id": 37, "usuarioId": 10, "cidadeId": 2, "bairroId": 8, "tipo": "lixo",       "titulo": "Container transbordando", "descricao": "Lixo espalhado no Eldorado.", "status": "aberto", "lat": -19.9195, "lng": -44.0395, "createdAt": "2025-01-10T10:15:00Z" },
-    { "id": 38, "usuarioId": 1, "cidadeId": 1, "bairroId": 5, "tipo": "sinalizacao", "titulo": "Faixa de pedestres apagada", "descricao": "Faixa no centro precisa ser repintada.", "status": "resolvido", "lat": -19.9248, "lng": -43.9358, "createdAt": "2025-01-09T16:25:00Z", "resolvedAt": "2025-01-10T08:00:00Z" },
-    { "id": 39, "usuarioId": 2, "cidadeId": 1, "bairroId": 6, "tipo": "calcada",     "titulo": "Calçada esburacada", "descricao": "Múltiplos buracos na Pampulha.", "status": "aberto", "lat": -19.8630, "lng": -43.9660, "createdAt": "2025-01-09T12:10:00Z" },
-    { "id": 40, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "iluminacao",  "titulo": "Poste com luz fraca", "descricao": "Iluminação insuficiente na rua.", "status": "aberto", "lat": -19.9358, "lng": -43.9325, "createdAt": "2025-01-08T20:45:00Z" }
+  "cidadaos": [
+    {
+      "id": 1,
+      "login": "joaozinho",
+      "senha": "123",
+      "nome": "Joao Pedro",
+      "email": "joaozinho@gmai.com"
+    },
+    {
+      "id": 2,
+      "login": "Maria00",
+      "senha": "123",
+      "nome": "Maria Luiza",
+      "email": "marialuiza@gmail.com"
+    }
+  ],
+  "denuncias": [
+    {
+      "id": 1,
+      "descricao": "Poste de luz queimado",
+      "latitude": -23.55052,
+      "longitude": -46.633308
+    },
+    {
+      "id": 2,
+      "descricao": "Buraco na rua",
+      "latitude": -23.55152,
+      "longitude": -46.634308
+    }
   ]
 }
