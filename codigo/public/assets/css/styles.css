@@ -59,6 +59,11 @@ body{
     padding: 10px 16px;
 }
 
+.user-panel{
+    margin: 0 auto;
+    padding: 10px 16px;
+}
+
 /* Conteiner de informações sobre ultima denúncia*/
 .conteiner-last-reports{
     background-color: #6a6a6a;
@@ -672,6 +677,11 @@ textarea.form-control {
     color: brown;
 }
 
+#occurrence-map-canvas {
+    border: 2px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Painel de denúncias em destaques*/
 .users-highlights{
     background-color: #f4f4f4;
@@ -688,149 +698,50 @@ textarea.form-control {
     border-radius: 12px;
 }
 
-/* == Painel de Usuario == */
-:root{
-  --bg:#ececec;
-  --panel:#2f2f2f;
-  --panel-2:#ffffff;
-  --text:#232323;
-  --muted:#7a7a7a;
-
-  --red:#d92929;
-  --yellow:#ffd23b;
-  --green:#18a957;
-
-  --radius:16px;
-  --shadow:0 8px 20px rgba(0,0,0,.08);
-  --container:1200px;
+#recent-reports-list .list-group-item {
+    background-color: #5a5a5a;
+    border-color: #6a6a6a;
+    color: white;
 }
 
-/* Base */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-  line-height:1.45;
-}
-img{max-width:100%;display:block}
-.container{width:min(100% - 2rem, var(--container));margin-inline:auto}
-
-/* Header */
-.topbar{
-  background:#3c3c3c;
-  color:#fff;
-  border-bottom:3px solid #2b2b2b;
-}
-.topbar__inner{
-  display:flex;align-items:center;gap:1rem;min-height:64px;
-}
-.brand__logo{
-  display:inline-block;
-  background:#242424;
-  color:#e8e8e8;
-  padding:.5rem .75rem;
-  border-radius:10px;
-  font-weight:800;
-  letter-spacing:.2px;
-}
-.brand__logo span{color:#ff4d5a}
-
-.mainnav{
-  display:flex;gap:1rem;margin-left:1rem;flex:1 1 auto;
-  overflow:auto;
-}
-.mainnav__link{
-  color:#ddd;text-decoration:none;padding:.4rem .6rem;border-radius:10px;
-  white-space:nowrap;
-}
-.mainnav__link:hover{background:rgba(255,255,255,.08);color:#fff}
-.mainnav__link.is-active{color:#ff4d5a;font-weight:700}
-
-.user{display:flex;align-items:center;gap:.5rem;margin-left:auto}
-.user__avatar{inline-size:36px;block-size:36px;border-radius:50%;display:grid;place-items:center;background:#565656}
-.user__hello{font-size:.9rem;color:#d7d7d7}
-.user__dot{inline-size:8px;block-size:8px;background:#ff3b3b;border-radius:50%;display:inline-block}
-
-/* Page header */
-.page{padding:1.5rem 0 2rem}
-.page__title{
-  font-size:1.8rem;margin:.5rem 0 1rem;color:#7b7b7b;font-weight:800
+#recent-reports-list .list-group-item:hover {
+    background-color: #656565;
 }
 
-/* Tabs */
-.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
-.tab{
-  border:0;cursor:pointer;
-  padding:.5rem .9rem;border-radius:999px;
-  background:#d9d9d9;color:#333;font-weight:600;
-}
-.tab.is-active{background:#3f3f3f;color:#fff}
-
-/* Layout */
-.layout{display:grid;gap:1rem;grid-template-columns:1fr}
-@media (min-width: 980px){
-  .layout{grid-template-columns: 340px 1fr}
+/* Últimas denúncias do usuário */
+.ultimas-denuncias-container {
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-/* Sidebar */
-.sidebar{
-  background:#3f3f3f;color:#eee;border-radius:18px;padding:1rem;
-  box-shadow:var(--shadow);
-}
-.profile{display:flex;gap:.8rem;align-items:center}
-.profile__avatar{inline-size:48px;block-size:48px;border-radius:50%;display:grid;place-items:center;background:#2b2b2b}
-.profile__info span{display:block;color:#cfcfcf;font-size:.9rem}
-.sep{border:0;border-top:1px solid rgba(255,255,255,.2);margin:1rem 0}
-.updates__title{font-size:1rem;margin:.2rem 0 .6rem;color:#e8e8e8}
-.update{display:flex;gap:.6rem;align-items:flex-start;margin:.6rem 0}
-.update__avatar{inline-size:28px;block-size:28px;border-radius:50%;display:grid;place-items:center;background:#2b2b2b}
-.update__text strong{display:block}
-
-/* Reports list */
-.reports{display:grid;gap:1rem}
-.report{
-  display:grid;grid-template-columns: 44px 1fr 110px;gap:.8rem;
-  background:var(--panel-2);border-radius:14px;padding:.9rem;border:1px solid #dcdcdc;
-  align-items:center;box-shadow:var(--shadow)
-}
-@media (max-width:680px){
-  .report{grid-template-columns:44px 1fr}
-  .report__thumb{display:none}
-}
-.report__avatar{inline-size:44px;block-size:44px;border-radius:50%;display:grid;place-items:center;background:#f1f1f1}
-.report__title{margin:0 0 .2rem}
-.report__time{color:var(--muted);font-size:.9rem}
-.report__thumb{
-  inline-size:100%; block-size:68px;
-  border-radius:10px;background:#f1f1f1;display:grid;place-items:center;font-size:1.2rem
+.denuncia-item {
+    background-color: #5a5a5a;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    border-left: 4px solid #6c757d;
+    font-size: 12px;
 }
 
-.report__status{display:flex;gap:.6rem;align-items:center;margin-top:.4rem;flex-wrap:wrap}
-.status-pill{
-  display:inline-flex;align-items:center;gap:.35rem;
-  padding:.25rem .55rem;border-radius:999px;font-weight:700;font-size:.9rem;
-  border:1px solid #e8e8e8;background:#f6f6f6;color:#333
-}
-.status-pill .dot{
-  inline-size:.7rem;block-size:.7rem;border-radius:50%;display:inline-block
-}
-.status--pendente .dot{background:var(--red)}
-.status--andamento .dot{background:var(--yellow)}
-.status--concluido .dot{background:var(--green)}
-.status--pendente{background:#fff0f0}
-.status--andamento{background:#fff9df}
-.status--concluido{background:#eefdf2}
-
-.status-select{
-  padding:.4rem .55rem;border-radius:10px;border:1px solid #d0d0d0;background:#fff
-}
-.sr-only{
-  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0
+.denuncia-item.status-aberto {
+    border-left-color: #ffc107;
 }
 
-/* Footer */
-.footer{padding:2rem 0 3rem;color:#666}
-.footer__inner{display:flex;align-items:center;justify-content:center;border-top:1px solid #d7d7d7;padding-top:1rem}
+.denuncia-item.status-em_andamento {
+    border-left-color: #0dcaf0;
+}
+
+.denuncia-item.status-resolvido {
+    border-left-color: #198754;
+}
+
+.denuncia-titulo {
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: white;
+}
+
+.denuncia-meta {
+    color: #d1d1d1;
+    font-size: 10px;
+}

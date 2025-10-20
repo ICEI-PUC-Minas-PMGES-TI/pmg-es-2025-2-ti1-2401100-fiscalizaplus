@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Session - FiscalizaPlus</title>
+</head>
+<body>
+    <h1>Test Session Setup</h1>
+    <p>This page will set up a test user session and redirect to dashboard.</p>
+    
+    <script>
+        // Set up a test user session (Joãozinho from db.json)
+        const testUser = {
+            "id": 3,
+            "login": "joaozinho", 
+            "nome": "Joãozinho",
+            "email": "joaozinho@gmail.com",
+            "cidadeId": 1,
+            "bairroId": 1
+        };
+        
+        sessionStorage.setItem('usuarioCorrente', JSON.stringify(testUser));
+        
+        // Redirect to dashboard after 1 second
+        setTimeout(() => {
+            window.location.href = '/index.html';
+        }, 1000);
+    </script>
+</body>
+</html>
