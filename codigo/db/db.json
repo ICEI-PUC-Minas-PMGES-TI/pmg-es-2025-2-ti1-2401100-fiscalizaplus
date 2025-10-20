@@ -1,4 +1,36 @@
 {
+
+  "cidadaos": [
+    {
+      "id": 1,
+      "login": "joaozinho",
+      "senha": "123",
+      "nome": "Joao Pedro",
+      "email": "joaozinho@gmai.com"
+    },
+    {
+      "id": 2,
+      "login": "Maria00",
+      "senha": "123",
+      "nome": "Maria Luiza",
+      "email": "marialuiza@gmail.com"
+    }
+  ],
+  "denuncias": [
+    {
+      "id": 1,
+      "descricao": "Poste de luz queimado",
+      "latitude": -23.55052,
+      "longitude": -46.633308
+    },
+    {
+      "id": 2,
+      "descricao": "Buraco na rua",
+      "latitude": -23.55152,
+      "longitude": -46.634308
+    }
+  ],
+
   "usuarios": [
     { "id": 1, "login": "admin", "senha": "123", "nome": "Administrador do Sistema", "email": "admin@abc.com", "cidadeId": 1, "bairroId": 1 },
     { "id": 2, "login": "user", "senha": "123", "nome": "Usuario Comum", "email": "user@abc.com", "cidadeId": 1, "bairroId": 2 },
