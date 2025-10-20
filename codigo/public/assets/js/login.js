@@ -11,8 +11,8 @@
 
 
 // Página inicial de Login
-const LOGIN_URL = "/modulos/login/login.html";
-let RETURN_URL = "/modulos/login/index.html";
+const LOGIN_URL = "/index.html";
+let RETURN_URL = "/index.html";
 const API_URL = '/usuarios';
 
 // Objeto para o banco de dados de usuários baseado em JSON
@@ -34,7 +34,8 @@ function initLoginApp () {
         if (usuarioCorrenteJSON) {
             usuarioCorrente = JSON.parse (usuarioCorrenteJSON);
         } else {
-            window.location.href = LOGIN_URL;
+            // Comentado para não redirecionar automaticamente
+            // window.location.href = LOGIN_URL;
         }
 
         // REGISTRA LISTENER PARA O EVENTO DE CARREGAMENTO DA PÁGINA PARA ATUALIZAR INFORMAÇÕES DO USUÁRIO
@@ -98,7 +99,8 @@ function loginUser (login, senha) {
 // Apaga os dados do usuário corrente no sessionStorage
 function logoutUser () {
     sessionStorage.removeItem ('usuarioCorrente');
-    window.location = LOGIN_URL;
+    // Comentado para não redirecionar automaticamente
+    // window.location = LOGIN_URL;
 }
 
 function addUser (nome, login, senha, email) {
@@ -136,3 +138,16 @@ function showUserInfo (element) {
 
 // Inicializa as estruturas utilizadas pelo LoginApp
 initLoginApp ();
+
+// Login automático temporário para desenvolvimento
+if (!sessionStorage.getItem('usuarioCorrente')) {
+    // Simula login do usuário joaozinho
+    const usuarioTemp = {
+        id: 3,
+        login: "joaozinho",
+        email: "joaozinho@gmail.com",
+        nome: "Joãozinho"
+    };
+    sessionStorage.setItem('usuarioCorrente', JSON.stringify(usuarioTemp));
+    usuarioCorrente = usuarioTemp;
+}
