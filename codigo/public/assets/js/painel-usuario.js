@@ -38,6 +38,56 @@
     }
   }
 
+  function fmtDate(iso) {
+    try {
+      const d = new Date(iso);
+      if (isNaN(d)) return '';
+      return d.toLocaleString();
+    } catch { return ''; }
+  }
+
+  function statusBadge(status) {
+    const color = (() => {
+      switch (String(status || '').toLowerCase()) {
+        case 'aberto': return 'warning';
+        case 'em_andamento': return 'info';
+        case 'resolvido': return 'success';
+        default: return 'secondary';
+      }
+    })();
+    return `<span class="badge text-bg-${color}">${status || 'n/d'}</span>`;
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"]+/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));
+  }
+
+  // Function to populate recent reports
+  async function populateRecentReports() {
+    const user = getUsuarioCorrente();
+    if (!user) return;
+    
+    const usuario = await fetchJson(`/usuarios/${user.id}`);
+    
+    // Recentes na cidade
+    const recentes = await fetchJson(`/ocorrencias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=5`);
+    const ul = document.getElementById('recent-reports-list');
+    if (ul) {
+      ul.innerHTML = '';
+      recentes.forEach(o => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <div>
+            <div><strong>${escapeHtml(o.titulo)}</strong> ${statusBadge(o.status)}</div>
+            <div class="text-muted small">${escapeHtml(o.tipo || 'n/d')} · ${fmtDate(o.createdAt)}</div>
+          </div>
+          <span class="text-muted small">Bairro ${o.bairroId}</span>`;
+        ul.appendChild(li);
+      });
+    }
+  }
+
   async function init() {
     const user = getUsuarioCorrente();
     if (!user) return;
@@ -64,6 +114,9 @@
         });
       }
     }
+
+    // Populate recent reports
+    await populateRecentReports();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
