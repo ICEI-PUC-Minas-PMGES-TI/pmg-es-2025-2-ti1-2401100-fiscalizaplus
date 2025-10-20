@@ -14,5 +14,27 @@
       "nome": "Maria Luiza",
       "email": "marialuiza@gmail.com"
     }
-  ]
+  ],
+  "denuncias":[
+  {
+      "id": 1,
+       "descricao": "Poste de luz queimado",
+        "latitude": -23.55052, 
+        "longitude": -46.633308
+    },
+    {
+      "id": 2,
+       "descricao": "Buraco na rua",
+        "latitude": -23.55152, 
+        "longitude": -46.634308
+    }
+    
+]
+
+
+
 }
+
+
+
+  
