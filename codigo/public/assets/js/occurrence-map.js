@@ -14,10 +14,40 @@
     }
   }
 
-  async function fetchJson(url) {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Falha ao carregar ' + url);
-    return res.json();
+  function fetchJson(url) {
+    // Usar dados locais (sem requisições)
+    const data = window.DB_DATA;
+    
+    // Simular consultas da API localmente
+    if (url.startsWith('/usuarios/')) {
+      const id = parseInt(url.split('/')[2]);
+      return Promise.resolve(data.usuarios.find(u => u.id === id));
+    }
+    
+    if (url.startsWith('/bairros/')) {
+      const id = parseInt(url.split('/')[2]);
+      return Promise.resolve(data.bairros.find(b => b.id === id));
+    }
+    
+    if (url.startsWith('/cidades/')) {
+      const id = parseInt(url.split('/')[2]);
+      return Promise.resolve(data.cidades.find(c => c.id === id));
+    }
+    
+    if (url.startsWith('/ocorrencias')) {
+      const params = new URLSearchParams(url.split('?')[1] || '');
+      let result = data.ocorrencias || [];
+      
+      // Filtrar por cidadeId
+      if (params.get('cidadeId')) {
+        const cidadeId = parseInt(params.get('cidadeId'));
+        result = result.filter(o => o.cidadeId === cidadeId);
+      }
+      
+      return Promise.resolve(result);
+    }
+    
+    return Promise.resolve(data);
   }
 
   async function init() {

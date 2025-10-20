@@ -8,10 +8,51 @@
     }
   }
 
-  async function fetchJson(url) {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Falha ao carregar ' + url);
-    return res.json();
+  function fetchJson(url) {
+    // Usar dados locais (sem requisições)
+    const data = window.DB_DATA;
+    
+    // Simular consultas da API localmente
+    if (url.startsWith('/usuarios/')) {
+      const id = parseInt(url.split('/')[2]);
+      return Promise.resolve(data.usuarios.find(u => u.id === id));
+    }
+    
+    if (url === '/bairros') {
+      return Promise.resolve(data.bairros);
+    }
+    
+    if (url.startsWith('/ocorrencias')) {
+      const params = new URLSearchParams(url.split('?')[1] || '');
+      let result = data.ocorrencias || [];
+      
+      // Filtrar por cidadeId
+      if (params.get('cidadeId')) {
+        const cidadeId = parseInt(params.get('cidadeId'));
+        result = result.filter(o => o.cidadeId === cidadeId);
+      }
+      
+      // Filtrar por usuarioId
+      if (params.get('usuarioId')) {
+        const usuarioId = parseInt(params.get('usuarioId'));
+        result = result.filter(o => o.usuarioId === usuarioId);
+      }
+      
+      // Ordenar por data
+      if (params.get('_sort') === 'createdAt' && params.get('_order') === 'desc') {
+        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+      
+      // Limitar resultados
+      if (params.get('_limit')) {
+        const limit = parseInt(params.get('_limit'));
+        result = result.slice(0, limit);
+      }
+      
+      return Promise.resolve(result);
+    }
+    
+    return Promise.resolve(data);
   }
 
 

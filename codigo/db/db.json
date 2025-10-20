@@ -98,6 +98,6 @@
     { "id": 37, "usuarioId": 10, "cidadeId": 2, "bairroId": 8, "tipo": "lixo",       "titulo": "Container transbordando", "descricao": "Lixo espalhado no Eldorado.", "status": "aberto", "lat": -19.9195, "lng": -44.0395, "createdAt": "2025-01-10T10:15:00Z" },
     { "id": 38, "usuarioId": 1, "cidadeId": 1, "bairroId": 5, "tipo": "sinalizacao", "titulo": "Faixa de pedestres apagada", "descricao": "Faixa no centro precisa ser repintada.", "status": "resolvido", "lat": -19.9248, "lng": -43.9358, "createdAt": "2025-01-09T16:25:00Z", "resolvedAt": "2025-01-10T08:00:00Z" },
     { "id": 39, "usuarioId": 2, "cidadeId": 1, "bairroId": 6, "tipo": "calcada",     "titulo": "Calçada esburacada", "descricao": "Múltiplos buracos na Pampulha.", "status": "aberto", "lat": -19.8630, "lng": -43.9660, "createdAt": "2025-01-09T12:10:00Z" },
-    { "id": 40, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "iluminacao",  "titulo": "Poste com luz fraca", "descricao": "Iluminação insuficiente na rua.", "status": "aberto", "lat": -19.9358, "lng": -43.9325, "createdAt": "2025-01-08T20:45:00Z" }
+    { "id": 40, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "iluminacao",  "titulo": "Poste com luz media", "descricao": "Iluminação insuficiente na rua.", "status": "aberto", "lat": -19.9358, "lng": -43.9325, "createdAt": "2025-01-08T20:45:00Z" }
   ]
 }
