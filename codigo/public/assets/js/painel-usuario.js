@@ -64,27 +64,48 @@
 
   // Function to populate recent reports
   async function populateRecentReports() {
-    const user = getUsuarioCorrente();
-    if (!user) return;
-    
-    const usuario = await fetchJson(`/usuarios/${user.id}`);
-    
-    // Recentes na cidade
-    const recentes = await fetchJson(`/ocorrencias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=5`);
-    const ul = document.getElementById('recent-reports-list');
-    if (ul) {
-      ul.innerHTML = '';
-      recentes.forEach(o => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `
-          <div>
-            <div><strong>${escapeHtml(o.titulo)}</strong> ${statusBadge(o.status)}</div>
-            <div class="text-muted small">${escapeHtml(o.tipo || 'n/d')} · ${fmtDate(o.createdAt)}</div>
-          </div>
-          <span class="text-muted small">Bairro ${o.bairroId}</span>`;
-        ul.appendChild(li);
+    try {
+      const user = getUsuarioCorrente();
+      if (!user) return;
+      
+      const usuario = await fetchJson(`/usuarios/${user.id}`);
+      
+      // Buscar bairros para obter os nomes
+      const bairros = await fetchJson('/bairros');
+      const bairrosMap = {};
+      bairros.forEach(b => {
+        bairrosMap[b.id] = b.nome;
       });
+      
+      // Recentes na cidade
+      const recentes = await fetchJson(`/ocorrencias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=5`);
+      const ul = document.getElementById('recent-reports-list');
+      if (ul) {
+        if (recentes.length === 0) {
+          ul.innerHTML = '<li class="list-group-item">Nenhum relatório encontrado na sua cidade.</li>';
+          return;
+        }
+        
+        ul.innerHTML = '';
+        recentes.forEach((o, index) => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item d-flex justify-content-between align-items-start';
+          li.innerHTML = `
+            <div class="flex-grow-1">
+              <div><strong>${escapeHtml(o.titulo)}</strong> ${statusBadge(o.status)}</div>
+              <div class="text-muted small">${escapeHtml(o.tipo || 'n/d')} · ${fmtDate(o.createdAt)}</div>
+              <div class="text-muted small">📍 ${bairrosMap[o.bairroId] || `Bairro ${o.bairroId}`}</div>
+            </div>
+            <span class="badge bg-secondary ms-2">#${index + 1}</span>`;
+          ul.appendChild(li);
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar relatórios recentes:', error);
+      const ul = document.getElementById('recent-reports-list');
+      if (ul) {
+        ul.innerHTML = '<li class="list-group-item text-danger">Erro ao carregar relatórios recentes.</li>';
+      }
     }
   }
 
