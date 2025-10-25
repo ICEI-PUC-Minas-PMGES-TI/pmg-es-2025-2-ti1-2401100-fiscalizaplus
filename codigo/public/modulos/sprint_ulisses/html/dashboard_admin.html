@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Administrativo | Fiscaliza+</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script defer src="../js/main_admin.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+      <div class="logo">Fiscaliza+</div>
+      <nav class="sidebar-nav">
+        <a href="#">Painel</a>
+        <a href="#">Usuários</a>
+        <a href="#">Denúncias</a>
+        <a href="#">Relatórios</a>
+        <a href="#">Configurações</a>
+      </nav>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="admin-dashboard">
+      <header class="topbar" style="background:transparent; color:var(--texto); padding:0;">
+        <h1 style="margin:0; font-size:2rem; color:var(--azul-principal)">Dashboard Administrativo</h1>
+        <p style="margin:6px 0 0 0; color:#666">Bem-vindo, Administrador 👋</p>
+      </header>
+
+      <!-- Cards -->
+      <section class="dashboard-area">
+        <div class="card estatistica">
+          <h2>Total de Denúncias</h2>
+          <p class="valor" id="totalAdmin">0</p>
+        </div>
+        <div class="card estatistica">
+          <h2>Denúncias Resolvidas</h2>
+          <p class="valor" id="resolvidasAdmin">0</p>
+        </div>
+        <div class="card estatistica">
+          <h2>Em Andamento</h2>
+          <p class="valor" id="andamentoAdmin">0</p>
+        </div>
+        <div class="card estatistica">
+          <h2>Em andamento hoje</h2>
+          <p class="valor" id="hojeAdmin">0</p>
+        </div>
+      </section>
+
+      <!-- Gráfico simples (donut) -->
+      <section class="grafico-area card">
+        <h2>Distribuição das Denúncias</h2>
+        <div class="donut" id="donutAdmin">
+          <div class="center" id="donutAdminCenter">--%</div>
+        </div>
+        <div class="legenda">
+          <span class="resolvido">Resolvidas</span>
+          <span class="andamento">Em andamento</span>
+          <span class="pendente">Pendentes</span>
+        </div>
+      </section>
+
+      <!-- Tabela -->
+      <section class="tabela-area card">
+        <h2>Últimas Denúncias</h2>
+        <table class="tabela-denuncias">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título da denúncia</th>
+              <th>Status</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-corpo">
+            <!-- preenchido por JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <footer class="rodape">
+    <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
+  </footer>
+</body>
+</html>

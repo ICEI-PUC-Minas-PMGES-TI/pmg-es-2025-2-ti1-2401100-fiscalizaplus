@@ -335,7 +335,7 @@ function removeImage(index){
 
 // Função de armazenamento Local dos Dados
 
-const STORAGE_KEY = 'relatosCidadão';
+const STORAGE_KEY = 'relatosUsuario';
 
 function handleSubmit(event) {
     event.preventDefault();
