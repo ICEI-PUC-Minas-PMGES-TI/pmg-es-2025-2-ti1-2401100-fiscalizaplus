@@ -276,3 +276,156 @@ body {
     gap: 10px;
   }
 }
+/* Adicione ao seu CSS existente */
+.acoes {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-editar {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-excluir {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-editar:hover {
+  background: #1976D2;
+}
+
+.btn-excluir:hover {
+  background: #d32f2f;
+}
+
+.status.resolvido { background: #4CAF50; }
+.status.andamento { background: #FFB300; }
+.status.pendente { background: #E53935; }
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Filtros */
+.filtros {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.filtros select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+/* Estilos para o modal de status */
+.modal-status {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-status-content {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 350px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.modal-status h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.modal-status select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-status-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-confirmar {
+  flex: 1;
+  padding: 10px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  flex: 1;
+  padding: 10px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-confirmar:hover {
+  background: #45a049;
+}
+
+.btn-cancelar:hover {
+  background: #da190b;
+}
+
+/* Feedback notifications */
+.feedback-admin {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 4px;
+  z-index: 1001;
+  font-weight: bold;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
