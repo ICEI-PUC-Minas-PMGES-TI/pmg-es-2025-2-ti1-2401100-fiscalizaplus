@@ -11,6 +11,7 @@
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../../assets/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 </head>
 
 <body>
@@ -130,7 +131,12 @@
             </div>
           </div>
 
-          <div class="report__thumb" aria-hidden="true">🗺️</div>
+          <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9364"
+          data-lng="-43.9344"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
         </article>
 
         <!-- Relato 2 -->
@@ -150,7 +156,12 @@
               </select>
             </div>
           </div>
-          <div class="report__thumb" aria-hidden="true">🗺️</div>
+          <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9292"
+          data-lng="-43.9398"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
         </article>
 
         <!-- Relato 3 -->
@@ -171,14 +182,19 @@
               </select>
             </div>
           </div>
-          <div class="report__thumb" aria-hidden="true">🗺️</div>
+         <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9371"
+          data-lng="-43.9340"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
         </article>
 
         <!-- Relato 4 -->
         <article class="report" data-id="r4" data-status="andamento">
           <div class="report__avatar">🧑</div>
           <div class="report__body">
-            <h3 class="report__title">Rua com faixa de pedestre apagada</h3>
+            <h3 class="report__title">Buraco na Rua X</h3>
             <span class="report__time">2d atrás</span>
 
             <div class="report__status">
@@ -191,7 +207,63 @@
               </select>
             </div>
           </div>
-          <div class="report__thumb" aria-hidden="true">🗺️</div>
+         <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9362"
+          data-lng="-43.9329"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
+        </article>
+        
+        <!-- Relato 5 -->
+        <article class="report" data-id="r3" data-status="concluido">
+          <div class="report__avatar">🧑</div>
+          <div class="report__body">
+            <h3 class="report__title">Lixeira quebrada</h3>
+            <span class="report__time">6d atrás</span>
+
+            <div class="report__status">
+              <span class="status-pill status--concluido">
+                <i class="dot"></i><span class="status-text">Concluido</span>
+              </span>
+              <label class="sr-only" for="select-r4">Alterar status</label>
+              
+               
+              </select>
+            </div>
+          </div>
+         <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9299"
+          data-lng="-43.9214"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
+        </article>
+
+
+                <!-- Relato 6 -->
+        <article class="report" data-id="r4" data-status="andamento">
+          <div class="report__avatar">🧑</div>
+          <div class="report__body">
+            <h3 class="report__title">Placa de transito danificada</h3>
+            <span class="report__time">9d atrás</span>
+
+            <div class="report__status">
+              <span class="status-pill status--andamento">
+                <i class="dot"></i><span class="status-text">Em andamento</span>
+              </span>
+              <label class="sr-only" for="select-r4">Alterar status</label>
+              
+               
+              </select>
+            </div>
+          </div>
+         <div
+          class="occurrence-map-canvas"
+          data-lat="-19.9298"
+          data-lng="-43.9220"
+          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
+        ></div>
         </article>
       </section>
     </section>
@@ -204,6 +276,9 @@
   </footer>
 
   <script src="/codigo/public/assets/js/status-relatos.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="/codigo/public/assets/js/occurrence-map.js"></script>
+
 
 </body>
 </html>
