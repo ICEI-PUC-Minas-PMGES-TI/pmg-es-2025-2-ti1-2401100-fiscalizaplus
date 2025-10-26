@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Servidor - FiscalizaPlus</title>
     <link rel="stylesheet" href="/codigo/public/assets/css/cadastro.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="form-wrapper">
-            <!-- Logo -->
             <div class="logo">
                 <img src="/codigo/public/assets/images/logo.png" alt="" class="logo-icon">
             </div>
 
-            <!-- Header -->
             <div class="form-header">
                 <h2 class="form-title">Cadastro de Administrador</h2>
                 <p class="form-subtitle">Complete seu cadastro para ter acesso à área da prefeitura</p>
             </div>
 
-            <!-- Form -->
             <form id="cadastroForm" class="cadastro-form">
                 <div class="form-group">
                     <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Nome completo" required>
@@ -40,10 +38,9 @@
                 </div>
 
                 <div class="form-group">
-                    <select id="cidade" name="cidade" required>
+                    <select id="cidade" name="cidade" required disabled>
                         <option value="">Cidade</option>
-                        <!-- Será preenchido dinamicamente baseado no estado -->
-                    </select>
+                        </select>
                 </div>
 
                 <div class="form-group">
@@ -61,11 +58,8 @@
                 <div class="form-group">
                     <div class="password-input">
                         <input type="password" id="senha" name="senha" placeholder="Senha" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('senha')">
-                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
+                        <button type="button" class="toggle-password" data-target="senha">
+                            <span class="material-icons eye-icon">visibility</span>
                         </button>
                     </div>
                 </div>
@@ -73,33 +67,27 @@
                 <div class="form-group">
                     <div class="password-input">
                         <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar senha" required>
-                        <button type="button" class="toggle-password">
-                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
+                        <button type="button" class="toggle-password" data-target="confirmarSenha">
+                            <span class="material-icons eye-icon">visibility</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Separator -->
                 <div class="separator"></div>
 
-                <!-- Submit Button -->
                 <button type="submit" class="submit-btn">
-                    <span class="btn-icon">👤+</span>
+                    <span class="material-icons btn-icon">person_add</span>
                     Cadastrar
                 </button>
             </form>
 
-            <!-- Login Link -->
             <div class="login-link">
                 <span>Já possui uma conta? </span>
-                <a href="#" class="login-text">Entrar</a>
+                <a href="/codigo/public/modulos/login/login.html" class="login-text">Entrar</a>
             </div>
         </div>
     </div>
 
-    <script src="cadastro-servidor.js"></script>
+    <script src="/codigo/public/assets/js/cadastro.js"></script>
 </body>
 </html>

@@ -21,11 +21,11 @@
                 <p class="form-subtitle">Insira sua chave de acesso para liberar o acesso ao formulário de cadastro de servidores</p>
             </div>
 
-            <form class="cadastro-form">
+            <form id="tokenForm" class="cadastro-form"> 
                 
                 <div class="form-group">
-                    <input type="text" placeholder="Ex: 1A2B-3C4D-5E6F" required>
-                    </div>
+                    <input type="text" id="tokenInput" name="token" placeholder="Ex: 1A2B-3C4D-5E6F" required>
+                </div>
                 
                 <button type="submit" class="submit-btn">
                     <i class="btn-icon">🔑</i> Validar token
@@ -40,5 +40,7 @@
             
         </div>
     </div>
+
+    <script src="/codigo/public/assets/js/cadastro.js"></script>
 </body>
 </html>

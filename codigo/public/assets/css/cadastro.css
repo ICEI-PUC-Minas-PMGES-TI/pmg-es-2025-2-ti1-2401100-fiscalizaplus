@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+/* Variáveis (Se você usasse) */
+:root {
+    --color-primary: #e53e3e;
+    --color-primary-dark: #c1121f;
+    --color-secondary: #667eea;
+    --color-text: #2d3748;
+    --color-card-bg: rgba(230, 230, 230, 0.9);
+}
+
+
 /* Formatação da página de token de cadastro */
 
 .container-token {
@@ -16,16 +26,17 @@
     padding: 40px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    /* Já definida no body, mas mantida para garantir consistência no card */
     background-color: rgba(230, 230, 230, 0.9); 
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-image: url('/codigo/public/assets/images/background-cadastro.png');
+    /* Imagem de fundo e overlay */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('/codigo/public/assets/images/background-cadastro.png');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('/codigo/public/assets/images/background-cadastro.png');
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -85,7 +96,10 @@ body::before {
 }
 
 .logo-icon {
-    width: 200px;
+    /* Ajustado para uma largura mais comum para logos em formulários */
+    width: 160px; 
+    max-width: 100%;
+    height: auto;
 }
 
 .logo-text {
@@ -177,11 +191,11 @@ body::before {
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #e53e3e; /* Cor da marca */
     background-color: white;
     box-shadow: 
-        0 0 0 3px rgba(102, 126, 234, 0.1),
-        0 4px 12px rgba(102, 126, 234, 0.15);
+        0 0 0 3px rgba(229, 62, 62, 0.1),
+        0 4px 12px rgba(229, 62, 62, 0.15);
     transform: translateY(-1px);
 }
 
@@ -192,7 +206,7 @@ body::before {
 
 .form-group select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23e53e3e' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 16px center;
     background-repeat: no-repeat;
     background-size: 20px;
@@ -214,7 +228,7 @@ body::before {
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(229, 62, 62, 0.1);
     border: none;
     cursor: pointer;
     padding: 8px;
@@ -223,22 +237,23 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1; /* Alinha o ícone do Material Icons */
 }
 
 .toggle-password:hover {
-    background: rgba(102, 126, 234, 0.2);
+    background: rgba(229, 62, 62, 0.2);
     transform: translateY(-50%) scale(1.05);
 }
 
 .eye-icon {
-    width: 20px;
-    height: 20px;
-    color: #667eea;
+    /* Ajuste para o tamanho dos ícones do Material Icons */
+    font-size: 20px; 
+    color: #e53e3e;
     transition: all 0.3s ease;
 }
 
 .toggle-password:hover .eye-icon {
-    color: #5a67d8;
+    color: #c1121f;
 }
 
 /* Separator */
@@ -300,7 +315,7 @@ body::before {
 .submit-btn:hover {
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(102, 126, 234, 0.3),
+        0 8px 25px rgba(229, 62, 62, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
@@ -389,6 +404,9 @@ body::before {
 
 /* Responsive */
 @media (max-width: 480px) {
+    body{
+        min-height: 50vh;
+    }
     .form-wrapper {
         padding: 32px 24px;
         margin: 16px;
@@ -410,6 +428,6 @@ body::before {
     }
     
     .logo-icon {
-        font-size: 28px;
+        width: 140px;
     }
 }
