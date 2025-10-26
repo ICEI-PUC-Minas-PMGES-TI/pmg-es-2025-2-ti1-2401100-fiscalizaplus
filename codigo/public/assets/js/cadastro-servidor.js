@@ -35,8 +35,8 @@ let form, estadoSelect, cidadeSelect;
 
 // Constantes de Controle
 const TOKENS_KEY = 'tokens_validos_e_usados';
-const URL_CADASTRO = '/codigo/public/modulos/cadastro/cadastro-servidor.html';
-const URL_TOKEN = '/codigo/public/modulos/cadastro/token-servidor.html';
+const URL_CADASTRO = '../../modulos/cadastro/cadastro-servidor.html';
+const URL_TOKEN = '../../modulos/cadastro/token-servidor.html';
 const URL_LOGIN = '#';
 
 

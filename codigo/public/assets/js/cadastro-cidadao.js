@@ -8,7 +8,7 @@ const cidadesPorEstado = {
 let form, estadoSelect, cidadeSelect;
 
 // Constantes de Controle
-const URL_CADASTRO = '/codigo/public/modulos/cadastro/cadastro-cidadao.html';
+const URL_CADASTRO = '../../modulos/cadastro/cadastro-cidadao.html';
 const URL_LOGIN = '#'; 
 // FUNÇÕES DE CADASTRO
 

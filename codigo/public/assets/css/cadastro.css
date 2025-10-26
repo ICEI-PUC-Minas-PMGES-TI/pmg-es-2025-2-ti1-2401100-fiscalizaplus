@@ -33,7 +33,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     /* Imagem de fundo e overlay */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('/codigo/public/assets/images/background-cadastro.png');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('../../assets/images/background-cadastro.png');
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
