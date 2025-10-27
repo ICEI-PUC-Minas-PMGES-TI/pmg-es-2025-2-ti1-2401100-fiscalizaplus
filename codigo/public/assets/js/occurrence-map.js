@@ -19,9 +19,9 @@
     const data = window.DB_DATA;
     
     // Simular consultas da API localmente
-    if (url.startsWith('/usuarios/')) {
+    if (url.startsWith('/cidadaos/')) {
       const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.usuarios.find(u => u.id === id));
+      return Promise.resolve(data.cidadaos.find(u => u.id === id));
     }
     
     if (url.startsWith('/bairros/')) {
@@ -34,9 +34,9 @@
       return Promise.resolve(data.cidades.find(c => c.id === id));
     }
     
-    if (url.startsWith('/ocorrencias')) {
+    if (url.startsWith('/denuncias')) {
       const params = new URLSearchParams(url.split('?')[1] || '');
-      let result = data.ocorrencias || [];
+      let result = data.denuncias || [];
       
       // Filtrar por cidadeId
       if (params.get('cidadeId')) {
@@ -65,8 +65,8 @@
     if (!user) {
       // Anonymous: just show BH area, try to load some occurrences city 1 if available
       try {
-        const ocorrencias = await fetchJson('/ocorrencias?cidadeId=1');
-        addMarkers(map, ocorrencias);
+  const ocorrencias = await fetchJson('/denuncias?cidadeId=1');
+  addMarkers(map, ocorrencias);
       } catch (e) {
         console.warn(e);
       }
@@ -74,7 +74,7 @@
     }
 
     // Ensure we have fresh user data (in case session has minimal fields)
-    const usuario = await fetchJson(`/usuarios/${user.id}`);
+  const usuario = await fetchJson(`/cidadaos/${user.id}`);
     const { cidadeId, bairroId } = usuario;
 
     // Load neighborhood to draw circle and recenter
@@ -82,7 +82,7 @@
     const cidade = await fetchJson(`/cidades/${cidadeId}`);
 
     // City-wide occurrences
-    const ocorrencias = await fetchJson(`/ocorrencias?cidadeId=${cidadeId}`);
+  const ocorrencias = await fetchJson(`/denuncias?cidadeId=${cidadeId}`);
 
     // Fit map to either bairro circle or city center
     const center = [bairro.lat, bairro.lng];

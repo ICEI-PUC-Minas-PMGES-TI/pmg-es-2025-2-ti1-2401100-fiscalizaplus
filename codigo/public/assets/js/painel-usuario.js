@@ -13,18 +13,18 @@
     const data = window.DB_DATA;
     
     // Simular consultas da API localmente
-    if (url.startsWith('/usuarios/')) {
+    if (url.startsWith('/cidadaos/')) {
       const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.usuarios.find(u => u.id === id));
+      return Promise.resolve(data.cidadaos.find(u => u.id === id));
     }
     
     if (url === '/bairros') {
       return Promise.resolve(data.bairros);
     }
     
-    if (url.startsWith('/ocorrencias')) {
+    if (url.startsWith('/denuncias')) {
       const params = new URLSearchParams(url.split('?')[1] || '');
-      let result = data.ocorrencias || [];
+      let result = data.denuncias || [];
       
       // Filtrar por cidadeId
       if (params.get('cidadeId')) {
@@ -109,7 +109,7 @@
       const user = getUsuarioCorrente();
       if (!user) return;
       
-      const usuario = await fetchJson(`/usuarios/${user.id}`);
+  const usuario = await fetchJson(`/cidadaos/${user.id}`);
       
       // Buscar bairros para obter os nomes
       const bairros = await fetchJson('/bairros');
@@ -119,7 +119,7 @@
       });
       
       // Recentes na cidade
-      const recentes = await fetchJson(`/ocorrencias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=5`);
+  const recentes = await fetchJson(`/denuncias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=5`);
       const ul = document.getElementById('recent-reports-list');
       if (ul) {
         if (recentes.length === 0) {
@@ -153,9 +153,9 @@
   async function init() {
     const user = getUsuarioCorrente();
     if (!user) return;
-    const usuario = await fetchJson(`/usuarios/${user.id}`);
+  const usuario = await fetchJson(`/cidadaos/${user.id}`);
 
-    const ultimasDenuncias = await fetchJson(`/ocorrencias?usuarioId=${usuario.id}&_sort=createdAt&_order=desc&_limit=2`);
+  const ultimasDenuncias = await fetchJson(`/denuncias?usuarioId=${usuario.id}&_sort=createdAt&_order=desc&_limit=2`);
     const ultimasDenunciasContainer = document.getElementById('ultimas-denuncias');
     
     if (ultimasDenunciasContainer) {

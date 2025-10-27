@@ -13,10 +13,10 @@
 // Página inicial de Login
 const LOGIN_URL = "/index.html";
 let RETURN_URL = "/index.html";
-const API_URL = '/usuarios';
+const API_URL = '/cidadaos';
 
-// Objeto para o banco de dados de usuários baseado em JSON
-var db_usuarios = {};
+// Objeto para o banco de dados de cidadãos baseado em JSON
+var db_cidadaos = {};
 
 // Objeto para o usuário corrente
 var usuarioCorrente = {};
@@ -60,7 +60,7 @@ function carregarUsuarios(callback) {
     fetch(API_URL)
     .then(response => response.json())
     .then(data => {
-        db_usuarios = data;
+        db_cidadaos = data;
         callback ()
     })
     .catch(error => {
@@ -74,8 +74,8 @@ function loginUser (login, senha) {
 
     // Verifica todos os itens do banco de dados de usuarios 
     // para localizar o usuário informado no formulario de login
-    for (var i = 0; i < db_usuarios.length; i++) {
-        var usuario = db_usuarios[i];
+    for (var i = 0; i < db_cidadaos.length; i++) {
+        var usuario = db_cidadaos[i];
 
         // Se encontrou login, carrega usuário corrente e salva no Session Storage
         if (login == usuario.login && senha == usuario.senha) {
@@ -119,7 +119,7 @@ function addUser (nome, login, senha, email) {
         .then(response => response.json())
         .then(data => {
             // Adiciona o novo usuário na variável db_usuarios em memória
-            db_usuarios.push (usuario);
+            db_cidadaos.push (usuario);
             displayMessage("Usuário inserido com sucesso");
         })
         .catch(error => {

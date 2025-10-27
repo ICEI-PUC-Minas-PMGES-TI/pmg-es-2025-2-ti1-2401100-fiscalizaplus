@@ -4,9 +4,16 @@
   "description": "Aplicação Web - FiscalizaPlus",
   "main": "public/index.html",
   "scripts": {
-   "start": "echo 'Abra o arquivo public/index.html no navegador' && start public/index.html"
+    "start": "echo 'Abra o arquivo public/index.html no navegador' && start public/index.html"
   },
-  "keywords": ["fiscalização", "cidadão", "relatórios"],
+  "keywords": [
+    "fiscalização",
+    "cidadão",
+    "relatórios"
+  ],
   "author": "Rommel Vieira Carneiro",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^1.0.0-beta.3"
+  }
 }
