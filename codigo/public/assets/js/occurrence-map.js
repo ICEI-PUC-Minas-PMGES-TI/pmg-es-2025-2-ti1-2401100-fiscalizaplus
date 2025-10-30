@@ -137,3 +137,31 @@
     console.error('Leaflet (L) não carregado');
   }
 })();
+document.addEventListener('DOMContentLoaded', () => {
+  // Seleciona todas as divs com classe .occurrence-map-canvas
+  const maps = document.querySelectorAll('.occurrence-map-canvas');
+  if (!maps.length) return;
+
+  maps.forEach((mapDiv, index) => {
+    // Exemplo: você pode definir coordenadas diferentes com data-atributos
+    const lat = parseFloat(mapDiv.dataset.lat) || -23.55052;
+    const lng = parseFloat(mapDiv.dataset.lng) || -46.633308;
+
+    // Cria o mapa
+    const map = L.map(mapDiv, {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([lat, lng], 15);
+
+    // Tiles do OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    // Marcador
+    L.marker([lat, lng]).addTo(map);
+
+    // Corrige renderização
+    setTimeout(() => map.invalidateSize(), 0);
+  });
+});
