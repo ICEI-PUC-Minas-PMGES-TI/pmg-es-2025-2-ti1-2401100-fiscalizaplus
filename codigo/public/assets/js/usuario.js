@@ -90,4 +90,3 @@ function filterBy(filter) {
 
 // Aplica filtro "todos" ao carregar
 filterBy('todos');
-
