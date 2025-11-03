@@ -8,62 +8,60 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/cidadaos.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Leaflet CSS para o mapa -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 </head>
 
 <body>
-  <!--Barra de navegação principal-->
+<!-- Barra de navegação principal -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="assets/images/logo.png" alt="Logo" class="navbar-logo">
+    </a>
 
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="assets/images/logo.png" alt="" style="width: 180px;">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active active-color" aria-current="page" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Comunidade</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="modulos/sprint_ulisses/html/dashboard_cliente.html">Dashboard de Ocorrências</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Guia do cidadão</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="modulos/Sprint-Vinicius/index.html"> Painel do usuário</a>
-          </li>
-        </ul>
-      </div>
-      <div class="collapse navbar-collapse navbar-user">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link name-user" href="" id="name-user">Olá, Joãozinho</a>
-          </li>
-          <li class="nav-item">
-            <a clas="nav-link" href="">
-              <div class="icon">
-                <div class="user-icon-circle">
-                </div>
-                <i class="fa-solid fa-circle-user user-icon "></i>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <!-- Botão de menu mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+      aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <!-- Links de navegação -->
+    <div class="collapse navbar-collapse justify-content-between" id="navbarMenu">
+      
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Comunidade</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Guia do Cidadão</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do Usuário</a>
+        </li>
+      </ul>
+
+      <!-- Área do usuário -->
+      <div class="navbar-user d-flex align-items-center">
+        <span class="name-user me-2">Olá, Joãozinho</span>
+        <a href="#" class="user-icon-link">
+          <i class="fa-solid fa-circle-user user-icon"></i>
+        </a>
+      </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   <!--Conteúdo principal da página-->
   <main>
@@ -82,7 +80,7 @@
               <div id="ultimas-denuncias" class="ultimas-denuncias-container">
                 <p class="text-muted small">Carregando...</p>
               </div>
-              <a href="modulos/sprint_italo/newreport.html">
+              <a href="modulos/painel-cidadao/reportar-ocorrências/newreport.html">
               <button class="btn-create-report">
                   <p>Reportar um novo problema</p>
               </button>
@@ -98,7 +96,7 @@
 
         <div class="col-md-4">
           <div class="p-2 border occurrence-map">
-            <h6 class="mb-2">Occurrence Map</h6>
+            <h6 class="mb-2">Mapa de ocorrências</h6>
             <div id="occurrence-map-canvas" style="height:360px; width:100%; border-radius:8px; overflow:hidden;"></div>
           </div>
           <div class="p-2 border mt-2 users-highlights">

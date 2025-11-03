@@ -9,35 +9,66 @@
 body{
     background-color: #d9d9d9;
 }
- /* Barra de navegação*/
-.navbar{
-    width: 100%;
-    margin: 0;
-    border-radius: 4px;
-    background-color: #737373 !important;
-}
-.navbar-nav .nav-item .nav-link{
-    color: white;
-    padding: 20px;
-}
-.navbar-nav .nav-item .nav-link:hover{
-    color: #d3d3d3;
-}
-.navbar-nav .nav-item .nav-link.active{
-    color: #700303;
-    padding: 20px;
+/* ======= Barra de navegação ======= */
+.navbar {
+  width: 100%;
+  background-color: #737373 !important;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Painel do usuário*/
-.name-user{
-    color: #700303 !important;
+.navbar-logo {
+  width: 160px;
+  transition: transform 0.2s ease-in-out;
 }
-.icon{
-    margin: 10px auto;
+
+.navbar-logo:hover {
+  transform: scale(1.05);
 }
-.user-icon{
-    color: aliceblue;
-    font-size: 40px;
+
+/* Links principais */
+.navbar-nav .nav-link {
+  color: white;
+  padding: 10px 18px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #d3d3d3;
+}
+
+.navbar-nav .nav-link.active {
+  color: #8b0b13;
+  border-bottom: 2px solid #700303;
+}
+
+/* ======= Área do Usuário ======= */
+.navbar-user {
+  gap: 10px;
+}
+
+.name-user {
+  color: #8b0b13;
+  font-weight: 600;
+}
+
+.user-icon-link {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.user-icon {
+  font-size: 40px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.user-icon:hover {
+  color: #d3d3d3;
+  transform: scale(1.1);
 }
 
 
@@ -971,3 +1002,100 @@ img{max-width:100%;display:block}
 /* Footer */
 .footer{padding:2rem 0 3rem;color:#666}
 .footer__inner{display:flex;align-items:center;justify-content:center;border-top:1px solid #d7d7d7;padding-top:1rem}
+
+
+/* Página de Dashboard do cidadão*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+:root {
+  --azul-principal: #4a4b4D;
+  --azul-claro: #EAF0FF;
+  --cinza-fundo: #F5F6FA;
+  --texto: #333;
+}
+
+
+/* ===== DASHBOARD ===== */
+.dashboard-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.titulo-dashboard {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.subtitulo-dashboard {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.dashboard-area {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+.card h2 {
+  color: var(--azul-principal);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.card .valor {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+}
+
+/* ===== GRÁFICO DONUT ===== */
+.donut {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(#4CAF50 0 120deg, #FFB300 120deg 160deg, #E53935 160deg 360deg);
+  margin: 18px auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
+  display: grid;
+  place-items: center;
+}
+
+.donut .center {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: white;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--azul-principal);
+}
+
+/* ===== RODAPÉ ===== */
+.rodape {
+  text-align: center;
+  padding: 20px;
+  background: var(--azul-principal);
+  color: white;
+  margin-top: 40px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .dashboard-area {
+    flex-direction: column;
+  }
+}
+
