@@ -189,6 +189,67 @@
     }
   }
 
+  async function populateUserImpact() {
+    try {
+      const container = document.getElementById('user-impact-body') || document.querySelector('.user-impact');
+      if (!container) return;
+
+      const user = getUsuarioCorrente();
+      if (!user) {
+        container.innerHTML = '<p class="text-muted small">Faça login para ver seu impacto.</p>';
+        return;
+      }
+
+      // Usar dados locais
+      const data = window.DB_DATA || {};
+      const ocorrencias = Array.isArray(data.ocorrencias) ? data.ocorrencias : [];
+
+      // Filtra as denúncias do usuário que foram resolvidas
+      const resolvidasDoUsuario = ocorrencias
+        .filter(o => o && o.usuarioId === user.id && String(o.status).toLowerCase() === 'resolvido')
+        .map(o => ({
+          ...o,
+          _resolvedAt: o.resolvedAt ? new Date(o.resolvedAt) : (o.updatedAt ? new Date(o.updatedAt) : (o.createdAt ? new Date(o.createdAt) : new Date(0)))
+        }))
+        .sort((a, b) => b._resolvedAt - a._resolvedAt);
+
+      const total = resolvidasDoUsuario.length;
+
+      // Monta o HTML do cartão
+      const header = `
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="fa-solid fa-star text-warning"></i>
+          <span class="fw-semibold">Você já ajudou a resolver ${total} problema${total === 1 ? '' : 's'}!</span>
+        </div>`;
+
+      if (total === 0) {
+        container.innerHTML = header + '<p class="text-muted small mb-0">Quando uma denúncia sua for concluída, ela aparecerá aqui.</p>';
+        return;
+      }
+
+      const ultimos = resolvidasDoUsuario.slice(0, 4);
+      const itens = ultimos.map(o => {
+        const when = timeAgoPt(o.resolvedAt || o.updatedAt || o.createdAt);
+        return `
+          <li class="list-group-item d-flex align-items-start gap-2 py-2">
+            <span class="mt-1" aria-hidden><i class="fa-solid fa-check-circle text-success"></i></span>
+            <div>
+              <div class="fw-semibold">${escapeHtml(o.titulo || 'Ocorrência resolvida')}</div>
+              <div class="text-muted small">${escapeHtml(o.tipo || 'Tipo')} • <span title="${fmtDate(o.resolvedAt || o.updatedAt || o.createdAt)}">${escapeHtml(when.text)}</span></div>
+            </div>
+          </li>`;
+      }).join('');
+
+      container.innerHTML = header + `
+        <ul class="list-group list-group-flush">${itens}</ul>
+      `;
+    } catch (e) {
+      console.error('Erro ao preencher impacto do usuário:', e);
+      const container = document.getElementById('user-impact-body') || document.querySelector('.user-impact');
+      if (container) container.innerHTML = '<p class="text-danger small">Não foi possível carregar seu impacto.</p>';
+    }
+  }
+
   async function init() {
     const user = getUsuarioCorrente();
     if (!user) return;
@@ -216,8 +277,11 @@
       }
     }
 
-    // Populate recent reports
-    await populateRecentReports();
+    // Populate recent reports e impacto do usuário
+    await Promise.all([
+      populateRecentReports(),
+      populateUserImpact()
+    ]);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

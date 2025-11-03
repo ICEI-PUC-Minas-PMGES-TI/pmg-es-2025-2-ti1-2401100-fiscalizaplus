@@ -28,7 +28,7 @@ window.DB_DATA = {
     { "id": 8, "nome": "Eldorado", "cidadeId": 2, "lat": -19.9200, "lng": -44.0400, "raio": 900 }
   ],
   "ocorrencias": [
-    { "id": 1,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Buraco na Rua X",            "descricao": "Buraco grande na esquina.", "status": "em_andamento", "lat": -19.9362, "lng": -43.9329, "createdAt": "2025-01-18T10:00:00Z" },
+    { "id": 1,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco",      "titulo": "Buraco na Rua X",            "descricao": "Buraco grande na esquina.", "status": "resolvido",    "lat": -19.9362, "lng": -43.9329, "createdAt": "2025-01-18T10:00:00Z", "resolvedAt": "2025-01-19T09:15:00Z" },
     { "id": 2,  "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "sinalizacao", "titulo": "Sinalização apagada",       "descricao": "Faixa apagada.",          "status": "aberto",       "lat": -19.9302, "lng": -43.9226, "createdAt": "2025-01-18T09:00:00Z" },
     { "id": 3,  "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "calcada",     "titulo": "Calçada quebrada",         "descricao": "Trinca extensa.",         "status": "aberto",       "lat": -19.9357, "lng": -43.9322, "createdAt": "2025-01-17T14:30:00Z" },
     { "id": 4,  "usuarioId": 1, "cidadeId": 1, "bairroId": 1, "tipo": "lixo",        "titulo": "Lixo acumulado",           "descricao": "Sacos na calçada.",       "status": "resolvido",    "lat": -19.9371, "lng": -43.9340, "createdAt": "2025-01-16T11:20:00Z", "resolvedAt": "2025-01-17T08:00:00Z" },
