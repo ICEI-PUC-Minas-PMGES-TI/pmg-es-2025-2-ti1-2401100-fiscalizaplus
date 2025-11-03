@@ -1099,3 +1099,179 @@ img{max-width:100%;display:block}
   }
 }
 
+/* ========== Reset básico ========== */
+*,*::before,*::after{ box-sizing:border-box }
+html,body{ height:100% }
+body{ margin:0; font:500 16px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial }
+img{ max-width:100%; display:block }
+button,input,select,textarea{ font:inherit }
+
+/* ========== Paleta e tokens ========== */
+:root{
+  --bg: #d9d9dc;              /* cinza de fundo da página */
+  --panel: #ececee;           /* painel “Fórum da Comunidade” */
+  --sidebar: #464a4f;         /* fundo do sidebar */
+  --sidebar-border: #2e3237;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #d7d9de;
+
+  --primary: #7c3aed;         /* roxo da barra/botão */
+  --primary-700: #5b21b6;
+  --danger: #d32f2f;          /* botão vermelho */
+
+  --radius-lg: 22px;
+  --radius: 14px;
+  --shadow-soft: 0 10px 28px rgba(0,0,0,.10);
+}
+
+/* ========== Topbar ========== */
+.topbar{
+  background:#4a4f56;
+  border-bottom:4px solid #3c4148;
+  position:sticky; top:0; z-index:9;
+}
+.topbar__inner{
+  max-width:1200px; margin:0 auto;
+  padding:8px 16px;
+  display:grid; grid-template-columns:200px 1fr auto; gap:16px; align-items:center;
+}
+.brand__logo{
+  color:#f2f3f5; font-weight:800; font-size:26px; letter-spacing:.2px;
+}
+.brand__logo span{ color:#ff4d4d }
+.brand__logo .plus{ color:#ff4666 }
+
+.mainnav{ display:flex; flex-wrap:wrap; gap:14px }
+.navlink{
+  color:#e6e7ea; text-decoration:none; padding:8px 10px; border-radius:10px;
+}
+.navlink:hover{ background:#5a6068 }
+.navlink.is-active{ color:#ffdfe6; background:#2f333a; font-weight:700 }
+
+.userchip{ display:flex; align-items:center; gap:10px; color:#f3f4f6; font-weight:700 }
+.avatar{
+  width:44px; height:44px; border-radius:50%;
+  display:grid; place-items:center;
+  background: linear-gradient(180deg,#ffc857,#f77f00);
+  color:#222; font-weight:900;
+  box-shadow: var(--shadow-soft);
+}
+.avatar--sm{ width:34px; height:34px; font-size:14px; background:linear-gradient(180deg,#a7f3d0,#34d399) }
+
+/* ========== Estrutura ========== */
+.page{ background: var(--bg) }
+.page__grid{
+  max-width:1200px; margin:24px auto; padding:0 16px;
+  display:grid; grid-template-columns:320px 1fr; gap:24px;
+}
+@media (max-width: 899.98px){
+  .page__grid{ grid-template-columns:1fr }
+}
+
+/* ========== Sidebar ========== */
+.sidebar{
+  background:var(--sidebar);
+  color:#e7eaee;
+  border:1px solid var(--sidebar-border);
+  border-radius: var(--radius-lg);
+  padding:18px;
+  box-shadow: var(--shadow-soft);
+}
+.btn{
+  border:1px solid var(--border);
+  background:#fff; color:#111827;
+  border-radius:12px; padding:10px 14px; cursor:pointer; font-weight:700;
+}
+.btn:hover{ filter:brightness(.98) }
+.btn--lg{ width:100%; padding:14px 16px }
+.btn--danger{ background:var(--danger); color:#fff; border-color:#b32626 }
+
+.profile{
+  display:flex; align-items:center; gap:12px;
+  padding:16px 0 8px;
+}
+.profile__info strong{ display:block }
+.profile__info small{ color:#cbd5e1 }
+
+.separator{
+  border:0; height:1px; background:#6a6f74; opacity:.55; margin:8px 0 14px;
+}
+
+.categories h3{ margin:6px 0 10px; font-size:16px }
+.categories ul{ list-style:none; margin:0; padding:0; display:grid; gap:8px }
+.cat-item{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 10px; border-radius:10px; cursor:pointer;
+}
+.cat-item:hover{ background:#4f555b }
+.cat-item.is-active{ background:#2f333a }
+.cat-label{ color:#e8ebef }
+.cat-dot{
+  width:10px; height:10px; border-radius:50%;
+  background:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,.35);
+}
+.cat-item.is-active .cat-dot{
+  background:#fff; box-shadow:0 0 0 3px rgba(124,58,237,.9);
+}
+
+/* ========== Conteúdo / Título do fórum ========== */
+.content{ min-width:0 }
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  box-shadow:var(--shadow-soft);
+  margin-bottom:16px;
+}
+.panel h2{ margin:0; font-size:24px; color:#1f2937 }
+
+/* ========== Cards ========== */
+.cards{
+  display:grid; grid-template-columns:repeat(12,1fr); gap:20px;
+}
+.card{
+  grid-column:span 12;
+  background:var(--card); color:var(--text);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+@media (min-width:900px){
+  .card{ grid-column:span 6 }
+}
+
+.card__header{ display:flex; align-items:center; gap:10px; margin-bottom:8px }
+.card__author .timeago{ color:var(--muted) }
+.card__title{ margin:6px 0; font-size:18px }
+.card__excerpt{ margin:0 0 12px; color:#3b4350 }
+
+/* Barra de progresso (roxo) */
+.progress{
+  height:12px; background:#eef2f6; border-radius:999px; overflow:hidden;
+  box-shadow:inset 0 0 0 1px #e5e7eb;
+}
+.progress__bar{
+  height:100%; width:0%;
+  background:linear-gradient(90deg,#7c3aed,#8b5cf6);
+  transition:width .25s ease;
+}
+
+/* Rodapé do card */
+.card__footer{
+  margin-top:12px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btn--outline{
+  background:transparent; color:var(--primary);
+  border:2px solid var(--primary); padding:8px 12px; border-radius:12px; font-weight:800
+}
+.btn--outline:hover{ background:var(--primary); color:#fff }
+.vote-btn.is-disabled{ opacity:.7; cursor:default }
+
+.votes{ color:#ef4444; font-weight:700; display:flex; align-items:center; gap:8px }
+.votes .dot{ font-size:18px }
+
