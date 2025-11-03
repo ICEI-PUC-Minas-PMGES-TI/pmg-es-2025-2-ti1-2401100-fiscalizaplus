@@ -551,3 +551,77 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5)
 }
+/* ======== PÁGINA VISUALIZAR DENÚNCIAS ======== */
+/* Correções visuais gerais */
+body {
+  background-color: #f4f6f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.topbar {
+  background-color: #333;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+}
+
+.container {
+  width: 90%;
+  margin: 30px auto;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #125ca1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background-color: #1976d2;
+  color: white;
+  padding: 8px;
+}
+
+table td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  color: #555;
+}
