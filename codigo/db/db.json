@@ -1,69 +1,143 @@
 {
-
   "cidadaos": [
     {
       "id": 1,
-      "login": "joaozinho",
-      "senha": "123",
-      "nome": "Joao Pedro",
-      "email": "joaozinho@gmai.com"
+      "nomeCompleto": "João Pedro",
+      "email": "joao.pedro@email.com",
+      "senhaHash": "hash_da_senha",
+      "estado": "MG",
+      "cidade": "Belo Horizonte",
+      "dataCadastro": "2023-10-26T10:00:00Z"
     },
     {
       "id": 2,
-      "login": "Maria00",
-      "senha": "123",
-      "nome": "Maria Luiza",
-      "email": "marialuiza@gmail.com"
+      "nomeCompleto": "Maria Luiza",
+      "email": "maria.luiza@email.com",
+      "senhaHash": "hash_da_senha",
+      "estado": "SP",
+      "cidade": "São Paulo",
+      "dataCadastro": "2023-10-27T11:30:00Z"
     }
   ],
-
-
-"ocorrenciasCidadao": {
-    "ocorrencias": [
-      {
-        "id": 1,
-        "titulo": "OCOR-002021",
-        "tipo": "Poste queimado na rua X",
+  "servidores": [
+    {
+      "id": 101,
+      "nomeCompleto": "Paulo Cardoso",
+      "email": "paulo@prefeitura.com",
+      "senhaHash": "hash_da_senha",
+      "estado": "MG",
+      "cidade": "Belo Horizonte",
+      "orgaoId": 1,
+      "dataCadastro": "2023-10-25T09:00:00Z"
+    },
+    {
+      "id": 102,
+      "nomeCompleto": "Paula Fernandes",
+      "email": "paula@prefeitura.com",
+      "senhaHash": "hash_da_senha",
+      "estado": "SP",
+      "cidade": "São Paulo",
+      "orgaoId": 2,
+      "dataCadastro": "2023-10-25T09:00:00Z"
+    }
+  ],
+  "tokensAcessoServidor": [
+    {
+      "token": "A1B9-C3D7-E5F2-G4H8",
+      "usado": false,
+      "dataCriacao": "2023-10-01T08:00:00Z"
+    },
+    {
+      "token": "Z9Y2-X4W6-V8U1-T3S5",
+      "usado": true,
+      "dataUso": "2023-10-25T09:00:00Z",
+      "servidorId": 101
+    }
+  ],
+  "orgaosMunicipais": [
+    {
+      "id": 1,
+      "nome": "Secretaria de Obras",
+      "emailContato": "obras@prefeitura.com"
+    },
+    {
+      "id": 2,
+      "nome": "Secretaria de Trânsito",
+      "emailContato": "transito@prefeitura.com"
+    },
+    {
+      "id": 3,
+      "nome": "Defesa Civil",
+      "emailContato": "defesacivil@prefeitura.com"
+    }
+  ],
+  "denuncias": [
+    {
+      "id": 1,
+      "numeroOcorrencia": "OCOR-002021",
+      "titulo": "Poste queimado na Rua X, Centro",
+      "tipoProblema": "Iluminação Pública",
+      "descricaoCompleta": "Encontrei um poste de luz na Rua X, próximo ao número 123, que está completamente apagado há 2 dias. A rua fica muito escura à noite, aumentando o risco de acidentes e assaltos. Já tentei contato por telefone, mas sem sucesso.",
+      "informacoesAdicionaisCidadao": "O poste fica na esquina com a Rua Y, em frente a uma loja de conveniência.",
+      "endereco": {
+        "rua": "Rua X",
+        "numero": "123",
         "bairro": "Centro",
-        "status": "Não iniciado",
-        "data": "2025-09-21",
-        "autor": "Cidadão3"
+        "cidade": "Belo Horizonte",
+        "estado": "MG",
+        "cep": "30000-000",
+        "latitude": -23.55052,
+        "longitude": -46.63330
       },
+      "imagens": [
+        "url_da_imagem_1.jpg",
+        "url_da_imagem_2.jpg"
+      ],
+      "prioridadeCidadao": "Média",
+      "urgenciaCidadao": "Normal",
+      "impactoComunidade": "Local",
+      "dataRegistro": "2025-09-21T10:30:00Z",
+      "autorCidadao": "Pedro",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-09-21T10:30:00Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null
+    }
+  ],
+  "admin": { 
+    "numeroTotalCidadaosAtivos": 5,
+    "numeroTotalDenuncias": 2000,
+    "denunciasPorStatus": {
+      "Pendente": 800,
+      "Em Análise": 300,
+      "Em Atendimento": 400,
+      "Concluído": 500,
+      "Rejeitado": 0
+    },
+    "denunciasPorTipoProblema": {
+      "Iluminação Pública": 800,
+      "Buraco na Via": 600,
+      "Lixo Acumulado": 100,
+      "Semáforo Quebrado": 400,
+      "Árvore Caída": 100
+    },
+    "ultimasAtividadesComunidade": [
       {
-        "id": 2,
-        "titulo": "OCOR-002022",
-        "tipo": "Buraco na avenida Y",
-        "bairro": "Santa Efigênia",
-        "status": "Não iniciado",
-        "data": "2025-09-21",
-        "autor": "Cidadão1"
-      },
-      {
-        "id": 3,
-        "titulo": "OCOR-002023",
-        "tipo": "Lixo acumulado no bairro Z",
-        "bairro": "Savassi",
-        "status": "Não iniciado",
-        "data": "2025-09-22",
-        "autor": "Cidadão5"
-      },
-      {
-        "id": 4,
-        "titulo": "OCOR-002024",
-        "tipo": "Semáforo apagado na Rua A",
-        "bairro": "São João Batista",
-        "status": "Não iniciado",
-        "data": "2025-09-23",
-        "autor": "Cidadão2"
-      },
-      {
-        "id": 5,
-        "titulo": "OCOR-002025",
-        "tipo": "Entulho acumulado na praça B",
-        "bairro": "Alipio de Melo",
-        "status": "Não iniciado",
-        "data": "2025-09-24",
-        "autor": "Cidadão3"
+        "tipo": "Iluminacao",
+        "denunciaId": 3,
+        "tituloDenuncia": "Galera vcs também perceberam que tem uma lâmpada queimada na rua X?",
+        "dataHora": "2025-09-21T10:30:00Z",
+        "autorNome": "João Pedro",
+        "isAnonimo": false
+      }
+    ],
+    "LocalComMaisDenuncias": [
+      { 
+        "latitude": -23.55052,
+        "longitude": -46.63330,
+        "quantidade": 800
       }
     ]
   }
