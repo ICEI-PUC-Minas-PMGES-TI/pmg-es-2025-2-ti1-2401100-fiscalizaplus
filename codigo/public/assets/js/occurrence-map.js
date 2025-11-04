@@ -34,14 +34,21 @@
       return Promise.resolve(data.cidades.find(c => c.id === id));
     }
     
-    if (url.startsWith('/ocorrencias')) {
+    if (url.startsWith('/ocorrencias') || url.startsWith('/denuncias')) {
       const params = new URLSearchParams(url.split('?')[1] || '');
-      let result = data.ocorrencias || [];
+      // prefer 'denuncias' if available
+      let result = data.denuncias || data.ocorrencias || [];
       
       // Filtrar por cidadeId
       if (params.get('cidadeId')) {
         const cidadeId = parseInt(params.get('cidadeId'));
         result = result.filter(o => o.cidadeId === cidadeId);
+      }
+
+      // Optional limit
+      if (params.get('_limit')) {
+        const limit = parseInt(params.get('_limit')) || result.length;
+        result = result.slice(0, limit);
       }
       
       return Promise.resolve(result);
@@ -65,7 +72,7 @@
     if (!user) {
       // Anonymous: just show BH area, try to load some occurrences city 1 if available
       try {
-        const ocorrencias = await fetchJson('/ocorrencias?cidadeId=1');
+        const ocorrencias = await fetchJson('/denuncias?cidadeId=1&_limit=100');
         addMarkers(map, ocorrencias);
       } catch (e) {
         console.warn(e);
@@ -81,14 +88,16 @@
     const bairro = await fetchJson(`/bairros/${bairroId}`);
     const cidade = await fetchJson(`/cidades/${cidadeId}`);
 
-    // City-wide occurrences
-    const ocorrencias = await fetchJson(`/ocorrencias?cidadeId=${cidadeId}`);
+
+  // City-wide occurrences - fetch more items to better populate the map
+  const ocorrencias = await fetchJson(`/denuncias?cidadeId=${cidadeId}&_limit=100`);
 
     // Fit map to either bairro circle or city center
     const center = [bairro.lat, bairro.lng];
-    const circle = L.circle(center, { radius: bairro.raio || 800, color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.08 });
-    circle.addTo(map);
-    map.setView(center, 14);
+  const circle = L.circle(center, { radius: bairro.raio || 800, color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.08 });
+  circle.addTo(map);
+  // Slightly zoom out so markers across the bairro are more visible and less visually concentrated
+  map.setView(center, 13);
 
     addMarkers(map, ocorrencias);
   }

@@ -723,21 +723,100 @@ textarea.form-control {
 
 
 /* Painel de denúncias recentes da cidade*/
-.recent-reports{
-    background-color: #4f4f4f;
+ .recent-reports{
+     background-color: #2A2A2A;
     height: 800px;
     border-radius: 12px;
+    color: #EDEDED;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-#recent-reports-list .list-group-item {
-    background-color: #5a5a5a;
-    border-color: #6a6a6a;
-    color: white;
+.recent-reports > h6,
+.recent-reports > .card-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(42,42,42,1), rgba(42,42,42,0.98));
+    padding: 12px 8px;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #EDEDED;
 }
 
-#recent-reports-list .list-group-item:hover {
-    background-color: #656565;
+#recent-reports-list {
+    padding: 8px;
+    list-style: none;
+    margin: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
+
+#recent-reports-list .recent-item {
+    display: flex;
+    gap: 12px; /* item spacing */
+    align-items: flex-start;
+    padding: 12px; /* per spec 12–14px */
+    margin-bottom: 8px;
+    background-color: #1F1F1F; /* item background */
+    border-radius: 8px;
+    color: #EDEDED;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+.recent-item .index-badge {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    background: #323232;
+    display: grid;
+    place-items: center;
+    color: #EDEDED;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.recent-item .recent-content{flex:1}
+.recent-item .recent-title{
+    margin:0 0 6px 0;
+    font-size: 15.5px; /* 15–16px */
+    font-weight: 600;
+    color: #EDEDED;
+}
+.recent-item .recent-meta{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:#A7A7A7
+}
+
+.recent-meta .meta-piece{display:inline-flex;gap:6px;align-items:center;color:#A7A7A7}
+.recent-meta .meta-piece i{width:14px;text-align:center}
+
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px;border:1px solid currentColor}
+.status-pill .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.status-aberto{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.status-em_andamento{color:#0EA5E9;background:rgba(14,165,233,0.08)}
+.status-resolvido{color:#10B981;background:rgba(16,185,129,0.08)}
+
+.status-aberto .dot{background:#F59E0B}
+.status-em_andamento .dot{background:#0EA5E9}
+.status-resolvido .dot{background:#10B981}
+
+
+.recent-item:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,0.45);background-color:#242424}
+
+.recent-item:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,0.03)}
+.recent-item[data-status="aberto"]:focus-visible{box-shadow:0 0 0 3px rgba(245,158,11,0.22)}
+.recent-item[data-status="em_andamento"]:focus-visible{box-shadow:0 0 0 3px rgba(14,165,233,0.22)}
+.recent-item[data-status="resolvido"]:focus-visible{box-shadow:0 0 0 3px rgba(16,185,129,0.22)}
+
+
+.recent-meta .time{font-size:12px;color:#A7A7A7}
+
+#recent-reports-list::after{content:'';display:block;height:12px}
+
 
 /* Últimas denúncias do usuário */
 .ultimas-denuncias-container {
