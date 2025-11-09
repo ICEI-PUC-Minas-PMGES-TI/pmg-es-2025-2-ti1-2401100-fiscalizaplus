@@ -64,6 +64,7 @@ function updateDashboardStats(denuncias) {
     document.getElementById('stat-pendente').textContent = denuncias.filter(d => d.statusAtual === 'Pendente').length;
     document.getElementById('stat-em-andamento').textContent = denuncias.filter(d => d.statusAtual === 'Em Andamento').length;
     document.getElementById('stat-concluido').textContent = denuncias.filter(d => d.statusAtual === 'Concluido').length;
+    document.getElementById('stat-concluido').textContent = denuncias.filter(d => d.statusAtual === 'Cancelado').length;
 }
 
 function aplicarFiltros() {
