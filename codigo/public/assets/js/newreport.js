@@ -2,14 +2,23 @@ let map;
 let marker;
 let selectedLocation = null;
 let imageInput = null;
-let selectedFilesList = []; 
-let selectedFileDataUrls = []; 
+let selectedFilesList = [];
+let selectedFileDataUrls = [];
 let currentUser = null; 
+// Variáveis para armazenar o endereço completo obtido pelo reverse geocoding
+let addressDetails = {
+    rua: '',
+    bairro: '',
+    cidade: 'Belo Horizonte',
+    estado: 'MG',
+    cep: ''
+};
 
 // --- CONFIGURAÇÃO DA API ---
-const API_BASE_URL = 'http://localhost:3000'; 
+const API_BASE_URL = 'http://localhost:3000';
 const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
-const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`; 
+const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`;
+const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';
 
 // Função para carregar dados do usuário do json-server
 async function loadUserData() {
@@ -26,7 +35,7 @@ async function loadUserData() {
             currentUser = data[0]; 
             console.log("Usuário carregado com sucesso:", currentUser.nomeCompleto);
 
-            const nomeUsuarioNav = document.getElementById('nomeUsuarioNav');
+            const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
             if (nomeUsuarioNav) {
                 nomeUsuarioNav.textContent = `Olá, ${currentUser.nomeCompleto.split(' ')[0]}`;
             }
@@ -113,25 +122,67 @@ function initMap() {
             }).addTo(map);
 
             selectedLocation = { lat: lat, lng: lng };
-            updateAdress(lat, lng);
+            updateAddressFields(lat, lng); // Chamada para reverse geocoding
         } else {
             alert('Por favor, selecione uma localização dentro dos limites de Belo Horizonte.');
         }
     });
 }
 
-function updateAdress(lat, lng) {
-    console.log(`Coordenadas selecionadas: ${lat}, ${lng}`);
-    const enderecoField = document.querySelector("#endereco");
-    enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+// NOVA FUNÇÃO: Reverse Geocoding para obter Rua e Bairro
+async function reverseGeocode(lat, lng) {
+    const url = `${NOMINATIM_BASE_URL}/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.address; // Retorna o objeto de endereço
+    } catch (error) {
+        console.error("Erro ao realizar reverse geocoding:", error);
+        return null;
+    }
 }
 
-function searchAdress() {
+// ATUALIZADA: Preenche o campo de endereço único e a variável global
+async function updateAddressFields(lat, lng) {
+    const enderecoField = document.querySelector("#endereco");
+    enderecoField.value = 'Localizando endereço...'; // Feedback imediato
+
+    const addressData = await reverseGeocode(lat, lng);
+
+    if (addressData) {
+        const street = addressData.road || addressData.footway || addressData.street || 'Endereço não identificado';
+        const neighbourhood = addressData.suburb || addressData.neighbourhood || addressData.village || 'Bairro não identificado';
+        const postcode = addressData.postcode || '';
+
+        // Preenche o campo visível no formulário com o endereço legível
+        enderecoField.value = `${street}, ${neighbourhood}, Belo Horizonte`;
+        
+        // Armazena os detalhes na variável global para o envio
+        addressDetails.rua = street;
+        addressDetails.bairro = neighbourhood;
+        addressDetails.cep = postcode;
+        addressDetails.cidade = addressData.city || addressData.town || 'Belo Horizonte';
+        addressDetails.estado = addressData.state_code || addressData.state || 'MG';
+
+    } else {
+        enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)} (Endereço não identificado)`;
+        // Reseta os detalhes se a busca falhar
+        addressDetails.rua = `Coordenadas: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        addressDetails.bairro = 'Não identificado';
+        addressDetails.cep = '';
+    }
+}
+
+
+function searchAdress() { // Mantido o nome original para evitar mudar o HTML
     const enderecoField = document.querySelector("#endereco");
     const endereco = enderecoField.value.trim();
 
-    if (!endereco) {
-        alert('Por favor, digite um endereço para buscar.');
+    if (!endereco || endereco.startsWith('Lat:')) {
+        alert('Por favor, digite um endereço válido para buscar.');
         return;
     }
 
@@ -143,10 +194,10 @@ function searchAdress() {
     const buscarBtn = document.querySelector('#buscar-btn');
     const originalText = buscarBtn.innerHTML;
 
-    buscarBtn.innerHTML = '⏳ Buscando...';
+    buscarBtn.innerHTML = '🔍 Buscando...';
     buscarBtn.disabled = true;
 
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(enderecoCompleto)}&limit=1&countrycodes=br`;
+    const url = `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(enderecoCompleto)}&limit=1&countrycodes=br`;
 
     fetch(url)
         .then(response => response.json())
@@ -158,7 +209,10 @@ function searchAdress() {
 
                 if (bhBounds.contains([lat, lng])) {
                     map.setView([lat, lng], 16);
-                    enderecoField.value = resultado.display_name || endereco;
+                    
+                    // O campo de endereço agora é atualizado pelo updateAddressFields, para consistência
+                    selectedLocation = { lat: lat, lng: lng };
+                    updateAddressFields(lat, lng); 
 
                     if (marker) {
                         map.removeLayer(marker);
@@ -171,12 +225,11 @@ function searchAdress() {
                             <div style="text-align: center; padding: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #ce2828;">📍 Endereço Encontrado</h4>
                                 <p style="margin: 0; font-size: 14px;">${resultado.display_name}</p>
-                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Clique no mapa para marcar a localização exata</p>
+                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Localização marcada automaticamente. Você pode clicar no mapa para ajustar.</p>
                             </div>
                         `)
                         .openOn(map);
 
-                    selectedLocation = { lat: lat, lng: lng };
 
                 } else {
                     alert('O endereço encontrado está fora dos limites de Belo Horizonte. Por favor, tente um endereço dentro da cidade.');
@@ -190,7 +243,7 @@ function searchAdress() {
             alert('Erro ao buscar o endereço. Tente novamente.');
         })
         .finally(() => {
-            buscarBtn.innerHTML = originalText;
+            buscarBtn.innerHTML = '🔍 Buscar';
             buscarBtn.disabled = false;
         });
 }
@@ -198,7 +251,7 @@ function searchAdress() {
 function getCurrentLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-            function (position) {
+            async function (position) { 
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
 
@@ -214,9 +267,9 @@ function getCurrentLocation() {
                     marker = L.marker([lat, lng]).addTo(map);
 
                     selectedLocation = { lat: lat, lng: lng };
-                    updateAdress(lat, lng);
-
-                    alert('Localização atual encontrada em Belo Horizonte!');
+                    await updateAddressFields(lat, lng); 
+                    
+                    alert('Localização atual encontrada e marcada em Belo Horizonte!');
                 } else {
                     alert('Sua localização atual está fora dos limites de Belo Horizonte. Por favor, selecione uma localização dentro da cidade.');
                 }
@@ -240,11 +293,19 @@ function resetMap() {
 
     selectedLocation = null;
     document.querySelector("#endereco").value = '';
+    addressDetails = { // Limpa os detalhes internos
+        rua: '',
+        bairro: '',
+        cidade: 'Belo Horizonte',
+        estado: 'MG',
+        cep: ''
+    };
 }
 
-// FUNÇÕES DE GERENCIAMENTO DE IMAGEM 
+// --- FUNÇÕES DE GERENCIAMENTO DE IMAGEM (Mantidas) ---
 
 function renderPreview() {
+    // ... (Mantido o código de renderPreview)
     const previewContainer = document.getElementById('imagePreview');
     if (!previewContainer) return;
 
@@ -262,6 +323,7 @@ function renderPreview() {
 }
 
 function readFileAsDataURL(file) {
+    // ... (Mantido o código de readFileAsDataURL)
     return new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -273,6 +335,7 @@ function readFileAsDataURL(file) {
 }
 
 async function previewImages(input) {
+    // ... (Mantido o código de previewImages)
     imageInput = input || document.querySelector("#imagens");
     if (!imageInput || !imageInput.files) return;
 
@@ -286,7 +349,6 @@ async function previewImages(input) {
         selectedFilesList.push(newFilesToAdd[i]);
     }
     
-    // Converte SOMENTE para Data URLs para a pré-visualização.
     const dataUrlPromises = selectedFilesList.map(file => readFileAsDataURL(file));
     const loadedDataUrls = await Promise.all(dataUrlPromises);
     
@@ -296,14 +358,14 @@ async function previewImages(input) {
 }
 
 function removeImage(index){
+    // ... (Mantido o código de removeImage)
     selectedFilesList = selectedFilesList.filter((_, i) => i !== index);
     selectedFileDataUrls = selectedFileDataUrls.filter((_, i) => i !== index);
 
     renderPreview();
 }
 
-// FUNÇÃO DE ENVIO DO FORMULÁRIO 
-
+// ATUALIZADA: FUNÇÃO DE ENVIO DO FORMULÁRIO (Usa addressDetails)
 async function handleSubmit(event) {
     event.preventDefault();
 
@@ -330,12 +392,13 @@ async function handleSubmit(event) {
         informacoesAdicionaisCidadao: document.getElementById('observacoes').value,
         
         endereco: {
-            rua: document.getElementById('endereco').value, 
-            numero: '', 
-            bairro: '',
-            cidade: 'Belo Horizonte', 
-            estado: 'MG', 
-            cep: '',
+            // Agora usa os dados armazenados pelo reverse geocoding
+            rua: addressDetails.rua, 
+            numero: '', // Mantido vazio, pois não há campo no HTML
+            bairro: addressDetails.bairro,
+            cidade: addressDetails.cidade, 
+            estado: addressDetails.estado, 
+            cep: addressDetails.cep,
             latitude: selectedLocation.lat,
             longitude: selectedLocation.lng
         },
@@ -404,10 +467,23 @@ async function initializeApp() {
     if (fileInput) {
         fileInput.addEventListener('change', (e) => previewImages(e.target));
     }
+    
+    // Adiciona event listener para o botão de buscar (searchAdress)
+    const buscarBtn = document.querySelector('#buscar-btn');
+    if (buscarBtn) {
+        buscarBtn.addEventListener('click', searchAdress);
+    }
 
-    const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
-    if (nomeUsuarioNav && !nomeUsuarioNav.id) {
-        nomeUsuarioNav.id = 'nomeUsuarioNav';
+    // Adiciona event listener para o botão de localização atual
+    const localizarBtn = document.querySelector('.map-controls .btn-outline-primary');
+    if (localizarBtn) {
+        localizarBtn.addEventListener('click', getCurrentLocation);
+    }
+
+    // Adiciona event listener para o botão de resetar mapa
+    const resetBtn = document.querySelector('.map-controls .btn-outline-secondary');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetMap);
     }
 }
 initializeApp();

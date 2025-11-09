@@ -73,39 +73,6 @@
   ],
   "denuncias": [
     {
-      "id": 1,
-      "numeroOcorrencia": "OCOR-002021",
-      "titulo": "Poste queimado na Rua X, Centro",
-      "tipoProblema": "Iluminação Pública",
-      "descricaoCompleta": "Encontrei um poste de luz na Rua X, próximo ao número 123, que está completamente apagado há 2 dias. A rua fica muito escura à noite, aumentando o risco de acidentes e assaltos. Já tentei contato por telefone, mas sem sucesso.",
-      "informacoesAdicionaisCidadao": "O poste fica na esquina com a Rua Y, em frente a uma loja de conveniência.",
-      "endereco": {
-        "rua": "Rua X",
-        "numero": "123",
-        "bairro": "Centro",
-        "cidade": "Belo Horizonte",
-        "estado": "MG",
-        "cep": "30000-000",
-        "latitude": -23.55052,
-        "longitude": -46.6333
-      },
-      "imagens": [
-        "url_da_imagem_1.jpg",
-        "url_da_imagem_2.jpg"
-      ],
-      "prioridadeCidadao": "Média",
-      "urgenciaCidadao": "Normal",
-      "impactoComunidade": "Local",
-      "dataRegistro": "2025-09-21T10:30:00Z",
-      "autorCidadao": "Pedro",
-      "isAnonimo": false,
-      "statusAtual": "Pendente",
-      "dataUltimaAtualizacaoStatus": "2025-09-21T10:30:00Z",
-      "prioridadeInterna": null,
-      "observacoesInternasServidor": "",
-      "servidorResponsavelId": null
-    },
-    {
       "titulo": "Buraco encontrado na rua das Flores",
       "tipoProblema": "infraestrutura",
       "descricaoCompleta": "adadadadadadadada dad3 wfsfgsdrgrthgesddsadgdgd",
@@ -137,6 +104,37 @@
       "contatoCidadao": "31995387581",
       "recebeNotificacoes": true,
       "id": 2
+    },
+    {
+      "titulo": "Iluminação queimada",
+      "tipoProblema": "iluminacao",
+      "descricaoCompleta": "adadad",
+      "informacoesAdicionaisCidadao": "",
+      "endereco": {
+        "rua": "sava",
+        "numero": "",
+        "bairro": "",
+        "cidade": "Belo Horizonte",
+        "estado": "MG",
+        "cep": "",
+        "latitude": -19.937253343927242,
+        "longitude": -43.93531314735541
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-09T18:58:09.953Z",
+      "autorCidadao": "João Pedro",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-09T18:58:09.953Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "31995387581",
+      "recebeNotificacoes": true,
+      "id": 3
     }
   ],
   "admin": {
