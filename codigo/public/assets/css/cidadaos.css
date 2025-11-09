@@ -1,3 +1,4 @@
+
 *{
     margin: 0;
     padding: 0;
@@ -8,6 +9,7 @@
 
 body{
     background-color: #d9d9d9;
+    height: 100%;
 }
 /* ======= Barra de navegação ======= */
 .navbar {
@@ -40,7 +42,7 @@ body{
 }
 
 .navbar-nav .nav-link.active {
-  color: #8b0b13;
+  color: black;
   border-bottom: 2px solid #700303;
 }
 
@@ -69,6 +71,22 @@ body{
 .user-icon:hover {
   color: #d3d3d3;
   transform: scale(1.1);
+}
+
+/* Garante que o offcanvas esteja oculto em telas maiores */
+@media (min-width: 992px) { 
+    #offcanvasNavbar {
+        visibility: hidden;
+        transform: translateX(-100%);
+        display: none !important; 
+    }
+}
+
+
+@media (max-width: 991.98px) { 
+    #navbarMenuLg {
+        display: none !important; 
+    }
 }
 
 
@@ -506,6 +524,59 @@ textarea.form-control {
 }
 
 /* Design reponsivo */
+/* Regras para telas pequenas (smartphones) */
+@media (max-width: 767.98px) {
+    /* Ajuste na barra de navegação para mobile */
+    .navbar-logo {
+        width: 120px; /* Reduz o logo em telas pequenas */
+    }
+
+    .navbar-user {
+        margin-top: 10px;
+        justify-content: space-between; /* Ajusta o alinhamento do nome e ícone */
+        width: 100%;
+    }
+
+    .name-user {
+        /* Garante que o nome do usuário não quebre a linha */
+        white-space: nowrap; 
+        font-size: 1rem;
+    }
+
+    /* O grid principal precisa garantir que todos os elementos ocupem a largura total */
+    .col-md-4 {
+        margin-bottom: 20px; /* Adiciona espaçamento vertical entre as colunas empilhadas */
+    }
+    
+    /* Garante que a coluna de relatos recentes ocupe todo o espaço */
+    .col-md-4:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Reduz o padding geral do container principal */
+    .conteiner-main {
+        padding: 0 15px;
+    }
+
+    /* Ajustes específicos de altura para mobile */
+    .user-preview, .user-impact, .occurrence-map, .users-highlights {
+        height: auto; /* Permite que o conteúdo defina a altura, fundamental no mobile */
+        min-height: 250px; /* Garante uma altura mínima, se necessário */
+    }
+
+    /* Estilização específica do painel de usuário para mobile */
+    .user-panel {
+        padding: 15px 10px;
+    }
+
+    .btn-create-report {
+        font-size: 16px;
+        height: 50px;
+        margin-top: 15px;
+    }
+}
+
+
 @media (max-width: 768px) {
     .report-container {
         padding: 15px 0;
@@ -724,7 +795,7 @@ textarea.form-control {
 
 /* Painel de denúncias recentes da cidade*/
  .recent-reports{
-     background-color: #2A2A2A;
+    background-color: #2A2A2A;
     height: 800px;
     border-radius: 12px;
     color: #EDEDED;
@@ -961,7 +1032,7 @@ img{max-width:100%;display:block}
 .reports{display:grid;gap:1rem}
 .report{
   display:grid;grid-template-columns: 44px 1fr 110px;gap:.8rem;
-  background:var(--panel-2);border-radius:14px;padding:.9rem;border:1px solid #dcdcdc;
+  background:var(--panel-2);border:1px solid #dcdcdc;
   align-items:center;box-shadow:var(--shadow)
 }
 @media (max-width:680px){
@@ -1108,7 +1179,7 @@ button,input,select,textarea{ font:inherit }
 
 /* ========== Paleta e tokens ========== */
 :root{
-  --bg: #d9d9dc;              /* cinza de fundo da página */
+  --bg: #d9d9dc;          /* cinza de fundo da página */
   --panel: #ececee;           /* painel “Fórum da Comunidade” */
   --sidebar: #464a4f;         /* fundo do sidebar */
   --sidebar-border: #2e3237;
@@ -1274,4 +1345,3 @@ button,input,select,textarea{ font:inherit }
 
 .votes{ color:#ef4444; font-weight:700; display:flex; align-items:center; gap:8px }
 .votes .dot{ font-size:18px }
-

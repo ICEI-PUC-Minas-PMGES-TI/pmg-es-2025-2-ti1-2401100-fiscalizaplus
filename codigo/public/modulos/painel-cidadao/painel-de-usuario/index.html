@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FiscalizaPlus</title>
@@ -11,57 +11,98 @@
   <link rel="shortcut icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../../../assets/css/cidadaos.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 </head>
 
 <body>
-<!-- Barra de navegação principal -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    
-    <!-- Logo -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo">
-    </a>
+  <!-- Barra de navegação principal -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo">
+      </a>
 
-    <!-- Botão de menu mobile -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-      aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Links de navegação -->
-    <div class="collapse navbar-collapse justify-content-between" id="navbarMenu">
-      
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link " href="../../../index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/codigo/public/modulos/comunidade/comunidade.html">Comunidade</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../dashboard_cliente.html">Dashboard de Ocorrências</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Guia do Cidadão</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/codigo/public/modulos/cad">Painel do Usuário</a>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarMenuLg">
 
-      <!-- Área do usuário -->
-      <div class="navbar-user d-flex align-items-center">
-        <span class="name-user me-2">Olá, Joãozinho</span>
-        <a href="#" class="user-icon-link">
-          <i class="fa-solid fa-circle-user user-icon"></i>
-        </a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="../../../index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../comunidade/comunidade.html">Comunidade</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../dashboard_cliente.html">Dashboard de Ocorrências</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Guia do Cidadão</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Painel do Usuário</a>
+          </li>
+        </ul>
+
+        <div class="navbar-user d-flex align-items-center dropdown">
+          <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Joãozinho</span>
+          <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="fa-solid fa-circle-user user-icon"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+          <ul class="navbar-nav flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Comunidade</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de
+                Ocorrências</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Guia do Cidadão</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do
+                Usuário</a>
+            </li>
+          </ul>
+
+          <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
+            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+            <a href="#" class="user-icon-link">
+              <i class="fa-solid fa-circle-user user-icon"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
-   <main class="container page">
+  </nav>
+  <main class="container page">
     <h1 class="page__title">Seus Relatos</h1>
 
     <!-- Abas de filtro -->
@@ -122,18 +163,14 @@
               </span>
 
               <label class="sr-only" for="select-r1">Alterar status</label>
-          
-            
+
+
               </select>
             </div>
           </div>
 
-          <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9364"
-          data-lng="-43.9344"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9364" data-lng="-43.9344"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
 
         <!-- Relato 2 -->
@@ -148,21 +185,17 @@
                 <i class="dot"></i><span class="status-text">Pendente</span>
               </span>
               <label class="sr-only" for="select-r2">Alterar status</label>
-            
-               
+
+
               </select>
             </div>
           </div>
-          <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9292"
-          data-lng="-43.9398"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9292" data-lng="-43.9398"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
 
         <!-- Relato 3 -->
-         
+
         <article class="report" data-id="r3" data-status="concluido">
           <div class="report__avatar">🧑</div>
           <div class="report__body">
@@ -174,17 +207,13 @@
                 <i class="dot"></i><span class="status-text">Concluído</span>
               </span>
               <label class="sr-only" for="select-r3">Alterar status</label>
-             
-               
+
+
               </select>
             </div>
           </div>
-         <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9371"
-          data-lng="-43.9340"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9371" data-lng="-43.9340"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
 
         <!-- Relato 4 -->
@@ -199,19 +228,15 @@
                 <i class="dot"></i><span class="status-text">Em andamento</span>
               </span>
               <label class="sr-only" for="select-r4">Alterar status</label>
-              
-               
+
+
               </select>
             </div>
           </div>
-         <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9362"
-          data-lng="-43.9329"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9362" data-lng="-43.9329"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
-        
+
         <!-- Relato 5 -->
         <article class="report" data-id="r3" data-status="concluido">
           <div class="report__avatar">🧑</div>
@@ -224,21 +249,17 @@
                 <i class="dot"></i><span class="status-text">Concluido</span>
               </span>
               <label class="sr-only" for="select-r4">Alterar status</label>
-              
-               
+
+
               </select>
             </div>
           </div>
-         <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9299"
-          data-lng="-43.9214"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9299" data-lng="-43.9214"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
 
 
-                <!-- Relato 6 -->
+        <!-- Relato 6 -->
         <article class="report" data-id="r4" data-status="andamento">
           <div class="report__avatar">🧑</div>
           <div class="report__body">
@@ -250,17 +271,13 @@
                 <i class="dot"></i><span class="status-text">Em andamento</span>
               </span>
               <label class="sr-only" for="select-r4">Alterar status</label>
-              
-               
+
+
               </select>
             </div>
           </div>
-         <div
-          class="occurrence-map-canvas"
-          data-lat="-19.9298"
-          data-lng="-43.9220"
-          style="height:80px; width:100%; border-radius:8px; overflow:hidden;"
-        ></div>
+          <div class="occurrence-map-canvas" data-lat="-19.9298" data-lng="-43.9220"
+            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
         </article>
       </section>
     </section>
@@ -273,8 +290,10 @@
   <script src="/codigo/public/assets/js/status-relatos.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="../../../assets/js/occurrence-map.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
 
 </body>
-</html>
 
+</html>
