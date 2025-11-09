@@ -2,15 +2,19 @@ let map;
 let marker;
 let selectedLocation = null;
 let imageInput = null;
-let selectedFilesList = [];
-let selectedFileDataUrls = [];
-let currentUser = null; // Variável global para armazenar o usuário logado
+let selectedFilesList = []; 
+let selectedFileDataUrls = []; 
+let currentUser = null; 
 
+// --- CONFIGURAÇÃO DA API ---
+const API_BASE_URL = 'http://localhost:3000'; 
+const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
+const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`; 
 
-// Função para carregar dados do usuário do arquivo JSON
+// Função para carregar dados do usuário do json-server
 async function loadUserData() {
     try {
-        const response = await fetch('/codigo/db/db.json');
+        const response = await fetch(CIDADAOS_ENDPOINT);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,18 +22,22 @@ async function loadUserData() {
         
         const data = await response.json();
         
-        // Simula o login pegando o primeiro usuário da lista
-        if (data.cidadaos && data.cidadaos.length > 0) {
-            currentUser = data.cidadaos[0]; 
-            console.log("Usuário carregado com sucesso:", currentUser.nome);
+        if (data && data.length > 0) {
+            currentUser = data[0]; 
+            console.log("Usuário carregado com sucesso:", currentUser.nomeCompleto);
+
+            const nomeUsuarioNav = document.getElementById('nomeUsuarioNav');
+            if (nomeUsuarioNav) {
+                nomeUsuarioNav.textContent = `Olá, ${currentUser.nomeCompleto.split(' ')[0]}`;
+            }
         } else {
-            console.error("Nenhum cidadão encontrado no arquivo JSON.");
+            console.error("Nenhum cidadão encontrado no json-server. Defininindo usuário de fallback.");
+            currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
         }
         
     } catch (error) {
-        console.error("Erro ao carregar dados do usuário:", error);
-        // Define um usuário de fallback caso a carga falhe
-        currentUser = { nome: "Usuário de Teste (Fallback)" };
+        console.error("Erro ao carregar dados do usuário do json-server:", error);
+        currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
     }
 }
 
@@ -44,7 +52,6 @@ const bhBounds = L.latLngBounds(
 
 // Função de inicialização do mapa usando o Leaflet
 function initMap() {
-    // Criação do mapa e configuração inicial
     map = L.map('map', {
         center: bhCenter,
         zoom: 13,
@@ -59,14 +66,12 @@ function initMap() {
         touchZoom: true,
     }).setView(bhCenter, 13);
 
-    // Adição de camada de tiles do OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 18,
         minZoom: 10
     }).addTo(map);
 
-    // Adicão de retângulo de limite visual
     L.rectangle(bhBounds, {
         color: '#ce2828',
         weight: 2,
@@ -75,19 +80,14 @@ function initMap() {
         dashArray: '5, 5'
     }).addTo(map);
 
-    // Adicionar evento de clique no mapa para marcar a localização
     map.on('click', function (e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Verificar se o clique está dentro dos limites de BH
         if (bhBounds.contains([lat, lng])) {
-            // Remove marcador anterior se existir
             if (marker) {
                 map.removeLayer(marker);
             }
-
-            // Criar novo marcador customizado
             marker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'custom-marker',
@@ -113,8 +113,6 @@ function initMap() {
             }).addTo(map);
 
             selectedLocation = { lat: lat, lng: lng };
-
-            // Atualiza o campo de endereço com as coordenadas
             updateAdress(lat, lng);
         } else {
             alert('Por favor, selecione uma localização dentro dos limites de Belo Horizonte.');
@@ -122,16 +120,12 @@ function initMap() {
     });
 }
 
-
-// Função para atualizar o campo de endereço com as coordenadas
 function updateAdress(lat, lng) {
     console.log(`Coordenadas selecionadas: ${lat}, ${lng}`);
     const enderecoField = document.querySelector("#endereco");
     enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
 }
 
-
-// Função para buscar endereço (geocoding) usando Nominatim
 function searchAdress() {
     const enderecoField = document.querySelector("#endereco");
     const endereco = enderecoField.value.trim();
@@ -141,7 +135,6 @@ function searchAdress() {
         return;
     }
 
-    // Adiciona Belo Horizonte ao final do endereço se não estiver presente
     let enderecoCompleto = endereco;
     if (!endereco.toLowerCase().includes('belo horizonte') && !endereco.toLowerCase().includes('bh')) {
         enderecoCompleto = endereco + ', Belo Horizonte, MG, Brasil';
@@ -150,11 +143,9 @@ function searchAdress() {
     const buscarBtn = document.querySelector('#buscar-btn');
     const originalText = buscarBtn.innerHTML;
 
-    // Estado de loading do botão
     buscarBtn.innerHTML = '⏳ Buscando...';
     buscarBtn.disabled = true;
 
-    // Utilização do Nominatim para geolocalização
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(enderecoCompleto)}&limit=1&countrycodes=br`;
 
     fetch(url)
@@ -166,19 +157,14 @@ function searchAdress() {
                 const lng = parseFloat(resultado.lon);
 
                 if (bhBounds.contains([lat, lng])) {
-                    // Move o mapa para a localização encontrada
                     map.setView([lat, lng], 16);
-
-                    // Preenche o campo de endereço com o nome completo
                     enderecoField.value = resultado.display_name || endereco;
 
-                    // Remove marcador anterior e adiciona o novo no local da busca
                     if (marker) {
                         map.removeLayer(marker);
                     }
                     marker = L.marker([lat, lng]).addTo(map);
 
-                    // Adiciona popup de confirmação
                     L.popup()
                         .setLatLng([lat, lng])
                         .setContent(`
@@ -190,7 +176,6 @@ function searchAdress() {
                         `)
                         .openOn(map);
 
-                    // Atualiza a localização selecionada
                     selectedLocation = { lat: lat, lng: lng };
 
                 } else {
@@ -205,13 +190,11 @@ function searchAdress() {
             alert('Erro ao buscar o endereço. Tente novamente.');
         })
         .finally(() => {
-            // Restaura o estado do botão
             buscarBtn.innerHTML = originalText;
             buscarBtn.disabled = false;
         });
 }
 
-// Função para usar localização atual do usuário e marcar no mapa
 function getCurrentLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -222,15 +205,12 @@ function getCurrentLocation() {
                 const currentLatLng = L.latLng(lat, lng);
 
                 if (bhBounds.contains(currentLatLng)) {
-                    // Move o mapa para a localização atual
                     map.setView([lat, lng], 15);
 
-                    // Remove marcador anterior
                     if (marker) {
                         map.removeLayer(marker);
                     }
 
-                    // Cria novo marcador na localização atual
                     marker = L.marker([lat, lng]).addTo(map);
 
                     selectedLocation = { lat: lat, lng: lng };
@@ -250,26 +230,19 @@ function getCurrentLocation() {
     }
 }
 
-// Função para resetar o mapa
 function resetMap() {
-    // Volta para o centro de Belo Horizonte
     map.setView(bhCenter, 13);
 
-    // Remove o marcador e limpa a localização
     if (marker) {
         map.removeLayer(marker);
         marker = null;
     }
 
     selectedLocation = null;
-
-    // Limpa o campo de endereço
     document.querySelector("#endereco").value = '';
 }
 
-// ======================================================================
-// FUNÇÕES DE GERENCIAMENTO DE IMAGEM
-// ======================================================================
+// FUNÇÕES DE GERENCIAMENTO DE IMAGEM 
 
 function renderPreview() {
     const previewContainer = document.getElementById('imagePreview');
@@ -277,7 +250,6 @@ function renderPreview() {
 
     previewContainer.innerHTML = '';
 
-    // Renderiza cada imagem na ordem exata
     selectedFileDataUrls.forEach((dataUrl, index) => {
         const imageDiv = document.createElement('div');
         imageDiv.className = 'image-preview-item';
@@ -300,7 +272,6 @@ function readFileAsDataURL(file) {
     });
 }
 
-// Usa async/await para garantir que a leitura de arquivos e a pré-visualização sejam feitas na ordem
 async function previewImages(input) {
     imageInput = input || document.querySelector("#imagens");
     if (!imageInput || !imageInput.files) return;
@@ -311,12 +282,11 @@ async function previewImages(input) {
     
     imageInput.value = ''; 
 
-    // Acumula os novos arquivos, respeitando o limite
     for (let i = 0; i < newFilesToAdd.length && selectedFilesList.length < maxFiles; i++) {
         selectedFilesList.push(newFilesToAdd[i]);
     }
     
-    // Converte todos os arquivos acumulados para Data URLs
+    // Converte SOMENTE para Data URLs para a pré-visualização.
     const dataUrlPromises = selectedFilesList.map(file => readFileAsDataURL(file));
     const loadedDataUrls = await Promise.all(dataUrlPromises);
     
@@ -326,104 +296,105 @@ async function previewImages(input) {
 }
 
 function removeImage(index){
-    // Remove o item da lista de arquivos e da lista de Data URLs
     selectedFilesList = selectedFilesList.filter((_, i) => i !== index);
     selectedFileDataUrls = selectedFileDataUrls.filter((_, i) => i !== index);
 
     renderPreview();
 }
 
-// Função de armazenamento Local dos Dados
+// FUNÇÃO DE ENVIO DO FORMULÁRIO 
 
-const STORAGE_KEY = 'relatosUsuario';
-
-function handleSubmit(event) {
+async function handleSubmit(event) {
     event.preventDefault();
 
-    // Validação de localização
     if (!selectedLocation) {
         alert("Por favor, selecione a localização exata do problema no mapa antes de enviar.");
         return;
     }
 
-    // Lógica de nome de usuário (correntUser ou anonimato)
     const isAnonimo = document.getElementById('anonimo').checked;
-    
-    // Pega o nome do usuário carregado (ou fallback)
-    const nomeReal = currentUser?.nome || 'Usuário Desconhecido';
-    
-    // Define o nome que será salvo no relato
-    const nomeCidadao = isAnonimo ? 'Anônimo' : nomeReal;
-    
-    // Obtém o valor booleano do checkbox de notificações
+    const nomeReal = currentUser?.nomeCompleto || 'Usuário Desconhecido';
+    const autorCidadao = isAnonimo ? 'Anônimo' : nomeReal;
     const recebeNotificacoes = document.getElementById('notificacoes').checked;
 
-    // Coleta todos os dados do formulário e transforma em um objeto json
+
+    const uploadedImageUrls = selectedFilesList.map((file, index) => {
+        const fileName = file.name.split('.').pop(); 
+        return `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/400/300.${fileName}`; 
+    });
+
     const reportData = {
-        // Informações Básicas
         titulo: document.getElementById('titulo').value,
-        categoria: document.getElementById('categoria').value,
-        descricao: document.getElementById('descricao').value,
+        tipoProblema: document.getElementById('categoria').value,
+        descricaoCompleta: document.getElementById('descricao').value,
+        informacoesAdicionaisCidadao: document.getElementById('observacoes').value,
         
-        // Nome do Cidadão (Anonimo ou Real)
-        nomeCidadao: nomeCidadao,
-
-        // Localização
-        localizacao: {
-            endereco: document.getElementById('endereco').value,
-            lat: selectedLocation.lat,
-            lng: selectedLocation.lng
+        endereco: {
+            rua: document.getElementById('endereco').value, 
+            numero: '', 
+            bairro: '',
+            cidade: 'Belo Horizonte', 
+            estado: 'MG', 
+            cep: '',
+            latitude: selectedLocation.lat,
+            longitude: selectedLocation.lng
         },
-
-        // Classificação
-        prioridade: document.getElementById('prioridade').value,
-        urgencia: document.getElementById('urgencia').value,
-        impacto: document.getElementById('impacto').value,
-
-        // Imagens (salva as Data URLs)
-        imagens: selectedFileDataUrls,
-        
-        // Informações Adicionais
-        observacoes: document.getElementById('observacoes').value,
-        contato: document.getElementById('contato').value,
-        
-        // Status dos Checkboxes
+        imagens: uploadedImageUrls, 
+        prioridadeCidadao: document.getElementById('prioridade').value,
+        urgenciaCidadao: document.getElementById('urgencia').value,
+        impactoComunidade: document.getElementById('impacto').value,
+        dataRegistro: new Date().toISOString(),
+        autorCidadao: autorCidadao,
         isAnonimo: isAnonimo,
-        recebeNotificacoes: recebeNotificacoes,
+        statusAtual: 'Pendente', 
+        dataUltimaAtualizacaoStatus: new Date().toISOString(),
+        prioridadeInterna: null,
+        observacoesInternasServidor: '',
+        servidorResponsavelId: null,
         
-        // Metadata do Relato
-        data_envio: new Date().toISOString(),
-        status: 'Pendente'
+        contatoCidadao: document.getElementById('contato').value,
+        recebeNotificacoes: recebeNotificacoes
     };
 
-    // Salva no localStorage
-    let relatos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    relatos.push(reportData);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(relatos));
+    console.log("Dados do relatório para envio (com URLs de imagens):", reportData);
 
-    console.log("Relato salvo no localStorage:", reportData);
-    alert("Relato enviado com sucesso, obrigado por denúnciar!");
-    
-    // Limpeza após envio
-    document.getElementById('reportForm').reset();
-    resetMap(); 
-    
-    // Limpa o gerenciamento de imagens e o preview
-    selectedFilesList = [];
-    selectedFileDataUrls = [];
-    renderPreview();
+    try {
+        const response = await fetch(DENUNCIAS_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reportData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Erro ao enviar relatório: ${response.status} - ${errorData.message || response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log("Relato enviado com sucesso para o json-server:", result);
+        alert("Relato enviado com sucesso, obrigado por denunciar!");
+        
+        document.getElementById('reportForm').reset();
+        resetMap(); 
+        
+        selectedFilesList = [];
+        selectedFileDataUrls = []; 
+        renderPreview();
+
+    } catch (error) {
+        console.error("Erro ao enviar relatório:", error);
+        alert("Ocorreu um erro ao enviar o relatório. Por favor, tente novamente.");
+    }
 }
 
 // ORQUESTRAÇÃO DE INICIALIZAÇÃO
 
 async function initializeApp() {
-    // 1. Carrega os dados do usuário
     await loadUserData(); 
-    
-    // 2. Inicializa o mapa
     initMap();
 
-    // 3. Anexa os listeners (agora que os dados estão carregados)
     const form = document.getElementById('reportForm');
     if (form) {
         form.addEventListener('submit', handleSubmit);
@@ -433,6 +404,10 @@ async function initializeApp() {
     if (fileInput) {
         fileInput.addEventListener('change', (e) => previewImages(e.target));
     }
+
+    const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
+    if (nomeUsuarioNav && !nomeUsuarioNav.id) {
+        nomeUsuarioNav.id = 'nomeUsuarioNav';
+    }
 }
-// Inicia o aplicativo
 initializeApp();

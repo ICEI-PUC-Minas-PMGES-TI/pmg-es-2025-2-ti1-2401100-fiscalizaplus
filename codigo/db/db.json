@@ -87,7 +87,7 @@
         "estado": "MG",
         "cep": "30000-000",
         "latitude": -23.55052,
-        "longitude": -46.63330
+        "longitude": -46.6333
       },
       "imagens": [
         "url_da_imagem_1.jpg",
@@ -104,9 +104,42 @@
       "prioridadeInterna": null,
       "observacoesInternasServidor": "",
       "servidorResponsavelId": null
+    },
+    {
+      "titulo": "Buraco encontrado na rua das Flores",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "adadadadadadadada dad3 wfsfgsdrgrthgesddsadgdgd",
+      "informacoesAdicionaisCidadao": "adadgehgdfgew reghdffsfsrsfsf",
+      "endereco": {
+        "rua": "Lat: -19.922535, Lng: -43.951237",
+        "numero": "",
+        "bairro": "",
+        "cidade": "Belo Horizonte",
+        "estado": "MG",
+        "cep": "",
+        "latitude": -19.9225348206398,
+        "longitude": -43.95123676272416
+      },
+      "imagens": [
+        "https://picsum.photos/seed/kn09a/400/300.png"
+      ],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-09T17:55:42.663Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-09T17:55:42.663Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "31995387581",
+      "recebeNotificacoes": true,
+      "id": 2
     }
   ],
-  "admin": { 
+  "admin": {
     "numeroTotalCidadaosAtivos": 5,
     "numeroTotalDenuncias": 2000,
     "denunciasPorStatus": {
@@ -134,9 +167,9 @@
       }
     ],
     "LocalComMaisDenuncias": [
-      { 
+      {
         "latitude": -23.55052,
-        "longitude": -46.63330,
+        "longitude": -46.6333,
         "quantidade": 800
       }
     ]

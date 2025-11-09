@@ -1,100 +1,94 @@
-// Lista de possíveis status
-const statusList = ["Pendente", "Em análise", "Em andamento", "Concluído"];
-let todasOcorrencias = []; // Armazena todas para pesquisa posterior
+const statusList = ["Pendente", "Em análise", "Em andamento", "Concluído", "Rejeitado"];
+let todasDenuncias = []; // Armazena todas as denúncias para pesquisa posterior
 
-// Função principal para carregar as ocorrências
-async function carregarOcorrencias() {
-  try {
-    const response = await fetch('../../../db/db.json');
-    const dados = await response.json();
-    todasOcorrencias = dados.ocorrencias; // salva todas as ocorrências
+// --- CONFIGURAÇÃO DA API ---
+const API_BASE_URL = 'http://localhost:3000'; 
+const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`; // Endpoint para buscar as denúncias
 
-    renderizarTabela(todasOcorrencias);
+// Função principal para carregar as denúncias
+async function carregarDenuncias() {
+    try {
+        const response = await fetch(DENUNCIAS_ENDPOINT);
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP! Status: ${response.status}`);
+        }
+        
+        const dados = await response.json();
+        todasDenuncias = dados; 
 
-    // Evento de pesquisa
-    const inputPesquisa = document.querySelector('input[type="text"]');
-    inputPesquisa.addEventListener("input", (e) => {
-      const termo = e.target.value.toLowerCase().trim();
-      const filtradas = todasOcorrencias.filter(oc =>
-        oc.titulo.toLowerCase().includes(termo) ||
-        oc.tipo.toLowerCase().includes(termo)
-      );
-      renderizarTabela(filtradas);
-    });
+        renderizarTabela(todasDenuncias);
 
-  } catch (error) {
-    console.error("❌ Erro ao carregar ocorrências:", error);
-  }
-}
+        // Evento de pesquisa
+        const inputPesquisa = document.querySelector('input[type="text"]');
+        if (inputPesquisa) { 
+            inputPesquisa.addEventListener("input", (e) => {
+                const termo = e.target.value.toLowerCase().trim();
+                const filtradas = todasDenuncias.filter(denuncia =>
+                    denuncia.titulo.toLowerCase().includes(termo) ||
+                    denuncia.tipoProblema.toLowerCase().includes(termo) || 
+                    denuncia.endereco.rua.toLowerCase().includes(termo) || 
+                    denuncia.statusAtual.toLowerCase().includes(termo)     
+                );
+                renderizarTabela(filtradas);
+            });
+        }
 
-// Função para renderizar as ocorrências na tabela
-function renderizarTabela(lista) {
-  const tbody = document.querySelector("tbody");
-  tbody.innerHTML = "";
-
-  lista.forEach((oc) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${oc.titulo}</td>
-      <td>${oc.tipo}</td>
-      <td class="status-col">${oc.status}</td>
-      <td>${formatarData(oc.createdAt)}</td>
-      <td class="position-relative">
-        <button class="btn btn-sm btn-outline-danger rounded-circle btn-status" data-id="${oc.id}">
-          <i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="dropdown-status shadow bg-white border rounded d-none position-absolute end-0 mt-1" style="z-index: 10;">
-          ${statusList.map(status => `
-            <button class="dropdown-item text-start w-100 py-1 px-3" data-status="${status}">
-              ${status}
-            </button>
-          `).join("")}
-        </div>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  ativarEventosDropdown();
-}
-
-// Função para configurar os eventos dos dropdowns
-function ativarEventosDropdown() {
-  // Abre/fecha dropdown
-  document.querySelectorAll(".btn-status").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const dropdown = e.currentTarget.nextElementSibling;
-      document.querySelectorAll(".dropdown-status").forEach(d => d.classList.add("d-none"));
-      dropdown.classList.toggle("d-none");
-    });
-  });
-
-  // Seleciona novo status
-  document.querySelectorAll(".dropdown-item").forEach((item) => {
-    item.addEventListener("click", (e) => {
-      const novoStatus = e.currentTarget.getAttribute("data-status");
-      const linha = e.currentTarget.closest("tr");
-      linha.querySelector(".status-col").textContent = novoStatus;
-      e.currentTarget.closest(".dropdown-status").classList.add("d-none");
-
-      const titulo = linha.querySelector("td").textContent;
-      console.log(`✅ Status da ocorrência "${titulo}" alterado para "${novoStatus}"`);
-    });
-  });
-
-  // Fecha dropdown ao clicar fora
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".btn-status") && !e.target.closest(".dropdown-status")) {
-      document.querySelectorAll(".dropdown-status").forEach(d => d.classList.add("d-none"));
+    } catch (error) {
+        console.error("❌ Erro ao carregar denúncias:", error);
+        // Exibir uma mensagem de erro na UI se houver um elemento para isso
+        const tbody = document.querySelector("tbody");
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Falha ao carregar as denúncias. ${error.message}</td></tr>`;
+        }
     }
-  });
+}
+
+// Função para renderizar as denúncias na tabela
+function renderizarTabela(lista) {
+    const tbody = document.querySelector("tbody");
+    if (!tbody) {
+        console.error("Elemento tbody não encontrado.");
+        return;
+    }
+    tbody.innerHTML = ""; // Limpa a tabela antes de adicionar novos dados
+
+    if (lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center">Nenhuma denúncia encontrada.</td></tr>`;
+        return;
+    }
+
+    lista.forEach((denuncia) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${denuncia.titulo}</td>
+            <td>${denuncia.tipoProblema}</td>
+            <td class="status-col">${denuncia.statusAtual}</td>
+            <td>${formatarData(denuncia.dataRegistro)}</td>
+            <td class="text-center">
+                <a href="detalhes-denuncia.html?id=${denuncia.id}" class="btn btn-sm btn-primary">
+                    Ver Detalhes
+                </a>
+                </td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 // Função para formatar data ISO em formato BR
 function formatarData(dataISO) {
-  const data = new Date(dataISO);
-  return data.toLocaleDateString("pt-BR");
+    try {
+        const data = new Date(dataISO);
+        // Verifica se a data é válida antes de formatar
+        if (isNaN(data.getTime())) {
+            return "Data inválida";
+        }
+        return data.toLocaleDateString("pt-BR");
+    } catch (e) {
+        console.error("Erro ao formatar data:", e);
+        return "Data inválida";
+    }
 }
 
-// Inicializa
-document.addEventListener("DOMContentLoaded", carregarOcorrencias);
+// Inicializa o carregamento das denúncias quando a página estiver totalmente carregada
+document.addEventListener("DOMContentLoaded", carregarDenuncias);
