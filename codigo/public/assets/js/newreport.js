@@ -305,7 +305,6 @@ function resetMap() {
 // --- FUNÇÕES DE GERENCIAMENTO DE IMAGEM (Mantidas) ---
 
 function renderPreview() {
-    // ... (Mantido o código de renderPreview)
     const previewContainer = document.getElementById('imagePreview');
     if (!previewContainer) return;
 
@@ -323,7 +322,6 @@ function renderPreview() {
 }
 
 function readFileAsDataURL(file) {
-    // ... (Mantido o código de readFileAsDataURL)
     return new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -335,7 +333,6 @@ function readFileAsDataURL(file) {
 }
 
 async function previewImages(input) {
-    // ... (Mantido o código de previewImages)
     imageInput = input || document.querySelector("#imagens");
     if (!imageInput || !imageInput.files) return;
 
@@ -343,6 +340,7 @@ async function previewImages(input) {
     
     const newFilesToAdd = Array.from(input.files).filter(f => f && f.type && f.type.startsWith('image/'));
     
+    // Limpar o input file para permitir selecionar as mesmas fotos novamente se necessário
     imageInput.value = ''; 
 
     for (let i = 0; i < newFilesToAdd.length && selectedFilesList.length < maxFiles; i++) {
@@ -358,14 +356,62 @@ async function previewImages(input) {
 }
 
 function removeImage(index){
-    // ... (Mantido o código de removeImage)
     selectedFilesList = selectedFilesList.filter((_, i) => i !== index);
     selectedFileDataUrls = selectedFileDataUrls.filter((_, i) => i !== index);
 
     renderPreview();
 }
 
-// ATUALIZADA: FUNÇÃO DE ENVIO DO FORMULÁRIO (Usa addressDetails)
+// --- FUNÇÕES PARA GERAR CÓDIGO DE OCORRÊNCIA (CORRIGIDAS) ---
+
+// Helper para formatar o número sequencial (0001, 0002, etc.)
+function formatarCodigo(numero) {
+    // Garante 4 dígitos com zeros à esquerda
+    const numeroFormatado = String(numero).padStart(4, '0'); 
+    return `OCOR-${numeroFormatado}`;
+}
+
+// FUNÇÃO ATUALIZADA: Principal para buscar o próximo número sequencial e formatar o código
+async function gerarCodigoOcorrencia() {
+    let proximoNumero = 1;
+
+    try {
+        // 1. Busca TODAS as denúncias para encontrar o maior codigoOcorrencia existente
+        // Remover _sort e _limit para que o json-server retorne todos os registros e possamos
+        // fazer a lógica de ordenação numérica corretamente no cliente.
+        const response = await fetch(DENUNCIAS_ENDPOINT); 
+        
+        if (!response.ok) {
+            console.warn("Falha ao buscar denúncias para gerar o código. Iniciando com OCOR-0001.");
+            return formatarCodigo(proximoNumero);
+        }
+
+        const todasDenuncias = await response.json();
+
+        if (todasDenuncias && todasDenuncias.length > 0) {
+            let maiorNumero = 0;
+            todasDenuncias.forEach(denuncia => {
+                if (denuncia.codigoOcorrencia) {
+                    // Extrai o número do código (ex: "OCOR-0123" -> 123)
+                    const numeroString = denuncia.codigoOcorrencia.split('-')[1];
+                    const numeroAtual = parseInt(numeroString);
+                    if (!isNaN(numeroAtual) && numeroAtual > maiorNumero) {
+                        maiorNumero = numeroAtual;
+                    }
+                }
+            });
+            proximoNumero = maiorNumero + 1;
+        }
+
+    } catch (error) {
+        console.error("Erro na comunicação com o servidor ao gerar o código da ocorrência. Usando OCOR-0001.", error);
+        // Em caso de erro na comunicação, inicia-se no 1 para evitar travamento
+    }
+
+    return formatarCodigo(proximoNumero);
+}
+
+// ATUALIZADA: FUNÇÃO DE ENVIO DO FORMULÁRIO (Usa addressDetails e gera codigoOcorrencia)
 async function handleSubmit(event) {
     event.preventDefault();
 
@@ -374,6 +420,11 @@ async function handleSubmit(event) {
         return;
     }
 
+    // --- GERA O CÓDIGO DE OCORRÊNCIA AQUI ---
+    const novoCodigoOcorrencia = await gerarCodigoOcorrencia();
+    console.log("Novo Código de Ocorrência gerado:", novoCodigoOcorrencia);
+    // ----------------------------------------
+
     const isAnonimo = document.getElementById('anonimo').checked;
     const nomeReal = currentUser?.nomeCompleto || 'Usuário Desconhecido';
     const autorCidadao = isAnonimo ? 'Anônimo' : nomeReal;
@@ -381,6 +432,9 @@ async function handleSubmit(event) {
 
 
     const uploadedImageUrls = selectedFilesList.map((file, index) => {
+        // Gera uma URL de imagem de placeholder para o json-server
+        // Em um sistema real, você faria upload para um serviço de armazenamento de arquivos (e.g., Cloudinary, S3)
+        // e obteria as URLs reais aqui.
         const fileName = file.name.split('.').pop(); 
         return `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/400/300.${fileName}`; 
     });
@@ -391,6 +445,10 @@ async function handleSubmit(event) {
         descricaoCompleta: document.getElementById('descricao').value,
         informacoesAdicionaisCidadao: document.getElementById('observacoes').value,
         
+        // --- ADICIONADO O CAMPO codigoOcorrencia ---
+        codigoOcorrencia: novoCodigoOcorrencia, 
+        // ------------------------------------------
+
         endereco: {
             // Agora usa os dados armazenados pelo reverse geocoding
             rua: addressDetails.rua, 
@@ -437,7 +495,7 @@ async function handleSubmit(event) {
 
         const result = await response.json();
         console.log("Relato enviado com sucesso para o json-server:", result);
-        alert("Relato enviado com sucesso, obrigado por denunciar!");
+        alert(`Relato ${result.codigoOcorrencia} enviado com sucesso, obrigado por denunciar!`); // Alerta com o código
         
         document.getElementById('reportForm').reset();
         resetMap(); 

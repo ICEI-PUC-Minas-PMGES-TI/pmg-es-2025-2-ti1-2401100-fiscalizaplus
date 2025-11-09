@@ -514,6 +514,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Os filtros antigos (.filters-container, .filter-btn) não são mais usados com dropdowns, mas mantidos para referência */
 .filters-container {
     display: flex;
     gap: 10px; 
@@ -545,9 +546,169 @@ body {
     box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
 }
 
-.map-ocurrence{
-  width: 100%;
-  height: 600px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5)
+/* Substituído por #map no novo layout com colunas, mas mantido para referência */
+.map-ocurrence {
+    width: 100%;
+    height: 700px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.filter-btn.active {
+    background-color: var(--cor-principal, #d62828); 
+    color: white;
+    border-color: var(--cor-principal, #d62828);
+    box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
+}
+
+/* --- Estilização Adicional para o Novo Layout (Contadores, Filtros, Mapa e Sidebar) --- */
+
+/* Estilização específica para o mapa na coluna (usando o ID para maior especificidade) */
+#map {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); /* Sombra consistente com .map-ocurrence */
+}
+
+/* Estilização para o Painel de Detalhes (Sidebar) */
+#sidebar-details {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    border: none;
+}
+
+#sidebar-details .card-header {
+    background-color: var(--cor-principal, #d62828) !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1rem;
+}
+
+#sidebar-details .btn-close-white {
+    opacity: 1;
+    filter: brightness(0) invert(1);
+}
+
+/* Estilo para as Imagens no Detalhe */
+#detail-imagens img {
+    border: 1px solid #ddd;
+    transition: transform 0.2s;
+    object-fit: cover;
+    height: 80px; /* Altura fixa para miniaturas */
+    width: 100%;
+    cursor: zoom-in;
+}
+#detail-imagens img:hover {
+    border-color: var(--cor-principal, #d62828);
+}
+
+/* --- Estilos para os Marcadores Leaflet Customizados --- */
+
+.custom-div-icon {
+    background: none !important; 
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo do Pino */
+.custom-div-icon .marker-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0; 
+    background-color: #555; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px; 
+    transform: rotate(-45deg); 
+    box-shadow: 0 0 5px rgba(0,0,0,0.4); 
+}
+
+/* Estilo do Ícone interno (Reverte a rotação) */
+.custom-div-icon i {
+    font-size: 16px; 
+    color: white; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -8px 0 0 -8px; 
+    transform: rotate(45deg); 
+    z-index: 1; 
+}
+
+/* --- Cores dos Marcadores por Status --- */
+.marker-pending .marker-pin { 
+    background-color: #ffc107; 
+} 
+.marker-in-progress .marker-pin { 
+    background-color: var(--cor-principal, #d62828); 
+} 
+.marker-completed .marker-pin { 
+    background-color: #198754; 
+} 
+.marker-rejected .marker-pin { 
+    background-color: #6c757d; 
+}
+
+
+/* --- Estilos para o Popup do Leaflet --- */
+.popup-info .ver-detalhes-btn {
+    width: 100%; 
+    background-color: var(--cor-principal, #d62828); 
+    color: white;
+    border-color: var(--cor-principal, #d62828);
+    margin-top: 8px; 
+}
+.popup-info .ver-detalhes-btn:hover {
+    background-color: #a71f1f; 
+    border-color: #a71f1f;
+}
+
+.popup-info h5 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+.popup-info p {
+    font-size: 0.9em;
+    line-height: 1.3;
+    color: #444;
+}
+.popup-info .small {
+    font-size: 0.8em;
+    color: #666;
+}
+.popup-info .badge {
+    font-size: 0.8em;
+    padding: 0.35em 0.6em;
+}
+
+/* Estilização dos Cards de Contadores (Dashboard Stats) */
+#dashboard-stats .card {
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+#dashboard-stats .card:hover {
+    transform: translateY(-2px);
+}
+
+/* Ajustes nos Selects e Input de Busca (Busca por ID e Seletor de Mapa) */
+#filters-container .form-select,
+#search-id-input,
+#map-view-selector {
+    border-radius: 0.375rem; 
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+}
+
+#search-id-input:focus,
+#filter-status:focus,
+#filter-tipo:focus,
+#map-view-selector:focus {
+    border-color: rgba(214, 40, 40, 0.5); /* Foco na cor principal */
+    box-shadow: 0 0 0 0.25rem rgba(214, 40, 40, 0.25);
 }

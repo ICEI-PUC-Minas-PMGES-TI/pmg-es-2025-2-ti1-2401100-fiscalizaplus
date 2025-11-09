@@ -11,8 +11,10 @@
     <link rel="stylesheet" href="../../assets/css/servidor.css">
     <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoCcT8V1B16uVnFk4sN7kK4fL3M7l4l4M3fK3g=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
 </head>
 
 <body>
@@ -40,11 +42,13 @@
                             denúncias</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="mapa_ocorrencias.html" class="nav-link text-white active"><i class="bi bi-geo-alt me-2"></i>Mapas de
+                        <a href="mapa_ocorrencias.html" class="nav-link text-white active"><i
+                                class="bi bi-geo-alt me-2"></i>Mapas de
                             denúncia</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="mapa_de_calor.html" class="nav-link text-white"><i class="bi bi-thermometer-snow me-2"></i>Mapa de
+                        <a href="mapa_de_calor.html" class="nav-link text-white"><i
+                                class="bi bi-thermometer-snow me-2"></i>Mapa de
                             calor</a>
                     </li>
                     <li class="nav-item mb-4">
@@ -59,22 +63,137 @@
         <div class="main-content-map p-4">
             <h1 class="mb-4">Mapa de Denúncias</h1>
 
-            <div class="filters-container d-flex mb-4 gap-2">
-                <button class="filter-btn active" data-status="todos">Todos</button>
-                <button class="filter-btn" data-status="pendente">Pendente</button>
-                <button class="filter-btn" data-status="em-andamento">Em andamento</button>
-                <button class="filter-btn" data-status="concluido">Concluídos</button>
-            </div>
+            <div class="container-fluid">
+                <div class="row" id="dashboard-stats">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-dark mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total de Denúncias</h5>
+                                <p class="card-text fs-4" id="stat-total">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Pendentes</h5>
+                                <p class="card-text fs-4" id="stat-pendente">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Em Andamento</h5>
+                                <p class="card-text fs-4" id="stat-em-andamento">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Concluídas</h5>
+                                <p class="card-text fs-4" id="stat-concluido">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div id="map" class="map-ocurrence"></div>
+                <div class="row mt-3 mb-3 align-items-end">
+                    <div class="col-md-6 d-flex gap-3">
+                        <select id="filter-status" class="form-select w-auto">
+                            <option value="all">Filtrar por Status (Todos)</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Concluido">Concluído</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+
+                        <select id="filter-tipo" class="form-select w-auto">
+                            <option value="all">Filtrar por Tipo (Todos)</option>
+                            <option value="infraestrutura">Infraestrutura</option>
+                            <option value="iluminacao">Iluminação</option>
+                            <option value="limpeza">Limpeza</option>
+                            <option value="transito">Trânsito</option>
+                            <option value="seguranca">Segurança</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                        <button id="reset-filters-btn" class="btn btn-secondary">Limpar Filtros</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="search-id-input" class="form-label visually-hidden">Pesquisar por N° da OCOR</label>
+                        <input type="text" id="search-codigo-ocorrencia-input" class="form-control"
+                            placeholder="Buscar por N° da OCOR">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="map-view-selector" class="form-label visually-hidden">Visualização do Mapa</label>
+                        <select id="map-view-selector" class="form-select">
+                            <option value="markers">Visualização Padrão</option>
+                            <option value="heatmap">Mapa de Calor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-9">
+                        <div id="map" style="height: 600px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="sidebar-details" class="card" style="display: block; height: 600px; overflow-y: auto;">
+                            <div id="sidebar-header" class="card-header bg-danger text-white">
+                                <h5 id="sidebar-title" class="mb-0">Aguardando Seleção
+                                    <button type="button" class="btn-close btn-close-white float-end" aria-label="Close"
+                                        onclick="closeSidebar()"></button>
+                                </h5>
+                            </div>
+
+                            <div id="initial-sidebar-content" class="card-body text-center p-4" style="display: block;">
+                                <i class="bi bi-pin-map-fill text-primary"
+                                    style="font-size: 3.5em; display: block; margin-bottom: 15px;"></i>
+                                <h5 class="card-title mb-3">Bem-vindo ao Mapa de Denúncias!</h5>
+                                <p class="card-text text-muted">Explore as denúncias registradas pelos cidadãos.</p>
+                                <p class="card-text small mb-4">Utilize os filtros acima para refinar sua busca por
+                                    tipo, status ou N° da OCOR.</p>
+                                <p class="card-text small text-secondary"><i class="bi bi-mouse me-2"></i>Clique em um
+                                    marcador no mapa para ver os detalhes aqui.</p>
+                            </div>
+
+                            <div id="denuncia-details-content" class="card-body" style="display: none;">
+                                <h4 id="detail-titulo"></h4>
+                                <p><strong>ID:</strong> <span id="detail-id"></span></p>
+                                <p><strong>Tipo:</strong> <span id="detail-tipo"></span></p>
+                                <p><strong>Status:</strong> <span id="detail-status" class="badge"></span></p>
+                                <p><strong>Endereço:</strong> <span id="detail-endereco"></span></p>
+                                <p><strong>Descrição:</strong> <span id="detail-descricao"></span></p>
+                                <p><strong>Observações Cidadão:</strong> <span id="detail-observacoes-cidadao"></span>
+                                </p>
+                                <p><strong>Registrado em:</strong> <span id="detail-data-registro"></span></p>
+                                <p><strong>Autor:</strong> <span id="detail-autor"></span></p>
+                                <p><strong>Contato:</strong> <span id="detail-contato"></span></p>
+                                <p><strong>Recebe Notificações:</strong> <span id="detail-recebe-notificacoes"></span>
+                                </p>
+                                <p><strong>Prioridade Cidadão:</strong> <span id="detail-prioridade-cidadao"></span></p>
+                                <p><strong>Urgência Cidadão:</strong> <span id="detail-urgencia-cidadao"></span></p>
+                                <p><strong>Impacto:</strong> <span id="detail-impacto"></span></p>
+
+                                <h6 class="mt-4">Imagens:</h6>
+                                <div id="detail-imagens" class="row g-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/4K8TO+6xL2N6T6nGWjPjM=" crossorigin=""></script>
-    
-    <script src="../../assets/js/mapa-denuncias.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="../../assets/js/mapa_ocorrencias.js"></script>
 </body>
 
 </html>
