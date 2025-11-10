@@ -1,8 +1,9 @@
+
 let map;
 let bhBounds;
 let todasDenuncias = []; 
-let markers = L.markerClusterGroup();
-let heatmapLayer = null; 
+let markers = L.markerClusterGroup(); 
+let heatmapLayer = null; // Camada para o mapa de calor
 let currentFilters = { status: 'all', tipo: 'all', codigoOcorrencia: '' }; 
 let selectedDenunciaId = null; 
 let currentView = 'markers'; 
@@ -36,7 +37,7 @@ function initMap() {
         minZoom: 10
     }).addTo(map);
 
-    markers.addTo(map); // Adiciona o layer de agrupamento ao mapa
+    markers.addTo(map); 
 }
 
 async function carregarDenuncias() {
@@ -64,7 +65,6 @@ function updateDashboardStats(denuncias) {
     document.getElementById('stat-pendente').textContent = denuncias.filter(d => d.statusAtual === 'Pendente').length;
     document.getElementById('stat-em-andamento').textContent = denuncias.filter(d => d.statusAtual === 'Em Andamento').length;
     document.getElementById('stat-concluido').textContent = denuncias.filter(d => d.statusAtual === 'Concluido').length;
-    document.getElementById('stat-concluido').textContent = denuncias.filter(d => d.statusAtual === 'Cancelado').length;
 }
 
 function aplicarFiltros() {
@@ -88,27 +88,27 @@ function aplicarFiltros() {
         );
     }
 
-    renderizarCamadaDoMapa(denunciasFiltradas);
+    renderizarCamadaDoMapa(denunciasFiltradas); 
 }
 
-// Função para renderizar a camada correta 
 function renderizarCamadaDoMapa(denunciasParaExibir) {
     if (map.hasLayer(markers)) {
         map.removeLayer(markers);
     }
-    if (heatmapLayer && map.hasLayer(heatmapLayer)) {
+    if (heatmapLayer && map.hasLayer(heatmapLayer)) { 
         map.removeLayer(heatmapLayer);
     }
 
     if (currentView === 'markers') {
-        markers.clearLayers();
-        const latLngs = []; 
+        markers.clearLayers(); 
+
+        const latLngs = []; // Para coletar todas as coordenadas dos marcadores
 
         denunciasParaExibir.forEach(denuncia => {
             if (denuncia.endereco && denuncia.endereco.latitude && denuncia.endereco.longitude) {
                 const lat = denuncia.endereco.latitude;
                 const lng = denuncia.endereco.longitude;
-                latLngs.push([lat, lng]); 
+                latLngs.push([lat, lng]); // Adiciona a coordenada para o ajuste de zoom
 
                 const customIcon = L.divIcon({
                     className: `custom-div-icon ${getMarkerClassByStatus(denuncia.statusAtual)}`,
@@ -132,7 +132,7 @@ function renderizarCamadaDoMapa(denunciasParaExibir) {
                 `;
                 marker.bindPopup(popupContent);
                 markers.addLayer(marker);
-                
+
                 marker.on('popupopen', function (e) {
                     const button = e.popup.getElement().querySelector('.ver-detalhes-btn');
                     if (button) {
@@ -144,16 +144,14 @@ function renderizarCamadaDoMapa(denunciasParaExibir) {
                 console.warn(`Denúncia com ID ${denuncia.id} não possui coordenadas válidas.`);
             }
         });
-        map.addLayer(markers); // Adiciona a camada de marcadores 
+        map.addLayer(markers); 
 
-        // Lógica de zoom 
+        // Lógica de zoom aprimorada
         if (latLngs.length > 0) {
             const bounds = L.latLngBounds(latLngs);
             if (latLngs.length === 1) {
-                // Se houver apenas um marcador, centraliza nele com um zoom específico
-                map.setView(bounds.getCenter(), 16); // Zoom mais fechado para um único ponto
+                map.setView(bounds.getCenter(), 16); 
             } else {
-                // Se houver múltiplos marcadores, ajusta os limites
                 map.fitBounds(bounds, {
                     padding: [50, 50], 
                     maxZoom: 15 
@@ -168,19 +166,25 @@ function renderizarCamadaDoMapa(denunciasParaExibir) {
             .filter(d => d.endereco && d.endereco.latitude && d.endereco.longitude)
             .map(d => [d.endereco.latitude, d.endereco.longitude, getHeatIntensity(d.statusAtual)]); 
 
-        if (heatmapLayer) { 
-            heatmapLayer.setLatLngs(heatData);
-        } else {
+        if (!heatmapLayer) {
             heatmapLayer = L.heatLayer(heatData, {
                 radius: 25,
                 blur: 15,
                 maxZoom: 17,
-                gradient: {0.0: 'blue', 0.4: 'cyan', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red'}
+                gradient: { //  GRADIENTE DE STATUS
+                    0.0: '#A9A9A9', 
+                    0.2: 'green',   
+                    0.5: 'yellow',  
+                    0.8: 'red'      
+                }
             });
+            map.addLayer(heatmapLayer); 
+        } else {
+            heatmapLayer.setLatLngs(heatData); 
             map.addLayer(heatmapLayer); 
         }
         
-        // Lógica de zoom para heatmap 
+        // Lógica de zoom para heatmap
         if (heatData.length > 0) {
             const bounds = L.latLngBounds(heatData.map(d => [d[0], d[1]]));
             map.fitBounds(bounds, {
@@ -197,10 +201,10 @@ function renderizarCamadaDoMapa(denunciasParaExibir) {
 function getHeatIntensity(status) {
     switch (status) {
         case "Pendente": return 1.0; 
-        case "Em Andamento": return 0.7;
+        case "Em Andamento": return 0.7; 
         case "Concluido": return 0.3; 
         case "Cancelado": return 0.1; 
-        default: return 0.5;
+        default: return 0.5; 
     }
 }
 
@@ -217,18 +221,19 @@ function getMarkerClassByStatus(status) {
     }
 }
 
+
 function getBadgeClassByStatus(status) {
     const statusNormalized = status.toLowerCase().replace(/\s/g, '-').replace(/ã/g, 'a').replace(/é/g, 'e');
     switch (statusNormalized) {
-        case "pendente": return "bg-warning text-dark"; // Amarelo para pendente
-        case "em-andamento": return "bg-info"; // Azul claro para em andamento
-        case "concluido": return "bg-success"; // Verde para concluído
-        case "cancelado": return "bg-danger"; // Vermelho para cancelado
-        default: return "bg-secondary"; // Cinza padrão
+        case "pendente": return "bg-warning text-dark"; 
+        case "em-andamento": return "bg-info"; 
+        case "concluido": return "bg-success"; 
+        case "cancelado": return "bg-danger"; 
+        default: return "bg-secondary"; 
     }
 }
 
-// Helper para ícones dos tipos de problema 
+
 function getIconClassByTipo(tipoProblema) {
     const tipoNormalized = tipoProblema.toLowerCase();
     if (tipoNormalized.includes("infraestrutura")) return "bi-tools";
@@ -243,7 +248,6 @@ function ativarListenersFiltros() {
     const filterStatus = document.getElementById('filter-status');
     const filterTipo = document.getElementById('filter-tipo');
     const resetFiltersBtn = document.getElementById('reset-filters-btn');
-    // Campo de busca por Código de Ocorrência
     const searchCodigoOcorrenciaInput = document.getElementById('search-codigo-ocorrencia-input'); 
     const mapViewSelector = document.getElementById('map-view-selector'); 
 
@@ -257,22 +261,19 @@ function ativarListenersFiltros() {
         aplicarFiltros();
     });
 
-    // Listener para a busca por Código de Ocorrência
     searchCodigoOcorrenciaInput.addEventListener('input', (e) => {
         currentFilters.codigoOcorrencia = e.target.value.trim();
         aplicarFiltros();
     });
 
     resetFiltersBtn.addEventListener('click', () => {
-        // Reset do filtro de Código de Ocorrência
         currentFilters = { status: 'all', tipo: 'all', codigoOcorrencia: '' }; 
         filterStatus.value = 'all';
         filterTipo.value = 'all';
-        searchCodigoOcorrenciaInput.value = ''; // Limpa o campo de busca
+        searchCodigoOcorrenciaInput.value = ''; 
         aplicarFiltros();
     });
 
-    //  Listener para o seletor de visualização do mapa
     mapViewSelector.addEventListener('change', (e) => {
         currentView = e.target.value;
         aplicarFiltros(); 
@@ -281,19 +282,15 @@ function ativarListenersFiltros() {
 
 // Handler para o clique no botão "Ver Detalhes"
 function handleVerDetalhesClick(denunciaId) {
-    // Fecha qualquer popup aberto
     map.closePopup(); 
-    // Abre a sidebar com os detalhes da denúncia
-    openSidebar(denunciaId);
+    openSidebar(denunciaId); // Abre a sidebar com os detalhes
 }
-
 
 function openSidebar(denunciaId = null) { 
     selectedDenunciaId = denunciaId;
     const initialContent = document.getElementById('initial-sidebar-content');
     const detailsContent = document.getElementById('denuncia-details-content');
     const sidebarTitleElement = document.getElementById('sidebar-title'); 
-
 
     if (denunciaId) {
         initialContent.style.display = 'none';
@@ -312,6 +309,7 @@ function closeSidebar() {
     const initialContent = document.getElementById('initial-sidebar-content');
     const detailsContent = document.getElementById('denuncia-details-content');
     const sidebarTitleElement = document.getElementById('sidebar-title'); 
+
     initialContent.style.display = 'block'; 
     detailsContent.style.display = 'none';
     sidebarTitleElement.textContent = 'Aguardando Seleção'; 
