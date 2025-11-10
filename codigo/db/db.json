@@ -102,7 +102,9 @@
         "latitude": -19.906745100706374,
         "longitude": -43.98083622909395
       },
-      "imagens": ["https://via.placeholder.com/150/FF0000/FFFFFF?text=buraco1"],
+      "imagens": [
+        "https://via.placeholder.com/150/FF0000/FFFFFF?text=buraco1"
+      ],
       "prioridadeCidadao": "critica",
       "urgenciaCidadao": "emergencia",
       "impactoComunidade": "regional",
@@ -134,7 +136,9 @@
         "latitude": -19.937915120484647,
         "longitude": -43.93578559403494
       },
-      "imagens": ["https://via.placeholder.com/150/0000FF/FFFFFF?text=lixo1"],
+      "imagens": [
+        "https://via.placeholder.com/150/0000FF/FFFFFF?text=lixo1"
+      ],
       "prioridadeCidadao": "media",
       "urgenciaCidadao": "media",
       "impactoComunidade": "local",
@@ -166,7 +170,9 @@
         "latitude": -19.9257817,
         "longitude": -44.0043542
       },
-      "imagens": ["https://via.placeholder.com/150/00FF00/FFFFFF?text=fiacao"],
+      "imagens": [
+        "https://via.placeholder.com/150/00FF00/FFFFFF?text=fiacao"
+      ],
       "prioridadeCidadao": "alta",
       "urgenciaCidadao": "alta",
       "impactoComunidade": "regional",
@@ -198,7 +204,9 @@
         "latitude": -19.937165934484973,
         "longitude": -43.93562970145074
       },
-      "imagens": ["https://via.placeholder.com/150/FFFF00/000000?text=semaforo1"],
+      "imagens": [
+        "https://via.placeholder.com/150/FFFF00/000000?text=semaforo1"
+      ],
       "prioridadeCidadao": "baixa",
       "urgenciaCidadao": "baixa",
       "impactoComunidade": "local",
@@ -230,7 +238,9 @@
         "latitude": -19.9234,
         "longitude": -43.9385
       },
-      "imagens": ["https://via.placeholder.com/150/FF6347/FFFFFF?text=arvore1"],
+      "imagens": [
+        "https://via.placeholder.com/150/FF6347/FFFFFF?text=arvore1"
+      ],
       "prioridadeCidadao": "critica",
       "urgenciaCidadao": "emergencia",
       "impactoComunidade": "regional",
@@ -259,10 +269,12 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-001",
-        "latitude": -19.9230,
-        "longitude": -43.9310
+        "latitude": -19.923,
+        "longitude": -43.931
       },
-      "imagens": ["https://via.placeholder.com/150/808080/FFFFFF?text=luzes"],
+      "imagens": [
+        "https://via.placeholder.com/150/808080/FFFFFF?text=luzes"
+      ],
       "prioridadeCidadao": "alta",
       "urgenciaCidadao": "alta",
       "impactoComunidade": "local",
@@ -291,10 +303,12 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31010-010",
-        "latitude": -19.9160,
+        "latitude": -19.916,
         "longitude": -43.9215
       },
-      "imagens": ["https://via.placeholder.com/150/D3D3D3/000000?text=entulho1"],
+      "imagens": [
+        "https://via.placeholder.com/150/D3D3D3/000000?text=entulho1"
+      ],
       "prioridadeCidadao": "media",
       "urgenciaCidadao": "media",
       "impactoComunidade": "local",
@@ -323,10 +337,12 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30112-001",
-        "latitude": -19.9200,
-        "longitude": -43.9400
+        "latitude": -19.92,
+        "longitude": -43.94
       },
-      "imagens": ["https://via.placeholder.com/150/000000/FFFFFF?text=pixacao"],
+      "imagens": [
+        "https://via.placeholder.com/150/000000/FFFFFF?text=pixacao"
+      ],
       "prioridadeCidadao": "baixa",
       "urgenciaCidadao": "baixa",
       "impactoComunidade": "local",
@@ -356,9 +372,11 @@
         "estado": "Minas Gerais",
         "cep": "30130-003",
         "latitude": -19.9205,
-        "longitude": -43.9370
+        "longitude": -43.937
       },
-      "imagens": ["https://via.placeholder.com/150/ADD8E6/000000?text=vazamento"],
+      "imagens": [
+        "https://via.placeholder.com/150/ADD8E6/000000?text=vazamento"
+      ],
       "prioridadeCidadao": "critica",
       "urgenciaCidadao": "emergencia",
       "impactoComunidade": "regional",
@@ -388,7 +406,7 @@
         "estado": "Minas Gerais",
         "cep": "30170-120",
         "latitude": -19.9225,
-        "longitude": -43.9420
+        "longitude": -43.942
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -419,10 +437,12 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30350-000",
-        "latitude": -19.9390,
-        "longitude": -43.9460
+        "latitude": -19.939,
+        "longitude": -43.946
       },
-      "imagens": ["https://via.placeholder.com/150/FF4500/FFFFFF?text=arvore_risco"],
+      "imagens": [
+        "https://via.placeholder.com/150/FF4500/FFFFFF?text=arvore_risco"
+      ],
       "prioridadeCidadao": "critica",
       "urgenciaCidadao": "emergencia",
       "impactoComunidade": "regional",
@@ -451,8 +471,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30140-010",
-        "latitude": -19.9290,
-        "longitude": -43.9380
+        "latitude": -19.929,
+        "longitude": -43.938
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -483,8 +503,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30170-010",
-        "latitude": -19.9250,
-        "longitude": -43.9450
+        "latitude": -19.925,
+        "longitude": -43.945
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -515,8 +535,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30160-030",
-        "latitude": -19.9200,
-        "longitude": -43.9390
+        "latitude": -19.92,
+        "longitude": -43.939
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -548,9 +568,11 @@
         "estado": "Minas Gerais",
         "cep": "30160-040",
         "latitude": -19.9195,
-        "longitude": -43.9410
+        "longitude": -43.941
       },
-      "imagens": ["https://via.placeholder.com/150/00FFFF/000000?text=boca_lobo"],
+      "imagens": [
+        "https://via.placeholder.com/150/00FFFF/000000?text=boca_lobo"
+      ],
       "prioridadeCidadao": "media",
       "urgenciaCidadao": "alta",
       "impactoComunidade": "local",
@@ -579,8 +601,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-008",
-        "latitude": -19.9320,
-        "longitude": -43.9370
+        "latitude": -19.932,
+        "longitude": -43.937
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -598,7 +620,6 @@
       "recebeNotificacoes": true,
       "id": 16
     },
-    
     {
       "titulo": "Buraco na Rua Nova do Bairro X",
       "tipoProblema": "infraestrutura",
@@ -613,7 +634,7 @@
         "estado": "Minas Gerais",
         "cep": "30775-010",
         "latitude": -19.9015,
-        "longitude": -44.0010
+        "longitude": -44.001
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -639,8 +660,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30730-470",
-        "latitude": -19.9050,
-        "longitude": -43.9850
+        "latitude": -19.905,
+        "longitude": -43.985
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -666,8 +687,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30575-827",
-        "latitude": -19.9670,
-        "longitude": -43.9750
+        "latitude": -19.967,
+        "longitude": -43.975
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -693,8 +714,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30310-000",
-        "latitude": -19.9400,
-        "longitude": -43.9250
+        "latitude": -19.94,
+        "longitude": -43.925
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -720,8 +741,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-055",
-        "latitude": -19.9320,
-        "longitude": -43.9480
+        "latitude": -19.932,
+        "longitude": -43.948
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -748,7 +769,7 @@
         "estado": "Minas Gerais",
         "cep": "30130-100",
         "latitude": -19.9205,
-        "longitude": -43.9280
+        "longitude": -43.928
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -774,8 +795,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30112-000",
-        "latitude": -19.9360,
-        "longitude": -43.9360
+        "latitude": -19.936,
+        "longitude": -43.936
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -801,8 +822,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30330-000",
-        "latitude": -19.9450,
-        "longitude": -43.9350
+        "latitude": -19.945,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -828,8 +849,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30440-000",
-        "latitude": -19.9400,
-        "longitude": -43.9650
+        "latitude": -19.94,
+        "longitude": -43.965
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -855,8 +876,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30315-000",
-        "latitude": -19.9470,
-        "longitude": -43.9300
+        "latitude": -19.947,
+        "longitude": -43.93
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -882,8 +903,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30180-000",
-        "latitude": -19.9320,
-        "longitude": -43.9450
+        "latitude": -19.932,
+        "longitude": -43.945
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -909,8 +930,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30180-000",
-        "latitude": -19.9250,
-        "longitude": -43.9550
+        "latitude": -19.925,
+        "longitude": -43.955
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -936,8 +957,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30220-000",
-        "latitude": -19.9380,
-        "longitude": -43.9180
+        "latitude": -19.938,
+        "longitude": -43.918
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -963,8 +984,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30130-100",
-        "latitude": -19.9230,
-        "longitude": -43.9350
+        "latitude": -19.923,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -990,8 +1011,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31010-000",
-        "latitude": -19.9140,
-        "longitude": -43.9050
+        "latitude": -19.914,
+        "longitude": -43.905
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1017,8 +1038,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31130-000",
-        "latitude": -19.8950,
-        "longitude": -43.9400
+        "latitude": -19.895,
+        "longitude": -43.94
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1044,8 +1065,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30480-000",
-        "latitude": -19.9320,
-        "longitude": -43.9850
+        "latitude": -19.932,
+        "longitude": -43.985
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1071,8 +1092,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30380-450",
-        "latitude": -19.9550,
-        "longitude": -43.9550
+        "latitude": -19.955,
+        "longitude": -43.955
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1098,8 +1119,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31170-000",
-        "latitude": -19.8900,
-        "longitude": -43.9200
+        "latitude": -19.89,
+        "longitude": -43.92
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1125,8 +1146,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31330-000",
-        "latitude": -19.8700,
-        "longitude": -44.0000
+        "latitude": -19.87,
+        "longitude": -44
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1152,8 +1173,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31360-000",
-        "latitude": -19.8550,
-        "longitude": -43.9850
+        "latitude": -19.855,
+        "longitude": -43.985
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1179,8 +1200,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9200,
-        "longitude": -43.9350
+        "latitude": -19.92,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1206,8 +1227,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30620-000",
-        "latitude": -20.0050,
-        "longitude": -44.0200
+        "latitude": -20.005,
+        "longitude": -44.02
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -1233,8 +1254,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30510-000",
-        "latitude": -19.9320,
-        "longitude": -44.0050
+        "latitude": -19.932,
+        "longitude": -44.005
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1260,8 +1281,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31842-000",
-        "latitude": -19.8350,
-        "longitude": -43.9000
+        "latitude": -19.835,
+        "longitude": -43.9
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1287,8 +1308,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31510-000",
-        "latitude": -19.8200,
-        "longitude": -43.9500
+        "latitude": -19.82,
+        "longitude": -43.95
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1314,8 +1335,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9200,
-        "longitude": -43.9400
+        "latitude": -19.92,
+        "longitude": -43.94
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1341,8 +1362,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31741-450",
-        "latitude": -19.8450,
-        "longitude": -43.9350
+        "latitude": -19.845,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1368,8 +1389,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31150-000",
-        "latitude": -19.8800,
-        "longitude": -43.9100
+        "latitude": -19.88,
+        "longitude": -43.91
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -1395,8 +1416,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30535-000",
-        "latitude": -19.9200,
-        "longitude": -43.9880
+        "latitude": -19.92,
+        "longitude": -43.988
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1422,8 +1443,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31310-000",
-        "latitude": -19.8850,
-        "longitude": -44.0050
+        "latitude": -19.885,
+        "longitude": -44.005
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1449,8 +1470,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30112-000",
-        "latitude": -19.9350,
-        "longitude": -43.9300
+        "latitude": -19.935,
+        "longitude": -43.93
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1476,8 +1497,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31015-000",
-        "latitude": -19.9150,
-        "longitude": -43.9200
+        "latitude": -19.915,
+        "longitude": -43.92
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1503,8 +1524,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30575-000",
-        "latitude": -19.9800,
-        "longitude": -44.0200
+        "latitude": -19.98,
+        "longitude": -44.02
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1530,8 +1551,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9250,
-        "longitude": -43.9350
+        "latitude": -19.925,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1557,8 +1578,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30855-000",
-        "latitude": -19.9200,
-        "longitude": -44.0100
+        "latitude": -19.92,
+        "longitude": -44.01
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1584,8 +1605,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31980-000",
-        "latitude": -19.8800,
-        "longitude": -43.8900
+        "latitude": -19.88,
+        "longitude": -43.89
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -1611,8 +1632,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31030-000",
-        "latitude": -19.9100,
-        "longitude": -43.9200
+        "latitude": -19.91,
+        "longitude": -43.92
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1638,8 +1659,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30440-000",
-        "latitude": -19.9380,
-        "longitude": -43.9600
+        "latitude": -19.938,
+        "longitude": -43.96
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1665,8 +1686,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30380-000",
-        "latitude": -19.9350,
-        "longitude": -43.9550
+        "latitude": -19.935,
+        "longitude": -43.955
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -1692,8 +1713,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30220-000",
-        "latitude": -19.9400,
-        "longitude": -43.9150
+        "latitude": -19.94,
+        "longitude": -43.915
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1719,8 +1740,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9210,
-        "longitude": -43.9450
+        "latitude": -19.921,
+        "longitude": -43.945
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -1746,8 +1767,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31844-000",
-        "latitude": -19.8500,
-        "longitude": -43.9200
+        "latitude": -19.85,
+        "longitude": -43.92
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1773,8 +1794,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31210-000",
-        "latitude": -19.9100,
-        "longitude": -43.9550
+        "latitude": -19.91,
+        "longitude": -43.955
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1800,8 +1821,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9230,
-        "longitude": -43.9390
+        "latitude": -19.923,
+        "longitude": -43.939
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1827,8 +1848,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31360-000",
-        "latitude": -19.8500,
-        "longitude": -43.9750
+        "latitude": -19.85,
+        "longitude": -43.975
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1854,8 +1875,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30270-350",
-        "latitude": -19.9200,
-        "longitude": -43.9050
+        "latitude": -19.92,
+        "longitude": -43.905
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1881,8 +1902,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31160-000",
-        "latitude": -19.8850,
-        "longitude": -43.9250
+        "latitude": -19.885,
+        "longitude": -43.925
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1908,8 +1929,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31814-000",
-        "latitude": -19.8600,
-        "longitude": -43.9350
+        "latitude": -19.86,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -1935,8 +1956,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31540-000",
-        "latitude": -19.8200,
-        "longitude": -44.0000
+        "latitude": -19.82,
+        "longitude": -44
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -1962,8 +1983,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30820-000",
-        "latitude": -19.8900,
-        "longitude": -44.0050
+        "latitude": -19.89,
+        "longitude": -44.005
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -1989,8 +2010,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30492-000",
-        "latitude": -19.9150,
-        "longitude": -43.8800
+        "latitude": -19.915,
+        "longitude": -43.88
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2016,8 +2037,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30460-000",
-        "latitude": -19.9300,
-        "longitude": -43.9800
+        "latitude": -19.93,
+        "longitude": -43.98
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2043,8 +2064,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30350-000",
-        "latitude": -19.9450,
-        "longitude": -43.9100
+        "latitude": -19.945,
+        "longitude": -43.91
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2070,8 +2091,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30710-000",
-        "latitude": -19.9200,
-        "longitude": -43.9650
+        "latitude": -19.92,
+        "longitude": -43.965
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2097,8 +2118,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31330-000",
-        "latitude": -19.8650,
-        "longitude": -43.9900
+        "latitude": -19.865,
+        "longitude": -43.99
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -2124,8 +2145,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30411-000",
-        "latitude": -19.9270,
-        "longitude": -43.9680
+        "latitude": -19.927,
+        "longitude": -43.968
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2151,8 +2172,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30180-000",
-        "latitude": -19.9300,
-        "longitude": -43.9480
+        "latitude": -19.93,
+        "longitude": -43.948
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2178,8 +2199,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30112-000",
-        "latitude": -19.9350,
-        "longitude": -43.9350
+        "latitude": -19.935,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2205,8 +2226,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30575-827",
-        "latitude": -19.9650,
-        "longitude": -43.9700
+        "latitude": -19.965,
+        "longitude": -43.97
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -2232,8 +2253,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-055",
-        "latitude": -19.9300,
-        "longitude": -43.9500
+        "latitude": -19.93,
+        "longitude": -43.95
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2259,8 +2280,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31741-450",
-        "latitude": -19.8400,
-        "longitude": -43.9300
+        "latitude": -19.84,
+        "longitude": -43.93
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2286,8 +2307,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30310-000",
-        "latitude": -19.9400,
-        "longitude": -43.9200
+        "latitude": -19.94,
+        "longitude": -43.92
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2313,8 +2334,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30360-000",
-        "latitude": -19.9500,
-        "longitude": -43.9500
+        "latitude": -19.95,
+        "longitude": -43.95
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -2340,8 +2361,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30180-000",
-        "latitude": -19.9200,
-        "longitude": -43.9500
+        "latitude": -19.92,
+        "longitude": -43.95
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2367,8 +2388,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30775-010",
-        "latitude": -19.9000,
-        "longitude": -44.0000
+        "latitude": -19.9,
+        "longitude": -44
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2394,8 +2415,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30310-000",
-        "latitude": -19.9390,
-        "longitude": -43.9210
+        "latitude": -19.939,
+        "longitude": -43.921
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2421,8 +2442,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30130-100",
-        "latitude": -19.9210,
-        "longitude": -43.9290
+        "latitude": -19.921,
+        "longitude": -43.929
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -2448,8 +2469,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30130-100",
-        "latitude": -19.9250,
-        "longitude": -43.9350
+        "latitude": -19.925,
+        "longitude": -43.935
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2475,8 +2496,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30510-000",
-        "latitude": -19.9300,
-        "longitude": -43.9900
+        "latitude": -19.93,
+        "longitude": -43.99
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2502,8 +2523,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30390-000",
-        "latitude": -19.9800,
-        "longitude": -43.9600
+        "latitude": -19.98,
+        "longitude": -43.96
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2529,8 +2550,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30750-060",
-        "latitude": -19.9050,
-        "longitude": -43.9800
+        "latitude": -19.905,
+        "longitude": -43.98
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2556,8 +2577,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30620-000",
-        "latitude": -20.0000,
-        "longitude": -44.0250
+        "latitude": -20,
+        "longitude": -44.025
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2583,8 +2604,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30730-470",
-        "latitude": -19.9040,
-        "longitude": -43.9840
+        "latitude": -19.904,
+        "longitude": -43.984
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -2610,8 +2631,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30820-000",
-        "latitude": -19.8900,
-        "longitude": -44.0000
+        "latitude": -19.89,
+        "longitude": -44
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2637,8 +2658,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30575-827",
-        "latitude": -19.9700,
-        "longitude": -43.9780
+        "latitude": -19.97,
+        "longitude": -43.978
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2664,8 +2685,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9220,
-        "longitude": -43.9380
+        "latitude": -19.922,
+        "longitude": -43.938
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2691,8 +2712,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "34000-000",
-        "latitude": -19.9600,
-        "longitude": -43.8800
+        "latitude": -19.96,
+        "longitude": -43.88
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2718,8 +2739,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30315-000",
-        "latitude": -19.9450,
-        "longitude": -43.9320
+        "latitude": -19.945,
+        "longitude": -43.932
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2745,8 +2766,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31010-000",
-        "latitude": -19.9150,
-        "longitude": -43.9000
+        "latitude": -19.915,
+        "longitude": -43.9
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2772,8 +2793,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30130-100",
-        "latitude": -19.9200,
-        "longitude": -43.9300
+        "latitude": -19.92,
+        "longitude": -43.93
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2799,8 +2820,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31510-000",
-        "latitude": -19.8250,
-        "longitude": -43.9550
+        "latitude": -19.825,
+        "longitude": -43.955
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2826,8 +2847,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31330-000",
-        "latitude": -19.8750,
-        "longitude": -43.9950
+        "latitude": -19.875,
+        "longitude": -43.995
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -2853,8 +2874,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30855-000",
-        "latitude": -19.9250,
-        "longitude": -44.0150
+        "latitude": -19.925,
+        "longitude": -44.015
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2880,8 +2901,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31814-000",
-        "latitude": -19.8700,
-        "longitude": -43.9100
+        "latitude": -19.87,
+        "longitude": -43.91
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2907,8 +2928,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30411-000",
-        "latitude": -19.9250,
-        "longitude": -43.9700
+        "latitude": -19.925,
+        "longitude": -43.97
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -2934,8 +2955,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30620-000",
-        "latitude": -20.0050,
-        "longitude": -44.0250
+        "latitude": -20.005,
+        "longitude": -44.025
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -2961,8 +2982,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30112-000",
-        "latitude": -19.9370,
-        "longitude": -43.9340
+        "latitude": -19.937,
+        "longitude": -43.934
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -2988,8 +3009,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30110-000",
-        "latitude": -19.9230,
-        "longitude": -43.9430
+        "latitude": -19.923,
+        "longitude": -43.943
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -3015,8 +3036,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31010-000",
-        "latitude": -19.9140,
-        "longitude": -43.9010
+        "latitude": -19.914,
+        "longitude": -43.901
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -3042,8 +3063,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31130-000",
-        "latitude": -19.8940,
-        "longitude": -43.9390
+        "latitude": -19.894,
+        "longitude": -43.939
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -3069,8 +3090,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30480-000",
-        "latitude": -19.9330,
-        "longitude": -43.9840
+        "latitude": -19.933,
+        "longitude": -43.984
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -3096,8 +3117,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30380-450",
-        "latitude": -19.9540,
-        "longitude": -43.9540
+        "latitude": -19.954,
+        "longitude": -43.954
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -3123,8 +3144,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31170-000",
-        "latitude": -19.8910,
-        "longitude": -43.9210
+        "latitude": -19.891,
+        "longitude": -43.921
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -3150,8 +3171,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30510-000",
-        "latitude": -19.9330,
-        "longitude": -44.0040
+        "latitude": -19.933,
+        "longitude": -44.004
       },
       "imagens": [],
       "prioridadeCidadao": "baixa",
@@ -3177,8 +3198,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31360-000",
-        "latitude": -19.8540,
-        "longitude": -43.9840
+        "latitude": -19.854,
+        "longitude": -43.984
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -3204,8 +3225,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "31980-000",
-        "latitude": -19.8790,
-        "longitude": -43.8890
+        "latitude": -19.879,
+        "longitude": -43.889
       },
       "imagens": [],
       "prioridadeCidadao": "alta",
@@ -3231,8 +3252,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30220-000",
-        "latitude": -19.9410,
-        "longitude": -43.9160
+        "latitude": -19.941,
+        "longitude": -43.916
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -3258,8 +3279,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30820-000",
-        "latitude": -19.8910,
-        "longitude": -44.0040
+        "latitude": -19.891,
+        "longitude": -44.004
       },
       "imagens": [],
       "prioridadeCidadao": "critica",
@@ -3285,8 +3306,8 @@
         "cidade": "Belo Horizonte",
         "estado": "Minas Gerais",
         "cep": "30460-000",
-        "latitude": -19.9290,
-        "longitude": -43.9810
+        "latitude": -19.929,
+        "longitude": -43.981
       },
       "imagens": [],
       "prioridadeCidadao": "media",
@@ -3298,9 +3319,40 @@
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T20:00:00Z",
       "id": 116
+    },
+    {
+      "titulo": "Buraco encontrado no Túnel Souza Lima",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Tem um buraco no Túnel Prefeito Souza Lima proximo ao Colégio Batista",
+      "informacoesAdicionaisCidadao": "Pode comprometer a segurança e levar a danos nos veículos",
+      "codigoOcorrencia": "OCOR-0117",
+      "endereco": {
+        "rua": "Túnel Prefeito Souza Lima",
+        "numero": "",
+        "bairro": "Colégio Batista",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "31110-150",
+        "latitude": -19.909809577792405,
+        "longitude": -43.938451512567454
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-10T16:12:09.904Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-10T16:12:09.904Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "",
+      "recebeNotificacoes": true,
+      "id": 117
     }
-    
-    ],
+  ],
   "admin": {
     "numeroTotalCidadaosAtivos": 5,
     "numeroTotalDenuncias": 2000,

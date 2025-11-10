@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FiscalizaPlus | Mapa de Denúncias</title>
+    <title>FiscalizaPlus</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/servidor.css">
     <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
+    <link rel="stylesheet" href="../../assets/css/servidor.css">
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                                 class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
                     </li>
                     <li class="nav-item mb-4">
-                        <a href="#" class="nav-link text-white"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
+                        <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
                     </li>
                 </ul>
             </nav>
@@ -60,7 +60,7 @@
             <div class="container-fluid">
                 <div class="row" id="dashboard-stats">
                     <div class="col-md-3">
-                        <div class="card text-white bg-dark mb-3">
+                        <div class="card text-white bg-secondary mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total de Denúncias</h5>
                                 <p class="card-text fs-4" id="stat-total">0</p>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card text-white bg-primary mb-3">
+                        <div class="card text-white bg-warning mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Em Andamento</h5>
                                 <p class="card-text fs-4" id="stat-em-andamento">0</p>
