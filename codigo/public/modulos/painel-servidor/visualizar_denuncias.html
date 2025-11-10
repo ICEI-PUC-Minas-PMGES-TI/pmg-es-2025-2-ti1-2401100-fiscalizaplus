@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fiscaliza+ - Visualizar Denúncias</title>
+  <link rel="stylesheet" href="../../assets/css/servidor.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <h1>📋 Visualizar e Filtrar Denúncias</h1>
+  </header>
+ <!-- Sidebar -->
+<aside class="sidebar d-flex flex-column align-items-start p-3">
+  <a href="#">
+    <img src="../../assets/images/logo.png" alt="Logo" style="width: 140px; margin: 15px auto 25px 20px;">
+  </a>
+
+  <!-- Informações do usuário -->
+  <div class="user-info text-center mb-4 w-100" style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuário" class="user-img mb-2">
+    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
+    <p class="text-white-50 small">paulo@prefeitura.com</p>
+  </div>
+
+  <!-- Navegação -->
+  <nav class="flex-grow-1 w-100">
+    <ul class="nav flex-column w-100">
+      <li class="nav-item mb-2">
+        <a href="../painel-servidor/dashboard_admin.html" class="nav-link"><i class="bi bi-house-door me-2"></i>Home</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link active"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-thermometer-snow me-2"></i>Mapa de calor</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a href="#" class="nav-link"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Botão de sair -->
+  <div class="mt-auto w-100" style="padding: 10px 20px;">
+    <a href="#" class="nav-link text-danger" style="background-color: #fff1f1; display: block; text-align: center;">🚪 Sair</a>
+  </div>
+</aside>
+   
+  
+
+  <main class="container">
+    <!-- FILTROS -->
+    <section class="filters card">
+      <h2>Filtros</h2>
+      <div class="filter-row">
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter">
+          <option value="">Todos</option>
+          <option value="pendente">Pendente</option>
+          <option value="andamento">Em andamento</option>
+          <option value="resolvido">Resolvido</option>
+        </select>
+
+        <label for="tipoFilter">Tipo:</label>
+        <select id="tipoFilter">
+          <option value="">Todos</option>
+          <option value="infraestrutura">Infraestrutura</option>
+          <option value="iluminacao">Iluminação</option>
+          <option value="limpeza">Limpeza</option>
+        </select>
+
+        <label for="dataFilter">Data:</label>
+        <input type="date" id="dataFilter" />
+
+        <button id="btnFiltrar">🔍 Filtrar</button>
+      </div>
+    </section>
+
+    <!-- TABELA -->
+    <section class="tabela card">
+      <h2>Denúncias Encontradas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Tipo</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaDenuncias">
+          <tr><td colspan="6" style="text-align:center;">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- AÇÕES -->
+    <section class="acoes card">
+      <button id="btnRelatorio">📊 Gerar Relatório PDF</button>
+      <button id="btnEnviar">📨 Encaminhar à Equipe</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Fiscaliza+ © 2025 - Todos os direitos reservados</p>
+  </footer>
+
+  <script src="../../assets/js/visualizar.js"></script>
+</body>
+</html>
