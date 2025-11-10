@@ -1,0 +1,65 @@
+.guia-page { padding: 36px 20px; background: #d9d9d9; min-height: calc(100vh - 100px); }
+.guia-title { font-size: 36px; margin-bottom: 22px; color:#222; }
+.guia-grid { display: grid; gap: 22px; grid-template-columns: 1fr; align-items: start; }
+.guia-card { background: linear-gradient(180deg,#4a4a4a 0%, #3a3a3a 100%); color:#fff; border-radius:14px; padding:28px; text-align:left; border:none; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.16); transition:transform .12s ease, box-shadow .12s ease, border-color .14s ease; min-height:160px; border-left:4px solid transparent; }
+.guia-card:hover { transform: translateY(-6px); box-shadow:0 10px 26px rgba(0,0,0,.22); }
+.guia-icon { font-size: 36px; margin-bottom:12px; color:#e6e6e6; }
+.guia-card h3 { margin:8px 0 10px; font-size:20px; color:#fff; min-height:52px; }
+.guia-card p { color:#d1d1d1; font-size:15px; line-height:1.4; }
+
+/* Desktop / tablet: force 2 columns (2x2 for 4 items) */
+@media (min-width: 700px) {
+	.guia-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Larger screens: increase spacing */
+@media (min-width: 1200px) {
+	.guia-page { padding: 48px 40px; }
+	.guia-card { padding:34px; min-height:180px; }
+	.guia-title { font-size:40px; }
+	.guia-icon { font-size:40px; }
+}
+
+/* Item container and inline details (expand in place) */
+.guia-item { display:flex; flex-direction:column; height:100%; }
+.guia-grid > .guia-item { height:100%; }
+.guia-item > .guia-card { flex:1 1 auto; display:flex; flex-direction:column; justify-content:flex-start; }
+.guia-item.featured { grid-column: 1 / -1; width: 100%; max-width: 980px; margin: 0 auto; }
+.guia-item.featured .guia-card { padding: 32px; border-radius: 12px; }
+.guia-details { overflow: hidden; max-height: 0; transition: max-height 0.28s ease, opacity 0.18s ease; opacity:0; background: #3a3a3a; color: #fff; border-radius: 8px; padding: 8px 18px 18px 18px; margin-top: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.08); }
+.guia-details.open { opacity:1; }
+.guia-details .guia-modal-desc { margin: 12px 0; color: #e6e6e6; }
+.guia-details .guia-tips { margin-bottom: 12px; }
+.guia-details .guia-tips h4, .guia-details .guia-example h4 { margin-top: 12px; margin-bottom: 8px; color:#fff; }
+.guia-details .guia-tips li { color:#d1d1d1; margin-bottom:6px; }
+.guia-details .guia-example img { width:100%; max-width:780px; border-radius:6px; display:block; margin-bottom:12px; border: 1px solid rgba(255,255,255,0.06); }
+/* example card inside details */
+.guia-example-card { display:flex; gap:12px; align-items:flex-start; }
+.guia-example-media img { width:140px; height:100px; object-fit:cover; border-radius:6px; }
+.guia-example-meta { flex:1; }
+.guia-example-meta .example-code { color:#cfcfcf; font-size:13px; margin:6px 0; }
+.guia-example-meta .example-desc { color:#d1d1d1; font-size:14px; margin:0; }
+/* explanation / reason box for the chosen example */
+.guia-example-reason { margin-top:10px; background: rgba(255,255,255,0.02); padding:10px; border-radius:6px; border: 1px solid rgba(255,255,255,0.03); }
+.guia-example-reason .reason-line { margin:6px 0; color:#e7e7e7; font-size:13px; }
+.guia-example-reason .reason-line strong { color:#fff; }
+
+/* Make the details visually tied to the card on light backgrounds */
+.guia-card + .guia-details { margin-top: 12px; }
+
+/* accent when open: left border red like other components */
+.guia-card[aria-expanded="true"] { border-left-color: #ce2828; box-shadow: 0 12px 30px rgba(0,0,0,0.24); }
+.guia-card[aria-expanded="true"] + .guia-details { box-shadow: 0 6px 18px rgba(0,0,0,0.14); }
+
+/* subtle icon circle */
+.guia-icon { display:inline-block; width:48px; height:48px; line-height:48px; text-align:center; background: rgba(255,255,255,0.03); border-radius:8px; }
+
+.guia-modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); padding:20px; z-index:1000; }
+.guia-modal[hidden] { display:none; }
+.guia-modal-content { background:#fff; color:#222; max-width:900px; width:100%; border-radius:10px; padding:20px; position:relative; max-height:90vh; overflow:auto; }
+.guia-close { position:absolute; right:12px; top:10px; border:none; background:transparent; font-size:20px; cursor:pointer; }
+.guia-modal-desc { margin-bottom:12px; }
+.guia-tips ol { padding-left:18px; }
+.guia-example img { width:100%; max-width:560px; border-radius:6px; margin-top:10px; display:block; }
+
+.guia-error { color:#c00; background:#fff0f0; padding:12px; border-radius:6px; }
