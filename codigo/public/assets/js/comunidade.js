@@ -182,3 +182,187 @@ function timeago(iso){
   return `${h}h atrás`;
 }
 function initial(name=""){ return name.trim().charAt(0).toUpperCase() || "?"; }
+
+/* ====== NOVA DISCUSSÃO (Bootstrap + json-server) ====== */
+(() => {
+  const API = "http://localhost:3333/api"; // ajuste se usar outra porta
+  const form = document.getElementById("new-post-form");
+  const modalEl = document.getElementById("newPostModal");
+  if (!form || !modalEl) return;
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+
+    const fd = new FormData(form);
+    const title = (fd.get("title") || "").toString().trim();
+    const category = (fd.get("category") || "todas").toString();
+    const body = (fd.get("body") || "").toString().trim();
+
+    if (!title || !body) return;
+
+    // tenta pegar o nome exibido no topo: "Olá, Joãozinho"
+    const greet = document.getElementById("name-user-lg")?.textContent || "";
+    const author = greet.replace(/^Olá,\s*/i, "").trim() || "Cidadão";
+    const avatarLetter = author.charAt(0).toUpperCase() || "C";
+
+    // objeto do post
+    const newPost = {
+      author,
+      avatarLetter,
+      createdAt: new Date().toISOString(),
+      title,
+      excerpt: body,
+      category,
+      votes: 0
+    };
+
+    try {
+      // envia para o json-server
+      const res = await fetch(`${API}/comunidade`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newPost)
+      });
+      if (!res.ok) throw new Error("Falha ao criar post");
+      const created = await res.json();
+
+      // insere no DOM no topo da lista
+      prependCard(created);
+
+      // fecha e limpa modal
+      bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+      form.reset();
+
+      // garante que o usuário enxergue o novo post (troca categoria se necessário)
+      if (category !== "todas") setActiveCategory(category);
+
+    } catch (err) {
+      console.error(err);
+      // fallback local (sem servidor rodando)
+      const created = { id: "p" + Math.random().toString(36).slice(2, 9), ...newPost };
+      prependCard(created);
+      bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+      form.reset();
+      if (category !== "todas") setActiveCategory(category);
+      alert("Não consegui falar com o servidor. O post foi adicionado localmente.");
+    }
+  });
+
+  /* ==== helpers ==== */
+  function prependCard(p) {
+    const cards = document.getElementById("cards");
+    if (!cards) return;
+
+    const article = document.createElement("article");
+    article.className = "card";
+    article.dataset.id = p.id;
+    article.dataset.category = p.category;
+
+    article.innerHTML = `
+      <header class="card__header">
+        <div class="avatar" aria-hidden="true">${(p.avatarLetter || "?")}</div>
+        <div class="card__author">
+          <strong class="author">${escapeHTML(p.author || "Cidadão")}</strong>
+          <small class="timeago">agora</small>
+        </div>
+      </header>
+
+      <h3 class="card__title">${escapeHTML(p.title)}</h3>
+      <p class="card__excerpt">${escapeHTML(p.excerpt)}</p>
+
+      <div class="progress" aria-label="Apoio da comunidade">
+        <div class="progress__bar" style="width:0%"></div>
+      </div>
+
+      <footer class="card__footer">
+        <button class="btn btn--outline vote-btn">Computar voto</button>
+        <div class="votes">
+          <span class="dot" aria-hidden="true">●</span>
+          <span class="votes__count">0</span> <span class="votes__label">Votos</span>
+        </div>
+      </footer>
+    `;
+
+    cards.insertBefore(article, cards.firstChild);
+
+    // se você já tem lógica de voto/voltar voto, reaproveite:
+    wireVote(article);
+  }
+
+  // liga o botão de voto do card recém-criado
+  function wireVote(article) {
+    const btn = article.querySelector(".vote-btn");
+    const votesEl = article.querySelector(".votes__count");
+    const bar = article.querySelector(".progress__bar");
+
+    if (!btn || !votesEl || !bar) return;
+
+    const MAX_FOR_PROGRESS = 50;
+    const votedKey = "fiscaliza.community.voted";
+
+    const hasVoted = (id) => new Set(JSON.parse(localStorage.getItem(votedKey) || "[]")).has(id);
+    const setVoted = (id) => {
+      const s = new Set(JSON.parse(localStorage.getItem(votedKey) || "[]"));
+      s.add(id); localStorage.setItem(votedKey, JSON.stringify([...s]));
+    };
+    const unsetVoted = (id) => {
+      const s = new Set(JSON.parse(localStorage.getItem(votedKey) || "[]"));
+      s.delete(id); localStorage.setItem(votedKey, JSON.stringify([...s]));
+    };
+    const updateBar = (n) => {
+      const pct = Math.max(0, Math.min(100, (n / MAX_FOR_PROGRESS) * 100));
+      bar.style.width = `${pct}%`;
+    };
+    const setBtnState = (voted) => {
+      btn.textContent = voted ? "Voltar voto" : "Computar voto";
+      btn.classList.toggle("is-voted", voted);
+    };
+
+    const id = article.dataset.id;
+    setBtnState(hasVoted(id));
+    updateBar(parseInt(votesEl.textContent || "0", 10));
+
+    btn.addEventListener("click", async () => {
+      const voted = hasVoted(id);
+      let next = parseInt(votesEl.textContent || "0", 10) + (voted ? -1 : +1);
+      next = Math.max(0, next);
+
+      // tenta refletir no json-server (se existir)
+      try {
+        const get = await fetch(`${API}/comunidade/${id}`);
+        if (get.ok) {
+          const cur = await get.json();
+          const patch = await fetch(`${API}/comunidade/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ votes: next })
+          });
+          if (!patch.ok) throw 0;
+        }
+      } catch (_e) { /* ok: segue local */ }
+
+      votesEl.textContent = String(next);
+      updateBar(next);
+      voted ? unsetVoted(id) : setVoted(id);
+      setBtnState(!voted);
+    });
+  }
+
+  function setActiveCategory(cat) {
+    const list = document.getElementById("cat-list");
+    if (!list) return;
+    list.querySelectorAll(".cat-item").forEach(li => {
+      li.classList.toggle("is-active", li.dataset.cat === cat);
+    });
+    document.querySelectorAll("#cards .card").forEach(card => {
+      card.style.display = (cat === "todas" || card.dataset.category === cat) ? "" : "none";
+    });
+  }
+
+  function escapeHTML(str) {
+    return (str || "").replace(/[&<>"']/g, m => (
+      { "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]
+    ));
+  }
+})();
+

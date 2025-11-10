@@ -104,7 +104,52 @@
     <div class="page__grid">
       <!-- ===== Sidebar ===== -->
       <aside class="sidebar">
-        <button class="btn btn--danger btn--lg" id="btn-new">Iniciar nova discussão</button>
+        <button class="btn btn--danger btn--lg"
+        id="btn-new"
+        data-bs-toggle="modal"
+        data-bs-target="#newPostModal">
+          Iniciar nova discussão</button>
+
+        <!-- Modal: Nova Discussão -->
+<div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" id="new-post-form">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newPostModalLabel">Nova discussão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Título</label>
+          <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Categoria</label>
+          <select name="category" class="form-select" required>
+            <option value="todas">Todas</option>
+            <option value="transito">Trânsitos</option>
+            <option value="meio_ambiente">Meio ambiente</option>
+            <option value="sugestoes">Sugestões</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Descrição</label>
+          <textarea name="body" rows="5" class="form-control" required></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Publicar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 
         <div class="profile">
           <div class="avatar" aria-hidden="true">J</div>
