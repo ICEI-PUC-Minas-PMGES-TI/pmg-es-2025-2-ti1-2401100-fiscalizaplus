@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* Sidebar */
@@ -514,6 +514,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Os filtros antigos (.filters-container, .filter-btn) não são mais usados com dropdowns, mas mantidos para referência */
 .filters-container {
     display: flex;
     gap: 10px; 
@@ -545,131 +546,169 @@ body {
     box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
 }
 
-.map-ocurrence{
-  width: 100%;
-  height: 600px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5)
-}
-/* Estilização da página de denúncias do Servidor */
-
-.main-content {
-  margin-left: 240px; /* mantém o espaço da sidebar */
-  background-color: #1e1e1e;
-  min-height: 100vh;
-  color: #fff;
-  padding: 2rem;
+/* Substituído por #map no novo layout com colunas, mas mantido para referência */
+.map-ocurrence {
+    width: 100%;
+    height: 700px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-/* Container principal */
-.denuncia-container {
-  background-color: #2b2b2b;
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 900px;
-  margin: 0 auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.filter-btn.active {
+    background-color: var(--cor-principal, #d62828); 
+    color: white;
+    border-color: var(--cor-principal, #d62828);
+    box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
 }
 
-.denuncia-container h1 {
-  text-align: center;
-  margin-bottom: 1.8rem;
-  font-size: 1.6rem;
-  color: #ffffff;
+/* --- Estilização Adicional para o Novo Layout (Contadores, Filtros, Mapa e Sidebar) --- */
+
+/* Estilização específica para o mapa na coluna (usando o ID para maior especificidade) */
+#map {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); /* Sombra consistente com .map-ocurrence */
 }
 
-/* Grade de campos */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.2rem 2rem;
+/* Estilização para o Painel de Detalhes (Sidebar) */
+#sidebar-details {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    border: none;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+#sidebar-details .card-header {
+    background-color: var(--cor-principal, #d62828) !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1rem;
 }
 
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  color: #e0e0e0;
+#sidebar-details .btn-close-white {
+    opacity: 1;
+    filter: brightness(0) invert(1);
 }
 
-.form-group span {
-  color: #ff5b5b;
+/* Estilo para as Imagens no Detalhe */
+#detail-imagens img {
+    border: 1px solid #ddd;
+    transition: transform 0.2s;
+    object-fit: cover;
+    height: 80px; /* Altura fixa para miniaturas */
+    width: 100%;
+    cursor: zoom-in;
+}
+#detail-imagens img:hover {
+    border-color: var(--cor-principal, #d62828);
 }
 
-input,
-textarea {
-  background-color: #1c1c1c;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  color: #fff;
-  font-size: 0.95rem;
+/* --- Estilos para os Marcadores Leaflet Customizados --- */
+
+.custom-div-icon {
+    background: none !important; 
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-input[readonly],
-textarea[readonly] {
-  opacity: 0.8;
-  cursor: default;
+/* Estilo do Pino */
+.custom-div-icon .marker-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0; 
+    background-color: #555; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px; 
+    transform: rotate(-45deg); 
+    box-shadow: 0 0 5px rgba(0,0,0,0.4); 
 }
 
-.full-width {
-  grid-column: span 2;
-  margin-top: 1rem;
+/* Estilo do Ícone interno (Reverte a rotação) */
+.custom-div-icon i {
+    font-size: 16px; 
+    color: white; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -8px 0 0 -8px; 
+    transform: rotate(45deg); 
+    z-index: 1; 
 }
 
-textarea {
-  resize: none;
-  line-height: 1.5;
+/* --- Cores dos Marcadores por Status --- */
+.marker-pending .marker-pin { 
+    background-color: #ffc107; 
+} 
+.marker-in-progress .marker-pin { 
+    background-color: var(--cor-principal, #d62828); 
+} 
+.marker-completed .marker-pin { 
+    background-color: #198754; 
+} 
+.marker-rejected .marker-pin { 
+    background-color: #6c757d; 
 }
 
-/* ====== MAPA ====== */
 
-.map-section {
-  margin-top: 2rem;
+/* --- Estilos para o Popup do Leaflet --- */
+.popup-info .ver-detalhes-btn {
+    width: 100%; 
+    background-color: var(--cor-principal, #d62828); 
+    color: white;
+    border-color: var(--cor-principal, #d62828);
+    margin-top: 8px; 
+}
+.popup-info .ver-detalhes-btn:hover {
+    background-color: #a71f1f; 
+    border-color: #a71f1f;
 }
 
-.map-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 0.8rem;
-  color: #fff;
+.popup-info h5 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+.popup-info p {
+    font-size: 0.9em;
+    line-height: 1.3;
+    color: #444;
+}
+.popup-info .small {
+    font-size: 0.8em;
+    color: #666;
+}
+.popup-info .badge {
+    font-size: 0.8em;
+    padding: 0.35em 0.6em;
 }
 
-.map-container {
-  border-radius: 10px;
-  overflow: hidden;
-  height: 350px;
-  border: 1px solid #444;
+/* Estilização dos Cards de Contadores (Dashboard Stats) */
+#dashboard-stats .card {
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s;
 }
-.bodyDenuncia{
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #1e1e1e; /* mantém o tom escuro */
+#dashboard-stats .card:hover {
+    transform: translateY(-2px);
 }
 
-/* Layout principal para preencher a tela inteira */
-.layout {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
+/* Ajustes nos Selects e Input de Busca (Busca por ID e Seletor de Mapa) */
+#filters-container .form-select,
+#search-id-input,
+#map-view-selector {
+    border-radius: 0.375rem; 
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 }
 
-/* Sidebar já tem largura fixa de 240px, então o conteúdo principal usa o resto */
-.main-content {
-  flex: 1;
-  background-color: #1e1e1e;
-  padding: 2rem;
-  color: #fff;
-  overflow-y: auto;
-}
-
-/* Ajuste para centralizar o container de denúncia e impedir bordas brancas */
-.denuncia-container {
-  margin: 0 auto;
-  max-width: 900px;
+#search-id-input:focus,
+#filter-status:focus,
+#filter-tipo:focus,
+#map-view-selector:focus {
+    border-color: rgba(214, 40, 40, 0.5); /* Foco na cor principal */
+    box-shadow: 0 0 0 0.25rem rgba(214, 40, 40, 0.25);
 }
