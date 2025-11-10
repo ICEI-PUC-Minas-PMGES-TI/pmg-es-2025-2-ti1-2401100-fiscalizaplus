@@ -1,65 +1,295 @@
 (function () {
+  const API_BASE = 'http://localhost:3000';
   function getUsuarioCorrente() {
     try {
-      const raw = sessionStorage.getItem('usuarioCorrente');
-      return raw ? JSON.parse(raw) : null;
+      // Tenta múltiplas chaves de sessão
+      const keys = ['usuarioCorrente', 'fp_user', 'user'];
+      for (const key of keys) {
+        const raw = sessionStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.id || parsed.nome || parsed.email)) {
+            return parsed;
+          }
+        }
+      }
+      return null;
     } catch (_) {
       return null;
     }
   }
 
-  function fetchJson(url) {
-    // Usar dados locais (sem requisições)
-    const data = window.DB_DATA;
-    
-    // Simular consultas da API localmente
-    if (url.startsWith('/usuarios/')) {
-      const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.usuarios.find(u => u.id === id));
+  function getLocalDb() {
+    return window.DB_DATA || {};
+  }
+
+  function normalizeText(str) {
+    const base = String(str || '');
+    const normalized = typeof base.normalize === 'function' ? base.normalize('NFD') : base;
+    return normalized.replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+
+  function normalizeStatus(status) {
+    const raw = normalizeText(status);
+    if (!raw) return 'aberto';
+    if (['aberto', 'novo', 'pendente', 'aguardando'].includes(raw)) return 'aberto';
+    if (['em andamento', 'em_andamento', 'andamento', 'em analise', 'analise'].includes(raw)) return 'em_andamento';
+  if (['resolvido', 'concluido', 'finalizado', 'resolvida', 'concluida', 'finalizada'].includes(raw)) return 'resolvido';
+    return raw.replace(/\s+/g, '_');
+  }
+
+  function localFetch(url) {
+    const data = getLocalDb();
+    if (url.startsWith('/usuarios/') || url.startsWith('/cidadaos/')) {
+      const id = parseInt(url.split('/')[2], 10);
+      return (data.usuarios || data.cidadaos || []).find(u => u.id === id) || null;
     }
-    
+    if (url.startsWith('/bairros/')) {
+      const id = parseInt(url.split('/')[2], 10);
+      return (data.bairros || []).find(b => b.id === id) || null;
+    }
+    if (url.startsWith('/cidades/')) {
+      const id = parseInt(url.split('/')[2], 10);
+      return (data.cidades || []).find(c => c.id === id) || null;
+    }
     if (url === '/bairros') {
-      return Promise.resolve(data.bairros);
+      return (data.bairros || []).map(b => ({ ...b }));
     }
-    
     if (url.startsWith('/ocorrencias')) {
-      const params = new URLSearchParams(url.split('?')[1] || '');
-      let result = data.ocorrencias || [];
-      
-      // Filtrar por cidadeId
-      if (params.get('cidadeId')) {
-        const cidadeId = parseInt(params.get('cidadeId'));
-        result = result.filter(o => o.cidadeId === cidadeId);
-      }
-      
-      // Filtrar por usuarioId
-      if (params.get('usuarioId')) {
-        const usuarioId = parseInt(params.get('usuarioId'));
-        result = result.filter(o => o.usuarioId === usuarioId);
-      }
-      
-      // Ordenar por data
-      if (params.get('_sort') === 'createdAt' && params.get('_order') === 'desc') {
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      }
-      
-      // Limitar resultados
-      if (params.get('_limit')) {
-        const limit = parseInt(params.get('_limit'));
+      return fetchOcorrenciasFromLocal(url, data);
+    }
+    return data;
+  }
+
+  function fetchOcorrenciasFromLocal(url, data) {
+    const params = new URLSearchParams(url.split('?')[1] || '');
+    let result = Array.isArray(data.ocorrencias) ? data.ocorrencias.map(o => ({ ...o })) : [];
+
+    if (params.get('cidadeId')) {
+      const cidadeId = parseInt(params.get('cidadeId'), 10);
+      result = result.filter(o => o.cidadeId === cidadeId);
+    }
+
+    if (params.get('usuarioId')) {
+      const usuarioId = parseInt(params.get('usuarioId'), 10);
+      result = result.filter(o => o.usuarioId === usuarioId);
+    }
+
+    if (params.get('status')) {
+      const status = normalizeStatus(params.get('status'));
+      result = result.filter(o => normalizeStatus(o.status) === status);
+    }
+
+    const sortField = params.get('_sort');
+    if (sortField) {
+      const order = (params.get('_order') || 'asc').toLowerCase() === 'desc' ? -1 : 1;
+      result.sort((a, b) => {
+        const va = sortField.endsWith('At') ? new Date(a[sortField]).getTime() || 0 : a[sortField];
+        const vb = sortField.endsWith('At') ? new Date(b[sortField]).getTime() || 0 : b[sortField];
+        if (va < vb) return -1 * order;
+        if (va > vb) return 1 * order;
+        return 0;
+      });
+    }
+
+    if (params.get('_limit')) {
+      const limit = parseInt(params.get('_limit'), 10);
+      if (!Number.isNaN(limit) && limit >= 0) {
         result = result.slice(0, limit);
       }
-      
-      return Promise.resolve(result);
     }
+
+    return result;
+  }
+
+  async function fetchOcorrenciasFromApi(path) {
+    const data = getLocalDb();
+    const idMatch = path.match(/^\/ocorrencias\/(\d+)/);
+    if (idMatch) {
+      const denuncia = await tryFetchFromApi(`/denuncias/${idMatch[1]}`);
+      if (!denuncia || typeof denuncia !== 'object') return denuncia;
+      return normalizeOcorrenciaFromApi(denuncia, data);
+    }
+
+    const denuncias = await tryFetchFromApi('/denuncias');
+    if (!Array.isArray(denuncias)) return null;
+
+    const query = path.split('?')[1] || '';
+    const params = new URLSearchParams(query);
+    const all = denuncias.map(d => normalizeOcorrenciaFromApi(d, data));
+    let result = all;
+
+    // Filtro por usuarioId: busca ocorrências onde o email bate
+    if (params.get('usuarioId')) {
+      const usuarioId = parseInt(params.get('usuarioId'), 10);
+      if (!Number.isNaN(usuarioId)) {
+        // Busca cidadãos da API primeiro
+        let targetEmail = null;
+        const cidadaosFromApi = await tryFetchFromApi('/cidadaos');
+        if (Array.isArray(cidadaosFromApi)) {
+          const targetUser = cidadaosFromApi.find(u => u.id === usuarioId);
+          targetEmail = targetUser ? (targetUser.email || '').toLowerCase().trim() : null;
+        }
+        
+        // Fallback para banco local se não encontrou na API
+        if (!targetEmail) {
+          const usuarios = data.usuarios || data.cidadaos || [];
+          const targetUser = usuarios.find(u => u.id === usuarioId);
+          targetEmail = targetUser ? (targetUser.email || '').toLowerCase().trim() : null;
+        }
+        
+        if (targetEmail) {
+          result = result.filter(o => {
+            const oEmail = (o.usuarioEmail || '').toLowerCase().trim();
+            return oEmail === targetEmail;
+          });
+        } else {
+          // Se não encontrou email do usuário, retorna vazio
+          result = [];
+        }
+      }
+    }
+
+    if (params.get('status')) {
+      const status = normalizeStatus(params.get('status'));
+      result = result.filter(o => normalizeStatus(o.status) === status);
+    }
+
+    if (params.get('cidadeId')) {
+      const cidadeId = parseInt(params.get('cidadeId'), 10);
+      if (!Number.isNaN(cidadeId)) {
+        const cidadeObj = (data.cidades || []).find(c => c.id === cidadeId);
+        const targetName = cidadeObj ? normalizeText(cidadeObj.nome) : null;
+        result = result.filter(o => {
+          if (typeof o.cidadeId === 'number') return o.cidadeId === cidadeId;
+          if (!targetName) return false;
+          return normalizeText(o.cidadeNome) === targetName;
+        });
+      }
+    }
+
+    const sortField = params.get('_sort');
+    if (sortField) {
+      const order = (params.get('_order') || 'asc').toLowerCase() === 'desc' ? -1 : 1;
+      const getValue = (item) => {
+        const value = item[sortField];
+        if (sortField.endsWith('At')) return new Date(value).getTime() || 0;
+        if (typeof value === 'string') return value.toLowerCase();
+        if (typeof value === 'number') return value;
+        return 0;
+      };
+      result = result.slice().sort((a, b) => {
+        const va = getValue(a);
+        const vb = getValue(b);
+        if (va < vb) return -1 * order;
+        if (va > vb) return 1 * order;
+        return 0;
+      });
+    }
+
+    if (params.get('_limit')) {
+      const limit = parseInt(params.get('_limit'), 10);
+      if (!Number.isNaN(limit) && limit >= 0) {
+        result = result.slice(0, limit);
+      }
+    }
+
+    return result;
+  }
+
+  function normalizeOcorrenciaFromApi(denuncia, data) {
+    const usuarios = data.usuarios || data.cidadaos || [];
+    const cidades = data.cidades || [];
+    const bairros = data.bairros || [];
+    const autorNome = denuncia.autorCidadao || '';
+    const autorEmail = (denuncia.contatoCidadao || '').toLowerCase().trim();
     
-    return Promise.resolve(data);
+    // Match APENAS por email (mais confiável e único)
+    const usuarioMatch = autorEmail 
+      ? usuarios.find(u => {
+          const uEmail = (u.email || '').toLowerCase().trim();
+          return uEmail && uEmail === autorEmail;
+        })
+      : null;
+    
+    const cidadeNome = denuncia.endereco?.cidade || '';
+    const cidadeMatch = cidades.find(c => normalizeText(c.nome) === normalizeText(cidadeNome));
+    const bairroNome = denuncia.endereco?.bairro || '';
+    const bairroMatch = bairros.find(b => {
+      if (normalizeText(b.nome) !== normalizeText(bairroNome)) return false;
+      if (!cidadeMatch) return true;
+      return b.cidadeId === cidadeMatch.id;
+    });
+
+    const statusNormalized = normalizeStatus(denuncia.statusAtual);
+    const latValueRaw = denuncia.endereco?.latitude ?? denuncia.lat ?? null;
+    const lngValueRaw = denuncia.endereco?.longitude ?? denuncia.lng ?? null;
+    const latValue = typeof latValueRaw === 'string' ? parseFloat(latValueRaw) : latValueRaw;
+    const lngValue = typeof lngValueRaw === 'string' ? parseFloat(lngValueRaw) : lngValueRaw;
+    const createdAt = denuncia.dataRegistro || denuncia.createdAt || null;
+    const resolvedAt = statusNormalized === 'resolvido'
+      ? (denuncia.dataConclusao || denuncia.dataUltimaAtualizacaoStatus || createdAt)
+      : (denuncia.dataResolucao || null);
+    const updatedAt = denuncia.dataUltimaAtualizacaoStatus || resolvedAt || createdAt;
+
+    return {
+      id: denuncia.id,
+      titulo: denuncia.titulo,
+      tipo: denuncia.tipoProblema || denuncia.tipo,
+      tipoProblema: denuncia.tipoProblema || denuncia.tipo,
+      descricao: denuncia.descricaoCompleta || denuncia.descricao,
+      descricaoCompleta: denuncia.descricaoCompleta || denuncia.descricao,
+      status: statusNormalized,
+      statusOriginal: denuncia.statusAtual,
+      createdAt,
+      updatedAt,
+      resolvedAt,
+      lat: Number.isFinite(latValue) ? latValue : null,
+      lng: Number.isFinite(lngValue) ? lngValue : null,
+      cidadeId: cidadeMatch ? cidadeMatch.id : null,
+      bairroId: bairroMatch ? bairroMatch.id : null,
+      cidadeNome: cidadeMatch ? cidadeMatch.nome : cidadeNome,
+      bairroNome: bairroMatch ? bairroMatch.nome : bairroNome,
+      usuarioId: usuarioMatch ? usuarioMatch.id : null,
+      usuarioNome: usuarioMatch ? (usuarioMatch.nome || usuarioMatch.nomeCompleto) : autorNome,
+      usuarioEmail: autorEmail,
+      endereco: denuncia.endereco || null,
+      prioridadeCidadao: denuncia.prioridadeCidadao,
+      urgenciaCidadao: denuncia.urgenciaCidadao,
+      impactoComunidade: denuncia.impactoComunidade,
+      observacoesInternasServidor: denuncia.observacoesInternasServidor,
+      servidorResponsavelId: denuncia.servidorResponsavelId
+    };
+  }  async function fetchJson(url) {
+    const normalizedUrl = url.startsWith('/') ? url : `/${url}`;
+
+    // Para ocorrências, sempre tenta API primeiro
+    if (normalizedUrl.startsWith('/ocorrencias')) {
+      const apiResult = await fetchOcorrenciasFromApi(normalizedUrl);
+      if (apiResult !== null) return apiResult;
+    }
+
+    // Para /usuarios ou /cidadaos, tenta API
+    if (normalizedUrl.startsWith('/usuarios') || normalizedUrl.startsWith('/cidadaos')) {
+      const apiPath = normalizedUrl.replace('/usuarios', '/cidadaos');
+      const apiFallback = await tryFetchFromApi(apiPath);
+      if (apiFallback !== null) return apiFallback;
+    }
+
+    // Para outros endpoints, tenta API genérica
+    const apiFallback = await tryFetchFromApi(normalizedUrl);
+    if (apiFallback !== null) return apiFallback;
+
+    return localFetch(normalizedUrl);
   }
 
 
 
   function formatDate(dateString) {
+    if (!dateString) return 'Data não informada';
     try {
       const date = new Date(dateString);
+      if (Number.isNaN(date.getTime())) return 'Data inválida';
       return date.toLocaleDateString('pt-BR', { 
         day: '2-digit', 
         month: '2-digit', 
@@ -71,16 +301,22 @@
   }
 
   function getStatusLabel(status) {
-    switch (status) {
-      case 'aberto': return 'Aberto';
-      case 'em_andamento': return 'Em andamento';
-      case 'resolvido': return 'Resolvido';
-      default: return 'Indefinido';
+    const normalized = normalizeStatus(status);
+    switch (normalized) {
+      case 'aberto':
+        return 'Aberto';
+      case 'em_andamento':
+        return 'Em andamento';
+      case 'resolvido':
+        return 'Resolvido';
+      default:
+        return status || 'Indefinido';
     }
   }
 
   function fmtDate(iso) {
     try {
+      if (!iso) return '';
       const d = new Date(iso);
       if (isNaN(d)) return '';
       return d.toLocaleString();
@@ -111,15 +347,20 @@
   }
 
   function statusBadge(status) {
+    const normalized = normalizeStatus(status);
     const color = (() => {
-      switch (String(status || '').toLowerCase()) {
-        case 'aberto': return 'warning';
-        case 'em_andamento': return 'info';
-        case 'resolvido': return 'success';
-        default: return 'secondary';
+      switch (normalized) {
+        case 'aberto':
+          return 'warning';
+        case 'em_andamento':
+          return 'info';
+        case 'resolvido':
+          return 'success';
+        default:
+          return 'secondary';
       }
     })();
-    return `<span class="badge text-bg-${color}">${status || 'n/d'}</span>`;
+    return `<span class="badge text-bg-${color}">${getStatusLabel(status)}</span>`;
   }
 
   function escapeHtml(str) {
@@ -132,19 +373,37 @@
       if (!user) return;
       
       const usuario = await fetchJson(`/usuarios/${user.id}`);
+      if (!usuario) {
+        console.warn('Usuário não encontrado');
+        return;
+      }
       
-      // Buscar bairros para obter os nomes
-      const bairros = await fetchJson('/bairros');
-      const bairrosMap = {};
-      bairros.forEach(b => {
-        bairrosMap[b.id] = b.nome;
-      });
+      // Não buscar bairros - usaremos bairroNome direto das ocorrências
       
-      // Recentes na cidade
-  const recentes = await fetchJson(`/ocorrencias?cidadeId=${usuario.cidadeId}&_sort=createdAt&_order=desc&_limit=7`);
+      // Recentes na cidade - filtra por nome da cidade, não ID
+      const todasOcorrencias = await fetchJson(`/ocorrencias?_sort=createdAt&_order=desc&_limit=20`);
+      const cidadeUsuario = usuario.cidade || (usuario.cidadeId ? '' : '');
+      const cidadeUsuarioNorm = normalizeText(cidadeUsuario);
+
+      let recentes = Array.isArray(todasOcorrencias) 
+        ? todasOcorrencias.filter(o => {
+            const cidadeOc = o.cidadeNome || (o.endereco ? o.endereco.cidade : '');
+            return normalizeText(cidadeOc) === cidadeUsuarioNorm;
+          })
+        : [];
+
+      // Fallback: se não houver nenhum da mesma cidade, mostra os mais recentes gerais
+      if (!recentes || recentes.length === 0) {
+        console.warn('[Recentes] Nenhuma ocorrência encontrada para a cidade do usuário:', cidadeUsuario);
+        recentes = Array.isArray(todasOcorrencias) ? todasOcorrencias.slice() : [];
+      }
+
+      // Limita a 7 itens após filtro/fallback
+      recentes = recentes.slice(0, 7);
+      
       const ul = document.getElementById('recent-reports-list');
       if (ul) {
-        if (recentes.length === 0) {
+        if (!Array.isArray(recentes) || recentes.length === 0) {
           ul.innerHTML = '<li class="list-group-item">Nenhum relatório encontrado na sua cidade.</li>';
           return;
         }
@@ -154,15 +413,21 @@
           const li = document.createElement('li');
           li.setAttribute('tabindex', '0');
           li.className = 'recent-item';
-          li.setAttribute('data-status', o.status || '');
 
-          const time = timeAgoPt(o.createdAt || o.data || '');
+          const time = timeAgoPt(o.createdAt || o.dataRegistro || o.data || '');
 
-          const statusLabel = getStatusLabel(o.status);
-          const statusClass = o.status === 'aberto' ? 'status-aberto' : (o.status === 'em_andamento' ? 'status-em_andamento' : 'status-resolvido');
+          const normalizedStatus = normalizeStatus(o.status || o.statusOriginal);
+          li.setAttribute('data-status', normalizedStatus);
+          const statusLabel = getStatusLabel(o.status || o.statusOriginal);
+          const statusClass = normalizedStatus === 'aberto'
+            ? 'status-aberto'
+            : (normalizedStatus === 'em_andamento' ? 'status-em_andamento' : 'status-resolvido');
 
-          const tipoHtml = `<span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(o.tipo || 'n/d')}</span>`;
-          const bairroHtml = `<span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairrosMap[o.bairroId] || `Bairro ${o.bairroId}`)}</span>`;
+          const tipoHtml = `<span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(o.tipo || o.tipoProblema || 'n/d')}</span>`;
+          const bairroNome = o.bairroNome || (o.endereco ? o.endereco.bairro : '');
+          const bairroHtml = bairroNome
+            ? `<span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome)}</span>`
+            : '';
 
           li.innerHTML = `
             <div class="index-badge" aria-hidden>${index + 1}</div>
@@ -172,7 +437,7 @@
                 <span class="status-pill ${statusClass}"><span class="dot"></span><span class="pill-text">${escapeHtml(statusLabel)}</span></span>
                 ${tipoHtml}
                 ${bairroHtml}
-                <span class="time" title="${fmtDate(o.createdAt)}">${escapeHtml(time.text)}</span>
+                <span class="time" title="${fmtDate(o.createdAt || o.dataRegistro)}">${escapeHtml(time.text)}</span>
               </div>
             </div>
           `;
@@ -189,6 +454,201 @@
     }
   }
 
+  function toDisplayDate(iso) {
+    try {
+      if (!iso) return '';
+      const d = new Date(iso);
+      if (isNaN(d)) return '';
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch { return ''; }
+  }
+
+  async function tryFetchFromApi(path) {
+    try {
+      const res = await fetch(`${API_BASE}${path}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (e) {
+      return null; // sinaliza falha para cair no fallback local
+    }
+  }
+
+  async function ensureSeedOccorrenciasIfEmpty() {
+    const snapshot = await fetchOcorrenciasFromApi('/ocorrencias');
+    if (snapshot === null) return; // API indisponível
+    if (Array.isArray(snapshot) && snapshot.length > 0) return; // já existe dado persistido
+
+    const data = getLocalDb();
+    const sample = Array.isArray(data.ocorrencias) ? data.ocorrencias.slice(0, 8) : [];
+    if (sample.length === 0) return;
+
+    const usuarios = data.usuarios || [];
+    const cidades = data.cidades || [];
+    const bairros = data.bairros || [];
+
+    for (const oc of sample) {
+      const usuario = usuarios.find(u => u.id === oc.usuarioId) || null;
+      const cidade = cidades.find(c => c.id === oc.cidadeId) || null;
+      const bairro = bairros.find(b => b.id === oc.bairroId) || null;
+      const payload = {
+        titulo: oc.titulo,
+        tipoProblema: oc.tipo,
+        descricaoCompleta: oc.descricao,
+        informacoesAdicionaisCidadao: '',
+        codigoOcorrencia: `LEGACY-${oc.id}`,
+        endereco: {
+          rua: '',
+          numero: '',
+          bairro: bairro ? bairro.nome : '',
+          cidade: cidade ? cidade.nome : '',
+          estado: cidade ? (cidade.uf || '') : '',
+          cep: '',
+          latitude: oc.lat ?? null,
+          longitude: oc.lng ?? null
+        },
+        imagens: [],
+        prioridadeCidadao: 'media',
+        urgenciaCidadao: 'media',
+        impactoComunidade: 'local',
+        dataRegistro: oc.createdAt || new Date().toISOString(),
+        autorCidadao: usuario ? usuario.nome : 'Usuário FiscalizaPlus',
+        isAnonimo: !usuario,
+        statusAtual: getStatusLabel(oc.status || oc.statusOriginal),
+        dataUltimaAtualizacaoStatus: oc.resolvedAt || oc.updatedAt || oc.createdAt || new Date().toISOString(),
+        prioridadeInterna: null,
+        observacoesInternasServidor: '',
+        servidorResponsavelId: null,
+        contatoCidadao: usuario ? (usuario.email || '') : '',
+        recebeNotificacoes: Boolean(usuario)
+      };
+      try {
+        await fetch(`${API_BASE}/denuncias`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (_) {
+        // Ignora erros de seed
+      }
+    }
+  }
+
+  function createImpactModalIfNeeded() {
+    if (document.getElementById('impact-detail-modal')) return;
+    const modalHtml = `
+      <div class="modal fade" id="impact-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="impact-detail-title">Detalhes da ocorrência</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-2"><span class="badge rounded-pill bg-success" id="impact-detail-status">Resolvido</span></div>
+              <div class="small text-muted mb-2" id="impact-detail-dates"></div>
+              <div class="mb-1 fw-semibold">Tipo</div>
+              <div class="mb-3" id="impact-detail-type">-</div>
+              <div class="mb-1 fw-semibold">Descrição</div>
+              <div id="impact-detail-desc">-</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+  }
+
+  function openImpactModal(oc) {
+    createImpactModalIfNeeded();
+    const title = document.getElementById('impact-detail-title');
+    const status = document.getElementById('impact-detail-status');
+    const dates = document.getElementById('impact-detail-dates');
+    const type = document.getElementById('impact-detail-type');
+    const desc = document.getElementById('impact-detail-desc');
+    // Extra fields ensure richer details
+    let extraContainer = document.getElementById('impact-detail-extra');
+    if (!extraContainer) {
+      const body = document.querySelector('#impact-detail-modal .modal-body');
+      if (body) {
+        extraContainer = document.createElement('div');
+        extraContainer.id = 'impact-detail-extra';
+        body.appendChild(document.createElement('hr'));
+        body.appendChild(extraContainer);
+      }
+    }
+
+    if (title) title.textContent = oc.titulo || 'Ocorrência';
+    const normalizedStatus = normalizeStatus(oc.status || oc.statusOriginal);
+    const color = (() => {
+      if (normalizedStatus === 'resolvido') return 'bg-success';
+      if (normalizedStatus === 'em_andamento') return 'bg-info';
+      if (normalizedStatus === 'aberto') return 'bg-warning text-dark';
+      return 'bg-secondary';
+    })();
+    if (status) {
+      status.className = `badge rounded-pill ${color}`;
+      status.textContent = getStatusLabel(oc.status || oc.statusOriginal);
+    }
+    if (dates) {
+      const aberto = toDisplayDate(oc.createdAt);
+      const resolvido = toDisplayDate(oc.resolvedAt);
+      const atualizado = toDisplayDate(oc.updatedAt);
+      dates.innerHTML = `
+        <span class="me-2"><i class="fa-regular fa-clock"></i> Criado: <strong>${aberto||'n/d'}</strong></span>
+        <span class="me-2"><i class="fa-solid fa-arrow-rotate-right"></i> Atualizado: <strong>${atualizado||'-'}</strong></span>
+        <span><i class="fa-solid fa-flag-checkered"></i> Resolvido: <strong>${resolvido||'-'}</strong></span>
+      `;
+    }
+    if (type) type.textContent = oc.tipo || oc.tipoProblema || '—';
+    if (desc) desc.textContent = oc.descricao || oc.descricaoCompleta || '-';
+    if (extraContainer) {
+      // Resolve friendly names
+      Promise.all([
+        oc.bairroId ? fetchJson(`/bairros/${oc.bairroId}`) : Promise.resolve(null),
+        oc.cidadeId ? fetchJson(`/cidades/${oc.cidadeId}`) : Promise.resolve(null),
+        oc.usuarioId ? fetchJson(`/usuarios/${oc.usuarioId}`) : Promise.resolve(null)
+      ]).then(([bairroObj, cidadeObj, usuarioObj]) => {
+        const bairroNome = bairroObj ? bairroObj.nome : (oc.bairroNome || (oc.endereco ? oc.endereco.bairro : ''));
+        const cidadeNome = cidadeObj ? cidadeObj.nome : (oc.cidadeNome || (oc.endereco ? oc.endereco.cidade : ''));
+        const usuarioNome = usuarioObj ? usuarioObj.nome : (oc.usuarioNome || '');
+        const latValue = typeof oc.lat === 'string' ? parseFloat(oc.lat) : oc.lat;
+        const lngValue = typeof oc.lng === 'string' ? parseFloat(oc.lng) : oc.lng;
+        const hasCoords = Number.isFinite(latValue) && Number.isFinite(lngValue);
+        extraContainer.innerHTML = `
+          <div class="small text-muted mb-2">Localização e autor</div>
+          <ul class="list-unstyled mb-3 small">
+            ${bairroNome?`<li><i class="fa-solid fa-location-dot"></i> Bairro: <strong>${bairroNome}</strong></li>`:''}
+            ${cidadeNome?`<li><i class="fa-regular fa-building"></i> Cidade: <strong>${cidadeNome}</strong></li>`:''}
+            ${usuarioNome?`<li><i class="fa-solid fa-user"></i> Usuário: <strong>${usuarioNome}</strong></li>`:''}
+          </ul>
+          ${hasCoords ? '<div id=\"impact-detail-map\" class=\"impact-map mt-2\"></div>' : '<p class=\"text-muted small\">Localização não disponível.</p>'}
+        `;
+
+        // Renderiza mini-mapa interativo (Leaflet) quando temos coordenadas
+        if (hasCoords && typeof L !== 'undefined') {
+          const mapEl = document.getElementById('impact-detail-map');
+          if (mapEl) {
+            // Garante container limpo a cada abertura
+            mapEl.innerHTML = '';
+            const map = L.map(mapEl, { attributionControl:false, zoomControl:false });
+            map.setView([latValue, lngValue], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+            L.marker([latValue, lngValue]).addTo(map);
+            // Ajusta tamanho após animação do modal
+            setTimeout(() => { try { map.invalidateSize(); } catch(_){} }, 250);
+          }
+        }
+      }).catch(() => {
+        extraContainer.innerHTML = '<p class="text-muted small">Não foi possível carregar localização.</p>';
+      });
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('impact-detail-modal'));
+    modal.show();
+  }
+
   async function populateUserImpact() {
     try {
       const container = document.getElementById('user-impact-body') || document.querySelector('.user-impact');
@@ -200,24 +660,29 @@
         return;
       }
 
-      // Usar dados locais
-      const data = window.DB_DATA || {};
-      const ocorrencias = Array.isArray(data.ocorrencias) ? data.ocorrencias : [];
+      console.log('[Seu Impacto] Usuário logado:', user);
 
-      // Filtra as denúncias do usuário que foram resolvidas
-      const resolvidasDoUsuario = ocorrencias
-        .filter(o => o && o.usuarioId === user.id && String(o.status).toLowerCase() === 'resolvido')
-        .map(o => ({
-          ...o,
-          _resolvedAt: o.resolvedAt ? new Date(o.resolvedAt) : (o.updatedAt ? new Date(o.updatedAt) : (o.createdAt ? new Date(o.createdAt) : new Date(0)))
-        }))
-        .sort((a, b) => b._resolvedAt - a._resolvedAt);
+      await ensureSeedOccorrenciasIfEmpty();
+      const fetched = await fetchJson(`/ocorrencias?usuarioId=${user.id}&status=resolvido&_sort=resolvedAt&_order=desc&_limit=10`);
+      
+      console.log('[Seu Impacto] Denúncias resolvidas encontradas:', fetched);
+      
+      const resolvidasDoUsuario = Array.isArray(fetched)
+        ? fetched.map(o => ({
+            ...o,
+            _resolvedAt: o.resolvedAt
+              ? new Date(o.resolvedAt)
+              : (o.updatedAt ? new Date(o.updatedAt) : (o.createdAt ? new Date(o.createdAt) : new Date(0)))
+          }))
+        : [];
 
       const total = resolvidasDoUsuario.length;
+      
+      console.log('[Seu Impacto] Total de problemas resolvidos:', total);
 
       // Monta o HTML do cartão
       const header = `
-        <div class="d-flex align-items-center gap-2 mb-2">
+        <div class="d-flex align-items-center gap-2 mb-3">
           <i class="fa-solid fa-star text-warning"></i>
           <span class="fw-semibold">Você já ajudou a resolver ${total} problema${total === 1 ? '' : 's'}!</span>
         </div>`;
@@ -227,22 +692,41 @@
         return;
       }
 
-      const ultimos = resolvidasDoUsuario.slice(0, 4);
+      const ultimos = resolvidasDoUsuario.slice(0, 6);
       const itens = ultimos.map(o => {
-        const when = timeAgoPt(o.resolvedAt || o.updatedAt || o.createdAt);
+        const when = toDisplayDate(o.resolvedAt || o.updatedAt || o.createdAt);
+        const safeTitle = escapeHtml(o.titulo || 'Ocorrência resolvida');
+        const safeTipo = escapeHtml(o.tipo || o.tipoProblema || 'Tipo');
+        const badge = `<span class="badge bg-success rounded-pill ms-auto">${when}</span>`;
         return `
-          <li class="list-group-item d-flex align-items-start gap-2 py-2">
-            <span class="mt-1" aria-hidden><i class="fa-solid fa-check-circle text-success"></i></span>
-            <div>
-              <div class="fw-semibold">${escapeHtml(o.titulo || 'Ocorrência resolvida')}</div>
-              <div class="text-muted small">${escapeHtml(o.tipo || 'Tipo')} • <span title="${fmtDate(o.resolvedAt || o.updatedAt || o.createdAt)}">${escapeHtml(when.text)}</span></div>
+          <button type="button" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 impact-item" data-oc='${JSON.stringify(o).replace(/'/g, "&#39;")}'>
+            <span class="impact-icon d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-25 text-success" style="width:34px;height:34px;"><i class="fa-solid fa-check"></i></span>
+            <div class="flex-grow-1 text-start">
+              <div class="fw-semibold mb-1">${safeTitle}</div>
+              <div class="text-muted small d-flex flex-wrap gap-2 align-items-center">
+                <span><i class="fa-solid fa-layer-group"></i> ${safeTipo}</span>
+                <span><i class="fa-solid fa-calendar-check"></i> Resolvido: ${when}</span>
+              </div>
             </div>
-          </li>`;
+            ${badge}
+          </button>`;
       }).join('');
 
       container.innerHTML = header + `
-        <ul class="list-group list-group-flush">${itens}</ul>
+        <div class="impact-scroll impact-list list-group list-group-flush border-0">${itens}</div>
       `;
+
+      // Eventos de clique para abrir modal
+      container.querySelectorAll('.impact-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          try {
+            const oc = JSON.parse(btn.getAttribute('data-oc').replace(/&#39;/g, "'"));
+            openImpactModal(oc);
+          } catch (e) {
+            console.warn('Falha ao abrir detalhes:', e);
+          }
+        });
+      });
     } catch (e) {
       console.error('Erro ao preencher impacto do usuário:', e);
       const container = document.getElementById('user-impact-body') || document.querySelector('.user-impact');
@@ -266,10 +750,14 @@
         ultimasDenuncias.forEach((denuncia, index) => {
           const denunciaDiv = document.createElement('div');
           denunciaDiv.className = `denuncia-item status-${denuncia.status}`;
+          const safeTitulo = escapeHtml(denuncia.titulo || 'Ocorrência');
+          const safeStatus = escapeHtml(getStatusLabel(denuncia.status || denuncia.statusOriginal));
+          const safeTipo = escapeHtml(denuncia.tipo || denuncia.tipoProblema || 'Tipo');
+          const safeData = escapeHtml(formatDate(denuncia.createdAt || denuncia.dataRegistro));
           denunciaDiv.innerHTML = `
-            <div class="denuncia-titulo">${index + 1}. ${denuncia.titulo}</div>
+            <div class="denuncia-titulo">${index + 1}. ${safeTitulo}</div>
             <div class="denuncia-meta">
-              ${getStatusLabel(denuncia.status)} • ${denuncia.tipo} • ${formatDate(denuncia.createdAt)}
+              ${safeStatus} • ${safeTipo} • ${safeData}
             </div>
           `;
           ultimasDenunciasContainer.appendChild(denunciaDiv);
