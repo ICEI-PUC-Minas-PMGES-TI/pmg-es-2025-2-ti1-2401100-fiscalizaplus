@@ -17,8 +17,6 @@
     --cor-principal: #d62828; /* Definindo a cor principal (vermelho) */
 }
 
-* { box-sizing: border-box; }
-
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -48,8 +46,8 @@ body {
 }
 
 .user-img {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
@@ -484,7 +482,7 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(214, 40, 40, 0.25);
 }
 
-
+/* Sidebar de Detalhes da Denúncia */
 #sidebar-details {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
@@ -492,6 +490,7 @@ body {
 }
 
 #sidebar-details .card-header {
+    /* Cor será definida pelo JS com base no status, mas mantém o estilo */
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     padding: 1rem;
@@ -567,4 +566,76 @@ body {
     visibility: visible !important;
     display: block !important;
     background-color: transparent !important; 
+}
+
+body {
+  background-color: #f4f6f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.topbar {
+  background-color: #333;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+}
+
+.container {
+  width: 90%;
+  margin: 30px auto;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #125ca1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background-color: #1976d2;
+  color: white;
+  padding: 8px;
+}
+
+table td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+.main-content,
+.content,
+.container,
+.dashboard-container {
+  margin-left: 240px; /* reserva o espaço da sidebar */
+  padding: 20px;
 }
