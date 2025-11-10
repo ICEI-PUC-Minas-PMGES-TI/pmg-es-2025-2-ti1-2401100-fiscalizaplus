@@ -1,3 +1,4 @@
+
 *{
     margin: 0;
     padding: 0;
@@ -8,36 +9,84 @@
 
 body{
     background-color: #d9d9d9;
+    height: 100%;
 }
- /* Barra de navegação*/
-.navbar{
-    width: 100%;
-    margin: 0;
-    border-radius: 4px;
-    background-color: #737373 !important;
-}
-.navbar-nav .nav-item .nav-link{
-    color: white;
-    padding: 20px;
-}
-.navbar-nav .nav-item .nav-link:hover{
-    color: #d3d3d3;
-}
-.navbar-nav .nav-item .nav-link.active{
-    color: #700303;
-    padding: 20px;
+/* ======= Barra de navegação ======= */
+.navbar {
+  width: 100%;
+  background-color: #737373 !important;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Painel do usuário*/
-.name-user{
-    color: #700303 !important;
+.navbar-logo {
+  width: 160px;
+  transition: transform 0.2s ease-in-out;
 }
-.icon{
-    margin: 10px auto;
+
+.navbar-logo:hover {
+  transform: scale(1.05);
 }
-.user-icon{
-    color: aliceblue;
-    font-size: 40px;
+
+/* Links principais */
+.navbar-nav .nav-link {
+  color: white;
+  padding: 10px 18px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #d3d3d3;
+}
+
+.navbar-nav .nav-link.active {
+  color: black;
+  border-bottom: 2px solid #700303;
+}
+
+/* ======= Área do Usuário ======= */
+.navbar-user {
+  gap: 10px;
+}
+
+.name-user {
+  color: #8b0b13;
+  font-weight: 600;
+}
+
+.user-icon-link {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.user-icon {
+  font-size: 40px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.user-icon:hover {
+  color: #d3d3d3;
+  transform: scale(1.1);
+}
+
+/* Garante que o offcanvas esteja oculto em telas maiores */
+@media (min-width: 992px) { 
+    #offcanvasNavbar {
+        visibility: hidden;
+        transform: translateX(-100%);
+        display: none !important; 
+    }
+}
+
+
+@media (max-width: 991.98px) { 
+    #navbarMenuLg {
+        display: none !important; 
+    }
 }
 
 
@@ -52,6 +101,11 @@ body{
     background-color: #4f4f4f;
     height: 400px;
     border-radius: 12px;
+}
+
+.user-panel{
+    margin: 0 auto;
+    padding: 10px 16px;
 }
 
 .user-panel{
@@ -133,7 +187,7 @@ body{
 /* Informações básicas style*/
 
 .report-container {
-    background-color: #4d4d4d;
+    background-color: #d9d9d9;
     min-height: calc(100vh - 100px);
     padding: 30px 0;
     margin-top: 2px;
@@ -148,13 +202,13 @@ body{
 .report-header h1 {
     font-size: 2.5rem;
     font-weight: bold;
-    color: white;
+    color: black;
     margin-bottom: 10px;
 }
 
 .report-header p {
     font-size: 1.1rem;
-    color: #ccc;
+    color: black;
     margin: 0;
 }
 
@@ -470,6 +524,59 @@ textarea.form-control {
 }
 
 /* Design reponsivo */
+/* Regras para telas pequenas (smartphones) */
+@media (max-width: 767.98px) {
+    /* Ajuste na barra de navegação para mobile */
+    .navbar-logo {
+        width: 120px; /* Reduz o logo em telas pequenas */
+    }
+
+    .navbar-user {
+        margin-top: 10px;
+        justify-content: space-between; /* Ajusta o alinhamento do nome e ícone */
+        width: 100%;
+    }
+
+    .name-user {
+        /* Garante que o nome do usuário não quebre a linha */
+        white-space: nowrap; 
+        font-size: 1rem;
+    }
+
+    /* O grid principal precisa garantir que todos os elementos ocupem a largura total */
+    .col-md-4 {
+        margin-bottom: 20px; /* Adiciona espaçamento vertical entre as colunas empilhadas */
+    }
+    
+    /* Garante que a coluna de relatos recentes ocupe todo o espaço */
+    .col-md-4:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Reduz o padding geral do container principal */
+    .conteiner-main {
+        padding: 0 15px;
+    }
+
+    /* Ajustes específicos de altura para mobile */
+    .user-preview, .user-impact, .occurrence-map, .users-highlights {
+        height: auto; /* Permite que o conteúdo defina a altura, fundamental no mobile */
+        min-height: 250px; /* Garante uma altura mínima, se necessário */
+    }
+
+    /* Estilização específica do painel de usuário para mobile */
+    .user-panel {
+        padding: 15px 10px;
+    }
+
+    .btn-create-report {
+        font-size: 16px;
+        height: 50px;
+        margin-top: 15px;
+    }
+}
+
+
 @media (max-width: 768px) {
     .report-container {
         padding: 15px 0;
@@ -664,12 +771,39 @@ textarea.form-control {
     border-radius: 12px;
 }
 
+/* Impact list look & feel (escuro como o painel do usuário) */
+.user-impact h6{ color:#fff; font-weight:700 }
+.user-impact #user-impact-body{ color:#e9e9e9 }
+.impact-list{ background:transparent }
+.impact-list .impact-item{
+    background-color:#3f3f3f;
+    color:#f1f1f1;
+    border:1px solid rgba(255,255,255,0.08);
+}
+.impact-list .impact-item:hover{ background-color:#454545 }
+.impact-list .impact-item .text-muted{ color:#cfcfcf !important }
+.impact-scroll{ max-height:260px; overflow:auto; border-radius:8px }
+.impact-badge{ display:inline-flex; align-items:center; gap:8px }
+
+/* Modal escuro para detalhes de impacto */
+.impact-modal{ background-color:#f6f6f6; color:#222 }
+.impact-modal .modal-header, .impact-modal .modal-footer{ border-color:rgba(0,0,0,0.12) }
+.impact-modal .modal-title{ color:#222 }
+.impact-modal .btn-secondary{ background:#6c757d; border-color:#6c757d; color:#fff }
+.impact-modal .btn-secondary:hover{ background:#5a6268 }
+.impact-map{ height:180px; border-radius:8px; overflow:hidden; border:1px solid rgba(0,0,0,0.1) }
+
 /* Painel do mapa de ocorrências da cidade*/
 .occurrence-map{
     background-color: #f4f4f4;
     height: 400px;
     border-radius: 12px;
     color: brown;
+}
+
+#occurrence-map-canvas {
+    border: 2px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Painel de denúncias em destaques*/
@@ -682,10 +816,137 @@ textarea.form-control {
 
 
 /* Painel de denúncias recentes da cidade*/
-.recent-reports{
-    background-color: #4f4f4f;
+ .recent-reports{
+    background-color: #2A2A2A;
     height: 800px;
     border-radius: 12px;
+    color: #EDEDED;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.recent-reports > h6,
+.recent-reports > .card-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(42,42,42,1), rgba(42,42,42,0.98));
+    padding: 12px 8px;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #EDEDED;
+}
+
+#recent-reports-list {
+    padding: 8px;
+    list-style: none;
+    margin: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#recent-reports-list .recent-item {
+    display: flex;
+    gap: 12px; /* item spacing */
+    align-items: flex-start;
+    padding: 12px; /* per spec 12–14px */
+    margin-bottom: 8px;
+    background-color: #1F1F1F; /* item background */
+    border-radius: 8px;
+    color: #EDEDED;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+.recent-item .index-badge {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    background: #323232;
+    display: grid;
+    place-items: center;
+    color: #EDEDED;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.recent-item .recent-content{flex:1}
+.recent-item .recent-title{
+    margin:0 0 6px 0;
+    font-size: 15.5px; /* 15–16px */
+    font-weight: 600;
+    color: #EDEDED;
+}
+.recent-item .recent-meta{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:#A7A7A7
+}
+
+.recent-meta .meta-piece{display:inline-flex;gap:6px;align-items:center;color:#A7A7A7}
+.recent-meta .meta-piece i{width:14px;text-align:center}
+
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px;border:1px solid currentColor}
+.status-pill .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.status-aberto{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.status-em_andamento{color:#0EA5E9;background:rgba(14,165,233,0.08)}
+.status-resolvido{color:#10B981;background:rgba(16,185,129,0.08)}
+
+.status-aberto .dot{background:#F59E0B}
+.status-em_andamento .dot{background:#0EA5E9}
+.status-resolvido .dot{background:#10B981}
+
+
+.recent-item:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,0.45);background-color:#242424}
+
+.recent-item:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,0.03)}
+.recent-item[data-status="aberto"]:focus-visible{box-shadow:0 0 0 3px rgba(245,158,11,0.22)}
+.recent-item[data-status="em_andamento"]:focus-visible{box-shadow:0 0 0 3px rgba(14,165,233,0.22)}
+.recent-item[data-status="resolvido"]:focus-visible{box-shadow:0 0 0 3px rgba(16,185,129,0.22)}
+
+
+.recent-meta .time{font-size:12px;color:#A7A7A7}
+
+#recent-reports-list::after{content:'';display:block;height:12px}
+
+
+/* Últimas denúncias do usuário */
+.ultimas-denuncias-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.denuncia-item {
+    background-color: #5a5a5a;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    border-left: 4px solid #6c757d;
+    font-size: 12px;
+}
+
+.denuncia-item.status-aberto {
+    border-left-color: #ffc107;
+}
+
+.denuncia-item.status-em_andamento {
+    border-left-color: #0dcaf0;
+}
+
+.denuncia-item.status-resolvido {
+    border-left-color: #198754;
+}
+
+.denuncia-titulo {
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: white;
+}
+
+.denuncia-meta {
+    color: #d1d1d1;
+    font-size: 10px;
 }
 
 /* == Painel de Usuario == */
@@ -793,7 +1054,7 @@ img{max-width:100%;display:block}
 .reports{display:grid;gap:1rem}
 .report{
   display:grid;grid-template-columns: 44px 1fr 110px;gap:.8rem;
-  background:var(--panel-2);border-radius:14px;padding:.9rem;border:1px solid #dcdcdc;
+  background:var(--panel-2);border:1px solid #dcdcdc;
   align-items:center;box-shadow:var(--shadow)
 }
 @media (max-width:680px){
@@ -834,3 +1095,275 @@ img{max-width:100%;display:block}
 /* Footer */
 .footer{padding:2rem 0 3rem;color:#666}
 .footer__inner{display:flex;align-items:center;justify-content:center;border-top:1px solid #d7d7d7;padding-top:1rem}
+
+
+/* Página de Dashboard do cidadão*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+:root {
+  --azul-principal: #4a4b4D;
+  --azul-claro: #EAF0FF;
+  --cinza-fundo: #F5F6FA;
+  --texto: #333;
+}
+
+
+/* ===== DASHBOARD ===== */
+.dashboard-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.titulo-dashboard {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.subtitulo-dashboard {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.dashboard-area {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+.card h2 {
+  color: var(--azul-principal);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.card .valor {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+}
+
+/* ===== GRÁFICO DONUT ===== */
+.donut {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(#4CAF50 0 120deg, #FFB300 120deg 160deg, #E53935 160deg 360deg);
+  margin: 18px auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
+  display: grid;
+  place-items: center;
+}
+
+.donut .center {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: white;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--azul-principal);
+}
+
+/* ===== RODAPÉ ===== */
+.rodape {
+  text-align: center;
+  padding: 20px;
+  background: var(--azul-principal);
+  color: white;
+  margin-top: 40px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .dashboard-area {
+    flex-direction: column;
+  }
+}
+
+/* ========== Reset básico ========== */
+*,*::before,*::after{ box-sizing:border-box }
+html,body{ height:100% }
+body{ margin:0; font:500 16px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial }
+img{ max-width:100%; display:block }
+button,input,select,textarea{ font:inherit }
+
+/* ========== Paleta e tokens ========== */
+:root{
+  --bg: #d9d9dc;          /* cinza de fundo da página */
+  --panel: #ececee;           /* painel “Fórum da Comunidade” */
+  --sidebar: #464a4f;         /* fundo do sidebar */
+  --sidebar-border: #2e3237;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #d7d9de;
+
+  --primary: #7c3aed;         /* roxo da barra/botão */
+  --primary-700: #5b21b6;
+  --danger: #d32f2f;          /* botão vermelho */
+
+  --radius-lg: 22px;
+  --radius: 14px;
+  --shadow-soft: 0 10px 28px rgba(0,0,0,.10);
+}
+
+/* ========== Topbar ========== */
+.topbar{
+  background:#4a4f56;
+  border-bottom:4px solid #3c4148;
+  position:sticky; top:0; z-index:9;
+}
+.topbar__inner{
+  max-width:1200px; margin:0 auto;
+  padding:8px 16px;
+  display:grid; grid-template-columns:200px 1fr auto; gap:16px; align-items:center;
+}
+.brand__logo{
+  color:#f2f3f5; font-weight:800; font-size:26px; letter-spacing:.2px;
+}
+.brand__logo span{ color:#ff4d4d }
+.brand__logo .plus{ color:#ff4666 }
+
+.mainnav{ display:flex; flex-wrap:wrap; gap:14px }
+.navlink{
+  color:#e6e7ea; text-decoration:none; padding:8px 10px; border-radius:10px;
+}
+.navlink:hover{ background:#5a6068 }
+.navlink.is-active{ color:#ffdfe6; background:#2f333a; font-weight:700 }
+
+.userchip{ display:flex; align-items:center; gap:10px; color:#f3f4f6; font-weight:700 }
+.avatar{
+  width:44px; height:44px; border-radius:50%;
+  display:grid; place-items:center;
+  background: linear-gradient(180deg,#ffc857,#f77f00);
+  color:#222; font-weight:900;
+  box-shadow: var(--shadow-soft);
+}
+.avatar--sm{ width:34px; height:34px; font-size:14px; background:linear-gradient(180deg,#a7f3d0,#34d399) }
+
+/* ========== Estrutura ========== */
+.page{ background: var(--bg) }
+.page__grid{
+  max-width:1200px; margin:24px auto; padding:0 16px;
+  display:grid; grid-template-columns:320px 1fr; gap:24px;
+}
+@media (max-width: 899.98px){
+  .page__grid{ grid-template-columns:1fr }
+}
+
+/* ========== Sidebar ========== */
+.sidebar{
+  background:var(--sidebar);
+  color:#e7eaee;
+  border:1px solid var(--sidebar-border);
+  border-radius: var(--radius-lg);
+  padding:18px;
+  box-shadow: var(--shadow-soft);
+}
+.btn{
+  border:1px solid var(--border);
+  background:#fff; color:#111827;
+  border-radius:12px; padding:10px 14px; cursor:pointer; font-weight:700;
+}
+.btn:hover{ filter:brightness(.98) }
+.btn--lg{ width:100%; padding:14px 16px }
+.btn--danger{ background:var(--danger); color:#fff; border-color:#b32626 }
+
+.profile{
+  display:flex; align-items:center; gap:12px;
+  padding:16px 0 8px;
+}
+.profile__info strong{ display:block }
+.profile__info small{ color:#cbd5e1 }
+
+.separator{
+  border:0; height:1px; background:#6a6f74; opacity:.55; margin:8px 0 14px;
+}
+
+.categories h3{ margin:6px 0 10px; font-size:16px }
+.categories ul{ list-style:none; margin:0; padding:0; display:grid; gap:8px }
+.cat-item{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 10px; border-radius:10px; cursor:pointer;
+}
+.cat-item:hover{ background:#4f555b }
+.cat-item.is-active{ background:#2f333a }
+.cat-label{ color:#e8ebef }
+.cat-dot{
+  width:10px; height:10px; border-radius:50%;
+  background:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,.35);
+}
+.cat-item.is-active .cat-dot{
+  background:#fff; box-shadow:0 0 0 3px rgba(124,58,237,.9);
+}
+
+/* ========== Conteúdo / Título do fórum ========== */
+.content{ min-width:0 }
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px;
+  box-shadow:var(--shadow-soft);
+  margin-bottom:16px;
+}
+.panel h2{ margin:0; font-size:24px; color:#1f2937 }
+
+/* ========== Cards ========== */
+.cards{
+  display:grid; grid-template-columns:repeat(12,1fr); gap:20px;
+}
+.card{
+  grid-column:span 12;
+  background:var(--card); color:var(--text);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+@media (min-width:900px){
+  .card{ grid-column:span 6 }
+}
+
+.card__header{ display:flex; align-items:center; gap:10px; margin-bottom:8px }
+.card__author .timeago{ color:var(--muted) }
+.card__title{ margin:6px 0; font-size:18px }
+.card__excerpt{ margin:0 0 12px; color:#3b4350 }
+
+/* Barra de progresso (roxo) */
+.progress{
+  height:12px; background:#eef2f6; border-radius:999px; overflow:hidden;
+  box-shadow:inset 0 0 0 1px #e5e7eb;
+}
+.progress__bar{
+  height:100%; width:0%;
+  background:linear-gradient(90deg,#7c3aed,#8b5cf6);
+  transition:width .25s ease;
+}
+
+/* Rodapé do card */
+.card__footer{
+  margin-top:12px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.btn--outline{
+  background:transparent; color:var(--primary);
+  border:2px solid var(--primary); padding:8px 12px; border-radius:12px; font-weight:800
+}
+.btn--outline:hover{ background:var(--primary); color:#fff }
+.vote-btn.is-disabled{ opacity:.7; cursor:default }
+
+.votes{ color:#ef4444; font-weight:700; display:flex; align-items:center; gap:8px }
+.votes .dot{ font-size:18px }

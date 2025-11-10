@@ -4,13 +4,26 @@ let selectedLocation = null;
 let imageInput = null;
 let selectedFilesList = [];
 let selectedFileDataUrls = [];
-let currentUser = null; // Variável global para armazenar o usuário logado
+let currentUser = null; 
+// Variáveis para armazenar o endereço completo obtido pelo reverse geocoding
+let addressDetails = {
+    rua: '',
+    bairro: '',
+    cidade: 'Belo Horizonte',
+    estado: 'MG',
+    cep: ''
+};
 
+// --- CONFIGURAÇÃO DA API ---
+const API_BASE_URL = 'http://localhost:3000';
+const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
+const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`;
+const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';
 
-// Função para carregar dados do usuário do arquivo JSON
+// Função para carregar dados do usuário do json-server
 async function loadUserData() {
     try {
-        const response = await fetch('/codigo/db/db.json');
+        const response = await fetch(CIDADAOS_ENDPOINT);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,18 +31,22 @@ async function loadUserData() {
         
         const data = await response.json();
         
-        // Simula o login pegando o primeiro usuário da lista
-        if (data.cidadaos && data.cidadaos.length > 0) {
-            currentUser = data.cidadaos[0]; 
-            console.log("Usuário carregado com sucesso:", currentUser.nome);
+        if (data && data.length > 0) {
+            currentUser = data[0]; 
+            console.log("Usuário carregado com sucesso:", currentUser.nomeCompleto);
+
+            const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
+            if (nomeUsuarioNav) {
+                nomeUsuarioNav.textContent = `Olá, ${currentUser.nomeCompleto.split(' ')[0]}`;
+            }
         } else {
-            console.error("Nenhum cidadão encontrado no arquivo JSON.");
+            console.error("Nenhum cidadão encontrado no json-server. Defininindo usuário de fallback.");
+            currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
         }
         
     } catch (error) {
-        console.error("Erro ao carregar dados do usuário:", error);
-        // Define um usuário de fallback caso a carga falhe
-        currentUser = { nome: "Usuário de Teste (Fallback)" };
+        console.error("Erro ao carregar dados do usuário do json-server:", error);
+        currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
     }
 }
 
@@ -44,7 +61,6 @@ const bhBounds = L.latLngBounds(
 
 // Função de inicialização do mapa usando o Leaflet
 function initMap() {
-    // Criação do mapa e configuração inicial
     map = L.map('map', {
         center: bhCenter,
         zoom: 13,
@@ -59,14 +75,12 @@ function initMap() {
         touchZoom: true,
     }).setView(bhCenter, 13);
 
-    // Adição de camada de tiles do OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 18,
         minZoom: 10
     }).addTo(map);
 
-    // Adicão de retângulo de limite visual
     L.rectangle(bhBounds, {
         color: '#ce2828',
         weight: 2,
@@ -75,19 +89,14 @@ function initMap() {
         dashArray: '5, 5'
     }).addTo(map);
 
-    // Adicionar evento de clique no mapa para marcar a localização
     map.on('click', function (e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Verificar se o clique está dentro dos limites de BH
         if (bhBounds.contains([lat, lng])) {
-            // Remove marcador anterior se existir
             if (marker) {
                 map.removeLayer(marker);
             }
-
-            // Criar novo marcador customizado
             marker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'custom-marker',
@@ -113,35 +122,70 @@ function initMap() {
             }).addTo(map);
 
             selectedLocation = { lat: lat, lng: lng };
-
-            // Atualiza o campo de endereço com as coordenadas
-            updateAdress(lat, lng);
+            updateAddressFields(lat, lng); // Chamada para reverse geocoding
         } else {
             alert('Por favor, selecione uma localização dentro dos limites de Belo Horizonte.');
         }
     });
 }
 
+// NOVA FUNÇÃO: Reverse Geocoding para obter Rua e Bairro
+async function reverseGeocode(lat, lng) {
+    const url = `${NOMINATIM_BASE_URL}/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.address; // Retorna o objeto de endereço
+    } catch (error) {
+        console.error("Erro ao realizar reverse geocoding:", error);
+        return null;
+    }
+}
 
-// Função para atualizar o campo de endereço com as coordenadas
-function updateAdress(lat, lng) {
-    console.log(`Coordenadas selecionadas: ${lat}, ${lng}`);
+// ATUALIZADA: Preenche o campo de endereço único e a variável global
+async function updateAddressFields(lat, lng) {
     const enderecoField = document.querySelector("#endereco");
-    enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+    enderecoField.value = 'Localizando endereço...'; // Feedback imediato
+
+    const addressData = await reverseGeocode(lat, lng);
+
+    if (addressData) {
+        const street = addressData.road || addressData.footway || addressData.street || 'Endereço não identificado';
+        const neighbourhood = addressData.suburb || addressData.neighbourhood || addressData.village || 'Bairro não identificado';
+        const postcode = addressData.postcode || '';
+
+        // Preenche o campo visível no formulário com o endereço legível
+        enderecoField.value = `${street}, ${neighbourhood}, Belo Horizonte`;
+        
+        // Armazena os detalhes na variável global para o envio
+        addressDetails.rua = street;
+        addressDetails.bairro = neighbourhood;
+        addressDetails.cep = postcode;
+        addressDetails.cidade = addressData.city || addressData.town || 'Belo Horizonte';
+        addressDetails.estado = addressData.state_code || addressData.state || 'MG';
+
+    } else {
+        enderecoField.value = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)} (Endereço não identificado)`;
+        // Reseta os detalhes se a busca falhar
+        addressDetails.rua = `Coordenadas: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        addressDetails.bairro = 'Não identificado';
+        addressDetails.cep = '';
+    }
 }
 
 
-// Função para buscar endereço (geocoding) usando Nominatim
-function searchAdress() {
+function searchAdress() { // Mantido o nome original para evitar mudar o HTML
     const enderecoField = document.querySelector("#endereco");
     const endereco = enderecoField.value.trim();
 
-    if (!endereco) {
-        alert('Por favor, digite um endereço para buscar.');
+    if (!endereco || endereco.startsWith('Lat:')) {
+        alert('Por favor, digite um endereço válido para buscar.');
         return;
     }
 
-    // Adiciona Belo Horizonte ao final do endereço se não estiver presente
     let enderecoCompleto = endereco;
     if (!endereco.toLowerCase().includes('belo horizonte') && !endereco.toLowerCase().includes('bh')) {
         enderecoCompleto = endereco + ', Belo Horizonte, MG, Brasil';
@@ -150,12 +194,10 @@ function searchAdress() {
     const buscarBtn = document.querySelector('#buscar-btn');
     const originalText = buscarBtn.innerHTML;
 
-    // Estado de loading do botão
-    buscarBtn.innerHTML = '⏳ Buscando...';
+    buscarBtn.innerHTML = '🔍 Buscando...';
     buscarBtn.disabled = true;
 
-    // Utilização do Nominatim para geolocalização
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(enderecoCompleto)}&limit=1&countrycodes=br`;
+    const url = `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(enderecoCompleto)}&limit=1&countrycodes=br`;
 
     fetch(url)
         .then(response => response.json())
@@ -166,32 +208,28 @@ function searchAdress() {
                 const lng = parseFloat(resultado.lon);
 
                 if (bhBounds.contains([lat, lng])) {
-                    // Move o mapa para a localização encontrada
                     map.setView([lat, lng], 16);
+                    
+                    // O campo de endereço agora é atualizado pelo updateAddressFields, para consistência
+                    selectedLocation = { lat: lat, lng: lng };
+                    updateAddressFields(lat, lng); 
 
-                    // Preenche o campo de endereço com o nome completo
-                    enderecoField.value = resultado.display_name || endereco;
-
-                    // Remove marcador anterior e adiciona o novo no local da busca
                     if (marker) {
                         map.removeLayer(marker);
                     }
                     marker = L.marker([lat, lng]).addTo(map);
 
-                    // Adiciona popup de confirmação
                     L.popup()
                         .setLatLng([lat, lng])
                         .setContent(`
                             <div style="text-align: center; padding: 10px;">
                                 <h4 style="margin: 0 0 10px 0; color: #ce2828;">📍 Endereço Encontrado</h4>
                                 <p style="margin: 0; font-size: 14px;">${resultado.display_name}</p>
-                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Clique no mapa para marcar a localização exata</p>
+                                <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Localização marcada automaticamente. Você pode clicar no mapa para ajustar.</p>
                             </div>
                         `)
                         .openOn(map);
 
-                    // Atualiza a localização selecionada
-                    selectedLocation = { lat: lat, lng: lng };
 
                 } else {
                     alert('O endereço encontrado está fora dos limites de Belo Horizonte. Por favor, tente um endereço dentro da cidade.');
@@ -205,38 +243,33 @@ function searchAdress() {
             alert('Erro ao buscar o endereço. Tente novamente.');
         })
         .finally(() => {
-            // Restaura o estado do botão
-            buscarBtn.innerHTML = originalText;
+            buscarBtn.innerHTML = '🔍 Buscar';
             buscarBtn.disabled = false;
         });
 }
 
-// Função para usar localização atual do usuário e marcar no mapa
 function getCurrentLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-            function (position) {
+            async function (position) { 
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
 
                 const currentLatLng = L.latLng(lat, lng);
 
                 if (bhBounds.contains(currentLatLng)) {
-                    // Move o mapa para a localização atual
                     map.setView([lat, lng], 15);
 
-                    // Remove marcador anterior
                     if (marker) {
                         map.removeLayer(marker);
                     }
 
-                    // Cria novo marcador na localização atual
                     marker = L.marker([lat, lng]).addTo(map);
 
                     selectedLocation = { lat: lat, lng: lng };
-                    updateAdress(lat, lng);
-
-                    alert('Localização atual encontrada em Belo Horizonte!');
+                    await updateAddressFields(lat, lng); 
+                    
+                    alert('Localização atual encontrada e marcada em Belo Horizonte!');
                 } else {
                     alert('Sua localização atual está fora dos limites de Belo Horizonte. Por favor, selecione uma localização dentro da cidade.');
                 }
@@ -250,26 +283,26 @@ function getCurrentLocation() {
     }
 }
 
-// Função para resetar o mapa
 function resetMap() {
-    // Volta para o centro de Belo Horizonte
     map.setView(bhCenter, 13);
 
-    // Remove o marcador e limpa a localização
     if (marker) {
         map.removeLayer(marker);
         marker = null;
     }
 
     selectedLocation = null;
-
-    // Limpa o campo de endereço
     document.querySelector("#endereco").value = '';
+    addressDetails = { // Limpa os detalhes internos
+        rua: '',
+        bairro: '',
+        cidade: 'Belo Horizonte',
+        estado: 'MG',
+        cep: ''
+    };
 }
 
-// ======================================================================
-// FUNÇÕES DE GERENCIAMENTO DE IMAGEM
-// ======================================================================
+// --- FUNÇÕES DE GERENCIAMENTO DE IMAGEM (Mantidas) ---
 
 function renderPreview() {
     const previewContainer = document.getElementById('imagePreview');
@@ -277,7 +310,6 @@ function renderPreview() {
 
     previewContainer.innerHTML = '';
 
-    // Renderiza cada imagem na ordem exata
     selectedFileDataUrls.forEach((dataUrl, index) => {
         const imageDiv = document.createElement('div');
         imageDiv.className = 'image-preview-item';
@@ -300,7 +332,6 @@ function readFileAsDataURL(file) {
     });
 }
 
-// Usa async/await para garantir que a leitura de arquivos e a pré-visualização sejam feitas na ordem
 async function previewImages(input) {
     imageInput = input || document.querySelector("#imagens");
     if (!imageInput || !imageInput.files) return;
@@ -309,14 +340,13 @@ async function previewImages(input) {
     
     const newFilesToAdd = Array.from(input.files).filter(f => f && f.type && f.type.startsWith('image/'));
     
+    // Limpar o input file para permitir selecionar as mesmas fotos novamente se necessário
     imageInput.value = ''; 
 
-    // Acumula os novos arquivos, respeitando o limite
     for (let i = 0; i < newFilesToAdd.length && selectedFilesList.length < maxFiles; i++) {
         selectedFilesList.push(newFilesToAdd[i]);
     }
     
-    // Converte todos os arquivos acumulados para Data URLs
     const dataUrlPromises = selectedFilesList.map(file => readFileAsDataURL(file));
     const loadedDataUrls = await Promise.all(dataUrlPromises);
     
@@ -326,104 +356,166 @@ async function previewImages(input) {
 }
 
 function removeImage(index){
-    // Remove o item da lista de arquivos e da lista de Data URLs
     selectedFilesList = selectedFilesList.filter((_, i) => i !== index);
     selectedFileDataUrls = selectedFileDataUrls.filter((_, i) => i !== index);
 
     renderPreview();
 }
 
-// Função de armazenamento Local dos Dados
+// --- FUNÇÕES PARA GERAR CÓDIGO DE OCORRÊNCIA (CORRIGIDAS) ---
 
-const STORAGE_KEY = 'relatosCidadão';
+// Helper para formatar o número sequencial (0001, 0002, etc.)
+function formatarCodigo(numero) {
+    // Garante 4 dígitos com zeros à esquerda
+    const numeroFormatado = String(numero).padStart(4, '0'); 
+    return `OCOR-${numeroFormatado}`;
+}
 
-function handleSubmit(event) {
+// FUNÇÃO ATUALIZADA: Principal para buscar o próximo número sequencial e formatar o código
+async function gerarCodigoOcorrencia() {
+    let proximoNumero = 1;
+
+    try {
+        // 1. Busca TODAS as denúncias para encontrar o maior codigoOcorrencia existente
+        // Remover _sort e _limit para que o json-server retorne todos os registros e possamos
+        // fazer a lógica de ordenação numérica corretamente no cliente.
+        const response = await fetch(DENUNCIAS_ENDPOINT); 
+        
+        if (!response.ok) {
+            console.warn("Falha ao buscar denúncias para gerar o código. Iniciando com OCOR-0001.");
+            return formatarCodigo(proximoNumero);
+        }
+
+        const todasDenuncias = await response.json();
+
+        if (todasDenuncias && todasDenuncias.length > 0) {
+            let maiorNumero = 0;
+            todasDenuncias.forEach(denuncia => {
+                if (denuncia.codigoOcorrencia) {
+                    // Extrai o número do código (ex: "OCOR-0123" -> 123)
+                    const numeroString = denuncia.codigoOcorrencia.split('-')[1];
+                    const numeroAtual = parseInt(numeroString);
+                    if (!isNaN(numeroAtual) && numeroAtual > maiorNumero) {
+                        maiorNumero = numeroAtual;
+                    }
+                }
+            });
+            proximoNumero = maiorNumero + 1;
+        }
+
+    } catch (error) {
+        console.error("Erro na comunicação com o servidor ao gerar o código da ocorrência. Usando OCOR-0001.", error);
+        // Em caso de erro na comunicação, inicia-se no 1 para evitar travamento
+    }
+
+    return formatarCodigo(proximoNumero);
+}
+
+// ATUALIZADA: FUNÇÃO DE ENVIO DO FORMULÁRIO (Usa addressDetails e gera codigoOcorrencia)
+async function handleSubmit(event) {
     event.preventDefault();
 
-    // Validação de localização
     if (!selectedLocation) {
         alert("Por favor, selecione a localização exata do problema no mapa antes de enviar.");
         return;
     }
 
-    // Lógica de nome de usuário (correntUser ou anonimato)
+    // --- GERA O CÓDIGO DE OCORRÊNCIA AQUI ---
+    const novoCodigoOcorrencia = await gerarCodigoOcorrencia();
+    console.log("Novo Código de Ocorrência gerado:", novoCodigoOcorrencia);
+    // ----------------------------------------
+
     const isAnonimo = document.getElementById('anonimo').checked;
-    
-    // Pega o nome do usuário carregado (ou fallback)
-    const nomeReal = currentUser?.nome || 'Usuário Desconhecido';
-    
-    // Define o nome que será salvo no relato
-    const nomeCidadao = isAnonimo ? 'Anônimo' : nomeReal;
-    
-    // Obtém o valor booleano do checkbox de notificações
+    const nomeReal = currentUser?.nomeCompleto || 'Usuário Desconhecido';
+    const autorCidadao = isAnonimo ? 'Anônimo' : nomeReal;
     const recebeNotificacoes = document.getElementById('notificacoes').checked;
 
-    // Coleta todos os dados do formulário e transforma em um objeto json
+
+    const uploadedImageUrls = selectedFilesList.map((file, index) => {
+        // Gera uma URL de imagem de placeholder para o json-server
+        // Em um sistema real, você faria upload para um serviço de armazenamento de arquivos (e.g., Cloudinary, S3)
+        // e obteria as URLs reais aqui.
+        const fileName = file.name.split('.').pop(); 
+        return `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/400/300.${fileName}`; 
+    });
+
     const reportData = {
-        // Informações Básicas
         titulo: document.getElementById('titulo').value,
-        categoria: document.getElementById('categoria').value,
-        descricao: document.getElementById('descricao').value,
+        tipoProblema: document.getElementById('categoria').value,
+        descricaoCompleta: document.getElementById('descricao').value,
+        informacoesAdicionaisCidadao: document.getElementById('observacoes').value,
         
-        // Nome do Cidadão (Anonimo ou Real)
-        nomeCidadao: nomeCidadao,
+        // --- ADICIONADO O CAMPO codigoOcorrencia ---
+        codigoOcorrencia: novoCodigoOcorrencia, 
+        // ------------------------------------------
 
-        // Localização
-        localizacao: {
-            endereco: document.getElementById('endereco').value,
-            lat: selectedLocation.lat,
-            lng: selectedLocation.lng
+        endereco: {
+            // Agora usa os dados armazenados pelo reverse geocoding
+            rua: addressDetails.rua, 
+            numero: '', // Mantido vazio, pois não há campo no HTML
+            bairro: addressDetails.bairro,
+            cidade: addressDetails.cidade, 
+            estado: addressDetails.estado, 
+            cep: addressDetails.cep,
+            latitude: selectedLocation.lat,
+            longitude: selectedLocation.lng
         },
-
-        // Classificação
-        prioridade: document.getElementById('prioridade').value,
-        urgencia: document.getElementById('urgencia').value,
-        impacto: document.getElementById('impacto').value,
-
-        // Imagens (salva as Data URLs)
-        imagens: selectedFileDataUrls,
-        
-        // Informações Adicionais
-        observacoes: document.getElementById('observacoes').value,
-        contato: document.getElementById('contato').value,
-        
-        // Status dos Checkboxes
+        imagens: uploadedImageUrls, 
+        prioridadeCidadao: document.getElementById('prioridade').value,
+        urgenciaCidadao: document.getElementById('urgencia').value,
+        impactoComunidade: document.getElementById('impacto').value,
+        dataRegistro: new Date().toISOString(),
+        autorCidadao: autorCidadao,
         isAnonimo: isAnonimo,
-        recebeNotificacoes: recebeNotificacoes,
+        statusAtual: 'Pendente', 
+        dataUltimaAtualizacaoStatus: new Date().toISOString(),
+        prioridadeInterna: null,
+        observacoesInternasServidor: '',
+        servidorResponsavelId: null,
         
-        // Metadata do Relato
-        data_envio: new Date().toISOString(),
-        status: 'Pendente'
+        contatoCidadao: document.getElementById('contato').value,
+        recebeNotificacoes: recebeNotificacoes
     };
 
-    // Salva no localStorage
-    let relatos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    relatos.push(reportData);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(relatos));
+    console.log("Dados do relatório para envio (com URLs de imagens):", reportData);
 
-    console.log("Relato salvo no localStorage:", reportData);
-    alert("Relato enviado com sucesso, obrigado por denúnciar!");
-    
-    // Limpeza após envio
-    document.getElementById('reportForm').reset();
-    resetMap(); 
-    
-    // Limpa o gerenciamento de imagens e o preview
-    selectedFilesList = [];
-    selectedFileDataUrls = [];
-    renderPreview();
+    try {
+        const response = await fetch(DENUNCIAS_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reportData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Erro ao enviar relatório: ${response.status} - ${errorData.message || response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log("Relato enviado com sucesso para o json-server:", result);
+        alert(`Relato ${result.codigoOcorrencia} enviado com sucesso, obrigado por denunciar!`); // Alerta com o código
+        
+        document.getElementById('reportForm').reset();
+        resetMap(); 
+        
+        selectedFilesList = [];
+        selectedFileDataUrls = []; 
+        renderPreview();
+
+    } catch (error) {
+        console.error("Erro ao enviar relatório:", error);
+        alert("Ocorreu um erro ao enviar o relatório. Por favor, tente novamente.");
+    }
 }
 
 // ORQUESTRAÇÃO DE INICIALIZAÇÃO
 
 async function initializeApp() {
-    // 1. Carrega os dados do usuário
     await loadUserData(); 
-    
-    // 2. Inicializa o mapa
     initMap();
 
-    // 3. Anexa os listeners (agora que os dados estão carregados)
     const form = document.getElementById('reportForm');
     if (form) {
         form.addEventListener('submit', handleSubmit);
@@ -433,6 +525,23 @@ async function initializeApp() {
     if (fileInput) {
         fileInput.addEventListener('change', (e) => previewImages(e.target));
     }
+    
+    // Adiciona event listener para o botão de buscar (searchAdress)
+    const buscarBtn = document.querySelector('#buscar-btn');
+    if (buscarBtn) {
+        buscarBtn.addEventListener('click', searchAdress);
+    }
+
+    // Adiciona event listener para o botão de localização atual
+    const localizarBtn = document.querySelector('.map-controls .btn-outline-primary');
+    if (localizarBtn) {
+        localizarBtn.addEventListener('click', getCurrentLocation);
+    }
+
+    // Adiciona event listener para o botão de resetar mapa
+    const resetBtn = document.querySelector('.map-controls .btn-outline-secondary');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetMap);
+    }
 }
-// Inicia o aplicativo
 initializeApp();
