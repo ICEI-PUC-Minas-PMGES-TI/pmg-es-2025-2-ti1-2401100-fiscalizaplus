@@ -13,10 +13,7 @@
 // Página inicial de Login
 const LOGIN_URL = "/index.html";
 let RETURN_URL = "/index.html";
-
-const API_BASE = 'http://localhost:3000';
-
-const API_URL = `${API_BASE}/cidadaos`;
+const API_URL = '/usuarios';
 
 // Objeto para o banco de dados de usuários baseado em JSON
 var db_usuarios = {};
@@ -60,26 +57,16 @@ function initLoginApp () {
 
 
 function carregarUsuarios(callback) {
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => {
-                // O arquivo db.json possui cidadãos com campos: id, nomeCompleto, email, senhaHash.
-                // Adaptamos para a estrutura esperada pelo restante do login:
-                db_usuarios = (Array.isArray(data) ? data : []).map(c => ({
-                    id: c.id,
-                    // Geramos um "login" sintético a partir do email (antes do @) caso não exista campo login
-                    login: c.login || (c.email ? c.email.split('@')[0] : `cidadao${c.id}`),
-                    // Senha fictícia apenas para ambiente de desenvolvimento (NUNCA usar em produção)
-                    senha: c.senha || c.senhaHash || '123',
-                    email: c.email,
-                    nome: c.nome || c.nomeCompleto || c.login || 'Usuário'
-                }));
-                callback();
-            })
-            .catch(error => {
-                console.error('Erro ao ler cidadãos via API JSONServer:', error);
-                displayMessage("Erro ao ler cidadãos");
-            });
+    fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+        db_usuarios = data;
+        callback ()
+    })
+    .catch(error => {
+        console.error('Erro ao ler usuários via API JSONServer:', error);
+        displayMessage("Erro ao ler usuários");
+    });
 }
 
 // Verifica se o login do usuário está ok e, se positivo, direciona para a página inicial
@@ -97,23 +84,23 @@ function loginUser (login, senha) {
             usuarioCorrente.email = usuario.email;
             usuarioCorrente.nome = usuario.nome;
 
-            const userJson = JSON.stringify(usuarioCorrente);
-            sessionStorage.setItem('usuarioCorrente', userJson);
-            sessionStorage.setItem('fp_user', userJson);
-            sessionStorage.setItem('user', userJson);
+            // Salva os dados do usuário corrente no Session Storage, mas antes converte para string
+            sessionStorage.setItem ('usuarioCorrente', JSON.stringify (usuarioCorrente));
 
+            // Retorna true para usuário encontrado
             return true;
         }
     }
 
+    // Se chegou até aqui é por que não encontrou o usuário e retorna falso
     return false;
 }
 
+// Apaga os dados do usuário corrente no sessionStorage
 function logoutUser () {
-    sessionStorage.removeItem('usuarioCorrente');
-    sessionStorage.removeItem('fp_user');
-    sessionStorage.removeItem('user');
-
+    sessionStorage.removeItem ('usuarioCorrente');
+    // Comentado para não redirecionar automaticamente
+    // window.location = LOGIN_URL;
 }
 
 function addUser (nome, login, senha, email) {
@@ -152,20 +139,15 @@ function showUserInfo (element) {
 // Inicializa as estruturas utilizadas pelo LoginApp
 initLoginApp ();
 
-// Login automático temporário para desenvolvimento - usando João Pedro que tem denúncias no db.json
-if (!sessionStorage.getItem('usuarioCorrente') && !sessionStorage.getItem('fp_user')) {
-    // Simula login do João Pedro (existe no db.json com denúncias)
+// Login automático temporário para desenvolvimento
+if (!sessionStorage.getItem('usuarioCorrente')) {
+    // Simula login do usuário joaozinho
     const usuarioTemp = {
-        id: 1,
-        login: "joao.pedro",
-        email: "joao.pedro@email.com",
-        nome: "João Pedro",
-        nomeCompleto: "João Pedro",
-        cidade: "Belo Horizonte"
+        id: 3,
+        login: "joaozinho",
+        email: "joaozinho@gmail.com",
+        nome: "Joãozinho"
     };
-    const userJson = JSON.stringify(usuarioTemp);
-    sessionStorage.setItem('usuarioCorrente', userJson);
-    sessionStorage.setItem('fp_user', userJson);
-    sessionStorage.setItem('user', userJson);
+    sessionStorage.setItem('usuarioCorrente', JSON.stringify(usuarioTemp));
     usuarioCorrente = usuarioTemp;
 }

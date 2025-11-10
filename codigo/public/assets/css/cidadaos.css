@@ -771,28 +771,6 @@ textarea.form-control {
     border-radius: 12px;
 }
 
-/* Impact list look & feel (escuro como o painel do usuário) */
-.user-impact h6{ color:#fff; font-weight:700 }
-.user-impact #user-impact-body{ color:#e9e9e9 }
-.impact-list{ background:transparent }
-.impact-list .impact-item{
-    background-color:#3f3f3f;
-    color:#f1f1f1;
-    border:1px solid rgba(255,255,255,0.08);
-}
-.impact-list .impact-item:hover{ background-color:#454545 }
-.impact-list .impact-item .text-muted{ color:#cfcfcf !important }
-.impact-scroll{ max-height:260px; overflow:auto; border-radius:8px }
-.impact-badge{ display:inline-flex; align-items:center; gap:8px }
-
-/* Modal escuro para detalhes de impacto */
-.impact-modal{ background-color:#f6f6f6; color:#222 }
-.impact-modal .modal-header, .impact-modal .modal-footer{ border-color:rgba(0,0,0,0.12) }
-.impact-modal .modal-title{ color:#222 }
-.impact-modal .btn-secondary{ background:#6c757d; border-color:#6c757d; color:#fff }
-.impact-modal .btn-secondary:hover{ background:#5a6268 }
-.impact-map{ height:180px; border-radius:8px; overflow:hidden; border:1px solid rgba(0,0,0,0.1) }
-
 /* Painel do mapa de ocorrências da cidade*/
 .occurrence-map{
     background-color: #f4f4f4;
