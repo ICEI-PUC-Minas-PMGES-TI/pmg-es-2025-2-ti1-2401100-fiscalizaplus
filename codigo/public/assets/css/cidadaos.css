@@ -1345,3 +1345,61 @@ button,input,select,textarea{ font:inherit }
 
 .votes{ color:#ef4444; font-weight:700; display:flex; align-items:center; gap:8px }
 .votes .dot{ font-size:18px }
+
+/* === Fórum mini (home) === */
+.forum-mini { color:#e9eef5; }
+.forum-mini__title{
+  font-weight:800; margin: 6px 8px 10px; color:#fff;
+}
+.forum-mini__list{
+  list-style:none; margin:0; padding:0; display:grid; gap:10px;
+}
+.forum-mini__item{
+  background:#2d3035; border:1px solid #3a3f46; border-radius:12px;
+  padding:10px; display:grid; grid-template-columns: 40px 1fr auto; gap:10px; align-items:center;
+}
+.forum-mini__avatar{
+  width:40px; height:40px; border-radius:50%;
+  display:grid; place-items:center; font-weight:900; color:#222;
+  background: linear-gradient(180deg,#ffd166,#f8961e);
+}
+.forum-mini__meta{
+  line-height:1.2;
+}
+.forum-mini__meta strong{ display:block; color:#fff; font-size:14px }
+.forum-mini__meta small{ color:#aeb7c4; font-size:12px }
+.forum-mini__titlepost{
+  display:block; color:#dfe6f0; font-weight:700; margin-top:2px; font-size:13px;
+}
+.forum-mini__right{
+  display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+}
+.forum-mini__vote.btn{
+  --c:#7c3aed;
+  border:1px solid var(--c); color:var(--c); background:transparent; padding:4px 8px;
+  border-radius:10px; font-weight:800; font-size:12px; line-height:1;
+}
+.forum-mini__vote.btn.is-voted{ background:var(--c); color:#fff }
+.forum-mini__votes{
+  color:#ffb3bd; font-weight:800; font-size:12px;
+}
+.forum-mini__bar{
+  height:8px; background:#e6ebf2; border-radius:999px; overflow:hidden;
+  box-shadow: inset 0 0 0 1px #cfd6df; grid-column: 1 / -1;
+}
+.forum-mini__bar > i{
+  display:block; height:100%; width:0%;
+  background: linear-gradient(90deg,#7c3aed,#8b5cf6);
+}
+.forum-mini__footer{
+  display:flex; justify-content:flex-end; margin-top:10px;
+}
+.forum-mini__footer a{ font-size:12px; text-decoration:none; color:#cdd6e3 }
+.forum-mini__skeleton{
+  display:grid; gap:10px;
+}
+.forum-mini__sk{
+  height:58px; border-radius:12px; background:linear-gradient(90deg,#2b2e33,#34393f,#2b2e33);
+  background-size:200% 100%; animation: fmShimmer 1.2s infinite linear;
+}
+@keyframes fmShimmer { to { background-position:-200% 0; } }
