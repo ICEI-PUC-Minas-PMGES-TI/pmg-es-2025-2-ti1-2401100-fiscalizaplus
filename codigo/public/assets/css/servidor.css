@@ -741,25 +741,103 @@ body {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* === Filtros de Visualização de Denúncias === */
+.filters {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.filters h2 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
 .filter-row {
   display: flex;
-  gap: 10px;
-  align-items: center;
   flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
 }
 
-button {
-  background-color: #1976d2;
-  color: white;
-  border: none;
+.filter-row label {
+  font-weight: 600;
+  color: #444;
+}
+
+.filter-row select,
+.filter-row input[type="date"] {
   padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  background-color: #125ca1;
+.filter-row select:focus,
+.filter-row input[type="date"]:focus {
+  border-color: #d62828;
+  box-shadow: 0 0 5px rgba(214, 40, 40, 0.3);
+  outline: none;
+}
+
+#btnFiltrar {
+  padding: 8px 15px;
+  border: 1px solid #d62828;
+  border-radius: 20px;
+  background-color: #d62828;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#btnFiltrar:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+}
+.acoes {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.acoes button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #d62828;
+  background-color: #d62828;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.acoes button:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+}
+
+.acoes #btnEnviar {
+  background-color: #d62828;
+  border-color: #d62828;
+}
+
+.acoes #btnEnviar:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
 }
 
 table {
@@ -768,7 +846,7 @@ table {
 }
 
 table th {
-  background-color: #1976d2;
+  background-color: #333;
   color: white;
   padding: 8px;
 }
@@ -784,6 +862,7 @@ table td {
   margin-left: 240px; /* reserva o espaço da sidebar */
   padding: 20px;
 }
+
 
 .footer {
   text-align: center;
