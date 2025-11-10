@@ -1,4 +1,5 @@
-*{
+/* Estilos Globais e Reset */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -6,683 +7,176 @@
     font-size: 14px;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background-color: #4a4a4a;
-  color: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow-y: auto;
-  padding-bottom: 20px;
-}
-
-
-.user-img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.nav-link {
-  color: #ffffffcc;
-  font-weight: 500;
-  transition: background 0.2s ease, color 0.2s ease;
-  border-radius: 6px;
-  padding: 8px 10px;
-}
-
-.nav-link:hover {
-  background-color: #5a5a5a;
-  color: white;
-}
-
-.nav-link.active {
-  background-color: #d62828;
-  color: white !important;
-}
-
-/* Conteúdo principal página Gerenciar denúncias */
-body {
-  background-color: #d9d9d9;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.main-content {
-  background-color: #e8e8e8;
-  border-radius: 10px;
-  margin: 20px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.search-box input {
-  border-radius: 8px 0 0 8px;
-}
-
-.search-box button {
-  border-radius: 0 8px 8px 0;
-}
-
-.arrow-down {
-  font-size: 1.2em;
-}
-
-.table thead th {
-  color: #c0392b;
-  font-weight: 600;
-  border-bottom: 2px solid #d3d3d3;
-}
-
-.table tbody td {
-  color: #333;
-  padding: 10px 8px;
-  vertical-align: middle;
-}
-
-.table tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
-.btn-outline-danger {
-  border-color: #d62828;
-  color: #d62828;
-}
-
-.btn-outline-danger:hover {
-  background-color: #d62828;
-  color: white;
-}
-
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 :root {
-  --azul-principal: #4a4b4D;
-  --azul-claro: #EAF0FF;
-  --cinza-fundo: #F5F6FA;
-  --texto: #333;
+    --azul-principal: #4a4b4D;
+    --azul-claro: #EAF0FF;
+    --cinza-fundo: #F5F6FA;
+    --texto: #333;
+    --cor-principal: #d62828; /* Definindo a cor principal (vermelho) */
 }
 
 * { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--cinza-fundo);
-  color: var(--texto);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cinza-fundo);
+    color: var(--texto);
 }
 
-/* Topbar used on client page */
+/* --- Layout Principal --- */
+.layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #4a4a4a;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    z-index: 1000; /* Sidebar acima do resto */
+}
+
+.user-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.nav-link {
+    color: #ffffffcc;
+    font-weight: 500;
+    transition: background 0.2s ease, color 0.2s ease;
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
+.nav-link:hover {
+    background-color: #5a5a5a;
+    color: white;
+}
+
+.nav-link.active {
+    background-color: var(--cor-principal);
+    color: white !important;
+}
+
+/* Topbar (Usado na página do Cliente) */
 .topbar {
-  background-color: var(--azul-principal);
-  color: white;
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background-color: var(--azul-principal);
+    color: white;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
-  font-weight: 600;
-  font-size: 1.3rem;
+    font-weight: 600;
+    font-size: 1.3rem;
 }
 
 .nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 15px;
-  font-weight: 500;
-  transition: 0.2s;
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: 0.2s;
 }
 
 .nav a:hover, .nav a.active {
-  text-decoration: underline;
-}
-
-.dashboard-container {
-  padding: 40px;
-}
-
-.titulo-dashboard {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-.subtitulo-dashboard {
-  color: #666;
-  margin-bottom: 30px;
-}
-
-.dashboard-area {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  padding: 20px;
-  flex: 1;
-  min-width: 250px;
-  text-align: center;
-}
-
-.card h2 {
-  color: var(--azul-principal);
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
-.card .valor {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #222;
+    text-decoration: underline;
 }
 
 .rodape {
-  text-align: center;
-  padding: 20px;
-  background: var(--azul-principal);
-  color: white;
-  margin-left: 240px;
-  text-align: center;
+    text-align: center;
+    padding: 20px;
+    background: var(--azul-principal);
+    color: white;
+    margin-left: 240px;
+    text-align: center;
 }
 
-/* ======== DASHBOARD ADMIN ======== */
-.layout {
-  display: flex;
-  min-height: 100vh;
-  position: relative;
-}
-
+/* --- Área de Conteúdo (Geral e Admin Dashboard) --- */
 .admin-dashboard {
-  margin-left: 240px;
-  padding: 40px;
-  flex: 1;
-  min-height: 100vh;
-  background-color: var(--cinza-fundo);
-  overflow-x: hidden;
-}
-
-.grafico-area {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.grafico-barra {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  height: 200px;
-  gap: 20px;
-  margin: 30px 0;
-}
-
-.grafico-barra .barra {
-  width: 60px;
-  border-radius: 8px 8px 0 0;
-}
-
-.barra.resolvido {
-  background-color: #4CAF50;
-}
-
-.barra.andamento {
-  background-color: #FFB300;
-}
-
-.barra.pendente {
-  background-color: #E53935;
-}
-
-.legenda {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-}
-
-.legenda span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 600;
-  color: var(--texto);
-}
-
-.legenda .resolvido::before,
-.legenda .andamento::before,
-.legenda .pendente::before {
-  content: "";
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 3px;
-}
-
-.legenda .resolvido::before { background-color: #4CAF50; }
-.legenda .andamento::before { background-color: #FFB300; }
-.legenda .pendente::before { background-color: #E53935; }
-
-.tabela-area {
-  margin-top: 30px;
-  overflow-x: auto;
-}
-
-.tabela-denuncias {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tabela-denuncias th,
-.tabela-denuncias td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-.tabela-denuncias th {
-  background-color: var(--azul-claro);
-  color: var(--azul-principal);
-}
-
-.status {
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.status.resolvido {
-  background-color: #c7f5c7;
-  color: #257b25;
-}
-
-.status.andamento {
-  background-color: #fff5c7;
-  color: #9a7b00;
-}
-
-.status.pendente {
-  background-color: #ffd6d6;
-  color: #9b1b1b;
-}
-
-/* Simple donut chart style using a circle element */
-.donut {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: conic-gradient(#4CAF50 0 120deg, #FFB300 120deg 160deg, #E53935 160deg 360deg);
-  margin: 18px auto;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
-  display: grid;
-  place-items: center;
-}
-
-.donut .center {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: white;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  color: var(--azul-principal);
-}
-
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    min-height: auto;
-  }
-  .grafico-barra {
-    gap: 10px;
-  }
-}
-/* Adicione ao seu CSS existente */
-.acoes {
-  display: flex;
-  gap: 5px;
-}
-
-.btn-editar {
-  background: #2196F3;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.btn-excluir {
-  background: #f44336;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.btn-editar:hover {
-  background: #1976D2;
-}
-
-.btn-excluir:hover {
-  background: #d32f2f;
-}
-
-.status.resolvido { background: #4CAF50; }
-.status.andamento { background: #FFB300; }
-.status.pendente { background: #E53935; }
-
-.status {
-  padding: 4px 8px;
-  border-radius: 12px;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Filtros */
-.filtros {
-  margin: 20px 0;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-
-.filtros select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-/* Estilos para o modal de status */
-.modal-status {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-status-content {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  width: 350px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.modal-status h3 {
-  margin: 0 0 15px 0;
-  color: #333;
-}
-
-.modal-status select {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.modal-status-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.btn-confirmar {
-  flex: 1;
-  padding: 10px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-cancelar {
-  flex: 1;
-  padding: 10px;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-confirmar:hover {
-  background: #45a049;
-}
-
-.btn-cancelar:hover {
-  background: #da190b;
-}
-
-/* Feedback notifications */
-.feedback-admin {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px 20px;
-  background: #4CAF50;
-  color: white;
-  border-radius: 4px;
-  z-index: 1001;
-  font-weight: bold;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Estilização da página de Mapa de ocorrências*/
-
-/* Estilos para a página de Mapa de Denúncias */
-.main-content-map {
     margin-left: 240px;
     padding: 40px;
     flex: 1;
     min-height: 100vh;
-    background-color: var(--cinza-fundo); 
+    background-color: var(--cinza-fundo);
     overflow-x: hidden;
 }
 
-/* Os filtros antigos (.filters-container, .filter-btn) não são mais usados com dropdowns, mas mantidos para referência */
-.filters-container {
-    display: flex;
-    gap: 10px; 
-    margin-bottom: 20px;
-    flex-wrap: wrap; 
+.main-content {
+    /* Estilo para a página Gerenciar Denúncias */
+    background-color: #e8e8e8;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
-.filter-btn {
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 20px; 
-    background-color: #f0f0f0;
-    color: #555;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap; 
+.main-content-map {
+    /* Estilo para a página Mapa de Ocorrências */
+    margin-left: 240px;
+    padding: 40px;
+    flex: 1;
+    min-height: 100vh;
+    background-color: var(--cinza-fundo);
+    overflow-x: hidden;
 }
 
-.filter-btn:hover {
-    background-color: #e0e0e0;
-    border-color: #bbb;
+/* Dashboard Stats */
+.dashboard-container {
+    padding: 40px;
 }
 
-.filter-btn.active {
-    background-color: #d62828; /* Cor vermelha do seu tema */
-    color: white;
-    border-color: #d62828;
-    box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
+.titulo-dashboard {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
 }
 
-/* Substituído por #map no novo layout com colunas, mas mantido para referência */
-.map-ocurrence {
-    width: 100%;
-    height: 700px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-
-.filter-btn.active {
-    background-color: var(--cor-principal, #d62828); 
-    color: white;
-    border-color: var(--cor-principal, #d62828);
-    box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
-}
-
-/* --- Estilização Adicional para o Novo Layout (Contadores, Filtros, Mapa e Sidebar) --- */
-
-/* Estilização específica para o mapa na coluna (usando o ID para maior especificidade) */
-#map {
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5); /* Sombra consistente com .map-ocurrence */
-}
-
-/* Estilização para o Painel de Detalhes (Sidebar) */
-#sidebar-details {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    border: none;
-}
-
-#sidebar-details .card-header {
-    background-color: var(--cor-principal, #d62828) !important;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 1rem;
-}
-
-#sidebar-details .btn-close-white {
-    opacity: 1;
-    filter: brightness(0) invert(1);
-}
-
-/* Estilo para as Imagens no Detalhe */
-#detail-imagens img {
-    border: 1px solid #ddd;
-    transition: transform 0.2s;
-    object-fit: cover;
-    height: 80px; /* Altura fixa para miniaturas */
-    width: 100%;
-    cursor: zoom-in;
-}
-#detail-imagens img:hover {
-    border-color: var(--cor-principal, #d62828);
-}
-
-/* --- Estilos para os Marcadores Leaflet Customizados --- */
-
-.custom-div-icon {
-    background: none !important; 
-    border: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Estilo do Pino */
-.custom-div-icon .marker-pin {
-    width: 30px;
-    height: 30px;
-    border-radius: 50% 50% 50% 0; 
-    background-color: #555; 
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -15px 0 0 -15px; 
-    transform: rotate(-45deg); 
-    box-shadow: 0 0 5px rgba(0,0,0,0.4); 
-}
-
-/* Estilo do Ícone interno (Reverte a rotação) */
-.custom-div-icon i {
-    font-size: 16px; 
-    color: white; 
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -8px 0 0 -8px; 
-    transform: rotate(45deg); 
-    z-index: 1; 
-}
-
-/* --- Cores dos Marcadores por Status --- */
-.marker-pending .marker-pin { 
-    background-color: #ffc107; 
-} 
-.marker-in-progress .marker-pin { 
-    background-color: var(--cor-principal, #d62828); 
-} 
-.marker-completed .marker-pin { 
-    background-color: #198754; 
-} 
-.marker-rejected .marker-pin { 
-    background-color: #6c757d; 
-}
-
-
-/* --- Estilos para o Popup do Leaflet --- */
-.popup-info .ver-detalhes-btn {
-    width: 100%; 
-    background-color: var(--cor-principal, #d62828); 
-    color: white;
-    border-color: var(--cor-principal, #d62828);
-    margin-top: 8px; 
-}
-.popup-info .ver-detalhes-btn:hover {
-    background-color: #a71f1f; 
-    border-color: #a71f1f;
-}
-
-.popup-info h5 {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-}
-.popup-info p {
-    font-size: 0.9em;
-    line-height: 1.3;
-    color: #444;
-}
-.popup-info .small {
-    font-size: 0.8em;
+.subtitulo-dashboard {
     color: #666;
+    margin-bottom: 30px;
 }
-.popup-info .badge {
-    font-size: 0.8em;
-    padding: 0.35em 0.6em;
+
+.dashboard-area {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+    border: none; /* Consolidado */
+}
+
+.card h2 {
+    color: var(--azul-principal);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.card .valor {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #222;
 }
 
 /* Estilização dos Cards de Contadores (Dashboard Stats) */
@@ -695,7 +189,284 @@ body {
     transform: translateY(-2px);
 }
 
-/* Ajustes nos Selects e Input de Busca (Busca por ID e Seletor de Mapa) */
+/* Gráficos e Tabelas */
+.grafico-area {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.grafico-barra {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 200px;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.grafico-barra .barra {
+    width: 60px;
+    border-radius: 8px 8px 0 0;
+}
+
+.barra.resolvido { background-color: #4CAF50; }
+.barra.andamento { background-color: #FFB300; }
+.barra.pendente { background-color: #E53935; }
+
+.legenda {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.legenda span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.legenda .resolvido::before,
+.legenda .andamento::before,
+.legenda .pendente::before {
+    content: "";
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+}
+
+.legenda .resolvido::before { background-color: #4CAF50; }
+.legenda .andamento::before { background-color: #FFB300; }
+.legenda .pendente::before { background-color: #E53935; }
+
+.tabela-area {
+    margin-top: 30px;
+    overflow-x: auto;
+}
+
+.tabela-denuncias {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela-denuncias th,
+.tabela-denuncias td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.tabela-denuncias th {
+    background-color: var(--azul-claro);
+    color: var(--azul-principal);
+}
+
+/* Tabela Gerenciar Denúncias */
+.table thead th {
+    color: #c0392b;
+    font-weight: 600;
+    border-bottom: 2px solid #d3d3d3;
+}
+
+.table tbody td {
+    color: #333;
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Status Badges */
+.status {
+    padding: 4px 8px;
+    border-radius: 12px; /* Maior para o estilo admin */
+    font-size: 12px;
+    font-weight: bold;
+    color: white; /* Consolidado: cor branca para todos os status */
+}
+
+.status.resolvido { background: #4CAF50; }
+.status.andamento { background: #FFB300; }
+.status.pendente { background: #E53935; }
+
+/* Donut Chart (Simples) */
+.donut {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(#4CAF50 0 120deg, #FFB300 120deg 160deg, #E53935 160deg 360deg);
+    margin: 18px auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
+    display: grid;
+    place-items: center;
+}
+
+.donut .center {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: white;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: var(--azul-principal);
+}
+
+/* --- Ações e Filtros (Gerenciar Denúncias) --- */
+.search-box input {
+    border-radius: 8px 0 0 8px;
+}
+
+.search-box button {
+    border-radius: 0 8px 8px 0;
+}
+
+.btn-outline-danger {
+    border-color: var(--cor-principal);
+    color: var(--cor-principal);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--cor-principal);
+    color: white;
+}
+
+.acoes {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-editar {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-excluir {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-editar:hover { background: #1976D2; }
+.btn-excluir:hover { background: #d32f2f; }
+
+
+/* Filtros */
+.filtros {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filtros select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* --- Modals e Feedback --- */
+.modal-status {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-status-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 350px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.modal-status h3 { margin: 0 0 15px 0; color: #333; }
+
+.modal-status select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-status-buttons { display: flex; gap: 10px; margin-top: 20px; }
+
+.btn-confirmar {
+    flex: 1; padding: 10px; background: #4CAF50; color: white; border: none;
+    border-radius: 4px; cursor: pointer;
+}
+
+.btn-cancelar {
+    flex: 1; padding: 10px; background: #f44336; color: white; border: none;
+    border-radius: 4px; cursor: pointer;
+}
+
+.btn-confirmar:hover { background: #45a049; }
+.btn-cancelar:hover { background: #da190b; }
+
+.feedback-admin {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    z-index: 1001;
+    font-weight: bold;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* --- Estilização do Mapa de Ocorrências --- */
+
+#map {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); 
+}
+
+/* Filtros do Mapa */
+.filter-btn {
+    padding: 8px 15px; border: 1px solid #ccc; border-radius: 20px;
+    background-color: #f0f0f0; color: #555; font-weight: 500; cursor: pointer;
+    transition: all 0.2s ease; white-space: nowrap;
+}
+
+.filter-btn:hover { background-color: #e0e0e0; border-color: #bbb; }
+
+.filter-btn.active {
+    background-color: var(--cor-principal); 
+    color: white; border-color: var(--cor-principal);
+    box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
+}
+
+/* Ajustes nos Selects e Input de Busca */
 #filters-container .form-select,
 #search-id-input,
 #map-view-selector {
@@ -709,6 +480,91 @@ body {
 #filter-status:focus,
 #filter-tipo:focus,
 #map-view-selector:focus {
-    border-color: rgba(214, 40, 40, 0.5); /* Foco na cor principal */
+    border-color: rgba(214, 40, 40, 0.5);
     box-shadow: 0 0 0 0.25rem rgba(214, 40, 40, 0.25);
+}
+
+
+#sidebar-details {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    border: none;
+}
+
+#sidebar-details .card-header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 1rem;
+}
+
+#detail-imagens img {
+    border: 1px solid #ddd;
+    transition: transform 0.2s;
+    object-fit: cover;
+    height: 80px;
+    width: 100%;
+    cursor: zoom-in;
+}
+
+/* --- Marcadores Leaflet Customizados --- */
+.custom-div-icon {
+    background: none !important; 
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-div-icon .marker-pin {
+    width: 30px; height: 30px;
+    border-radius: 50% 50% 50% 0; 
+    background-color: #555; 
+    position: absolute;
+    left: 50%; top: 50%;
+    margin: -15px 0 0 -15px; 
+    transform: rotate(-45deg); 
+    box-shadow: 0 0 5px rgba(0,0,0,0.4); 
+}
+
+.custom-div-icon i {
+    font-size: 16px; color: white; 
+    position: absolute;
+    left: 50%; top: 50%;
+    margin: -8px 0 0 -8px; 
+    transform: rotate(45deg); 
+    z-index: 1; 
+}
+
+/* Cores dos Marcadores por Status */
+.marker-pending .marker-pin { background-color: rgb(207, 9, 9); } 
+.marker-in-progress .marker-pin { background-color: #ffc107; } 
+.marker-completed .marker-pin { background-color: #198754; } 
+.marker-rejected .marker-pin { background-color: #6c757d; }
+
+/* Estilos para o Popup do Leaflet */
+.popup-info .ver-detalhes-btn {
+    width: 100%; background-color: var(--cor-principal); color: white;
+    border-color: var(--cor-principal); margin-top: 8px;
+}
+.popup-info .ver-detalhes-btn:hover { background-color: #a71f1f; border-color: #a71f1f; }
+.popup-info h5 { font-size: 1.1em; font-weight: bold; color: #333; margin-bottom: 5px; }
+.popup-info p { font-size: 0.9em; line-height: 1.3; color: #444; }
+.popup-info .small { font-size: 0.8em; color: #666; }
+.popup-info .badge { font-size: 0.8em; padding: 0.35em 0.6em; }
+
+/* --- Media Queries --- */
+@media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; flex-direction: row; justify-content: space-around; min-height: auto; }
+    .grafico-barra { gap: 10px; }
+    .admin-dashboard, .main-content-map { margin-left: 0; padding: 20px; }
+    .rodape { margin-left: 0; }
+}
+
+.leaflet-pane.leaflet-overlay-pane canvas.leaflet-heatmap-layer {
+    z-index: 400 !important; 
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    background-color: transparent !important; 
 }
