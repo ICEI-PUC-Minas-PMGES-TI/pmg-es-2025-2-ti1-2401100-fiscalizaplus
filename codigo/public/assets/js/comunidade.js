@@ -185,7 +185,7 @@ function initial(name=""){ return name.trim().charAt(0).toUpperCase() || "?"; }
 
 /* ====== NOVA DISCUSSÃO (Bootstrap + json-server) ====== */
 (() => {
-  const API = "http://localhost:3333/api"; // ajuste se usar outra porta
+  const API = "http://localhost:3000/api"; // ajuste se usar outra porta
   const form = document.getElementById("new-post-form");
   const modalEl = document.getElementById("newPostModal");
   if (!form || !modalEl) return;
