@@ -3352,25 +3352,41 @@
       "contatoCidadao": "",
       "recebeNotificacoes": true,
       "id": 117
+    },
+    {
+      "titulo": "Buraco encontrado na Cidade Administrativa",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Encontrei um buraco próximo da cidade administrativa no tunel central ",
+      "informacoesAdicionaisCidadao": "Risco de acidentes",
+      "codigoOcorrencia": "OCOR-0118",
+      "endereco": {
+        "rua": "MG-010",
+        "numero": "",
+        "bairro": "Serra Verde",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "31749-005",
+        "latitude": -19.7987162,
+        "longitude": -43.9502257
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-12T16:09:53.031Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-12T16:09:53.031Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "",
+      "recebeNotificacoes": true,
+      "id": 118
     }
   ],
   "admin": {
-    "numeroTotalCidadaosAtivos": 5,
-    "numeroTotalDenuncias": 2000,
-    "denunciasPorStatus": {
-      "Pendente": 800,
-      "Em Análise": 300,
-      "Em Atendimento": 400,
-      "Concluído": 500,
-      "Rejeitado": 0
-    },
-    "denunciasPorTipoProblema": {
-      "Iluminação Pública": 800,
-      "Buraco na Via": 600,
-      "Lixo Acumulado": 100,
-      "Semáforo Quebrado": 400,
-      "Árvore Caída": 100
-    },
     "ultimasAtividadesComunidade": [
       {
         "tipo": "Iluminacao",

@@ -20,38 +20,49 @@
 <body>
     <div class="layout">
         <aside class="sidebar d-flex flex-column p-3">
-            <a href="#">
-                <img src="../../assets/images/logo.png" alt="Logo"
-                    style="width : 150px; margin-left: 25px; margin-top: 15px;">
+            <a href="#" class="text-center mb-4">
+                <img src="https://placehold.co/150x50/343a40/ffffff?text=FiscalizaPlus" alt="Logo FiscalizaPlus"
+                    style="width : 150px; margin-top: 15px;">
             </a>
 
-            <div class="user-info text-center mb-4">
-                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuário" class="user-img mb-2">
-                <p class="mb-0 fw-semibold">Paulo Cardoso</p>
-                <p class="text-white-50 small">paulo@prefeitura.com</p>
+            <div class="user-info text-center mb-4 dropdown">
+                <a class="d-block dropdown-toggle text-decoration-none" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="color: white; cursor: pointer;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do Usuário Paulo Cardoso"
+                        class="user-img mb-2">
+                    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
+                    <p class="text-white-50 small">paulo@prefeitura.com</p>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark mx-auto text-start" style="width: 250px;">
+                    <li class="dropdown-header text-uppercase small">Conta & Sistema</li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i> Meu Perfil</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i> Notificações</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-journal-check me-2"></i> Registro de Atividades</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-tags me-2"></i> Gerenciar Categorias</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-stopwatch me-2"></i> Configurações</a></li> 
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i> Sair</a></li>
+                </ul>
             </div>
 
             <nav class="flex-grow-1">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a href="dashboard_admin.html" class="nav-link text-white"><i
-                                class="bi bi-house-door me-2"></i>Home</a>
+                        <a href="dashboard_admin.html" class="nav-link active"><i class="bi bi-house-door me-2"></i>Home</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="report_manager.html" class="nav-link "><i class="bi bi-gear me-2"></i>Gerenciar
-                            denúncias</a>
+                        <a href="report_manager.html" class="nav-link text-white"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="mapa_ocorrencias.html" class="nav-link text-white active"><i
-                                class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
+                        <a href="mapa_ocorrencias.html" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
                     </li>
                     <li class="nav-item mb-4">
-                        <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
+                        <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i
+                                class="bi bi-clipboard-data me-2"></i>Relatórios</a>
                     </li>
                 </ul>
             </nav>
-
-            <a href="#" class="nav-link text-danger mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Sair</a>
         </aside>
 
         <div class="main-content-map p-4">
