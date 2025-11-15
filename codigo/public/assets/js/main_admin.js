@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/denuncias";
+const API_URL = "/denuncias";
 
 // Paleta de cores padronizada
 const CORES = {
@@ -36,7 +36,7 @@ async function fetchDenuncias() {
     const data = await response.json();
     document.querySelector('#data-load-alert')?.classList.add('d-none');
     return data;
-  } catch (err) {
+  } catch (error) {
     document.querySelector('#data-load-alert')?.classList.remove('d-none');
     return [];
   }

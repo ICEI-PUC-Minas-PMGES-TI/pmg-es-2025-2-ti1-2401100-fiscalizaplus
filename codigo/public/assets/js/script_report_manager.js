@@ -1,94 +1,159 @@
-const statusList = ["Pendente", "Em análise", "Em andamento", "Concluído", "Rejeitado"];
-let todasDenuncias = []; // Armazena todas as denúncias para pesquisa posterior
+const URL_BASE = "/denuncias";
 
-// --- CONFIGURAÇÃO DA API ---
-const API_BASE_URL = 'http://localhost:3000'; 
-const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`; // Endpoint para buscar as denúncias
+document.addEventListener('DOMContentLoaded', () => {
 
-// Função principal para carregar as denúncias
-async function carregarDenuncias() {
-    try {
-        const response = await fetch(DENUNCIAS_ENDPOINT);
-        
-        if (!response.ok) {
-            throw new Error(`Erro HTTP! Status: ${response.status}`);
+    const tableBody = document.querySelector('tbody');
+    const cardElement = document.querySelector('.card');
+
+    // --- Estado da Aplicação ---
+    let allDenuncias = [];      
+    let currentPage = 1;        
+    const itemsPerPage = 25;  
+
+     /* Função Principal: Busca os dados e inicializa a tabela */
+    async function init() {
+        try {
+            const response = await fetch(URL_BASE); // Puxa os dados
+            if (!response.ok) {
+                throw new Error('Falha ao carregar denúncias.json');
+            }
+            allDenuncias = await response.json();
+            
+            renderTable();
+            setupPagination();
+            setupEventListeners();
+
+        } catch (error) {
+            console.error('Erro ao inicializar:', error);
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Erro ao carregar os dados.</td></tr>`;
         }
-        
-        const dados = await response.json();
-        todasDenuncias = dados; 
+    }
 
-        renderizarTabela(todasDenuncias);
+     /* Renderiza a tabela com os itens da página atual*/
+    function renderTable() {
+        // Limpa a tabela antes de desenhar
+        tableBody.innerHTML = '';
 
-        // Evento de pesquisa
-        const inputPesquisa = document.querySelector('input[type="text"]');
-        if (inputPesquisa) { 
-            inputPesquisa.addEventListener("input", (e) => {
-                const termo = e.target.value.toLowerCase().trim();
-                const filtradas = todasDenuncias.filter(denuncia =>
-                    denuncia.titulo.toLowerCase().includes(termo) ||
-                    denuncia.tipoProblema.toLowerCase().includes(termo) || 
-                    denuncia.endereco.rua.toLowerCase().includes(termo) || 
-                    denuncia.statusAtual.toLowerCase().includes(termo)     
-                );
-                renderizarTabela(filtradas);
+        // Calcula o "slice" (fatia) de dados para a página atual
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedItems = allDenuncias.slice(startIndex, endIndex);
+
+        // Cria o HTML para cada linha
+        paginatedItems.forEach(item => {
+            const tr = document.createElement('tr');
+            
+            // Formata a data para o padrão brasileiro
+            const dataFormatada = new Date(item.dataRegistro).toLocaleDateString('pt-BR', {
+                day: '2-digit', month: '2-digit', year: 'numeric'
             });
-        }
 
-    } catch (error) {
-        console.error("❌ Erro ao carregar denúncias:", error);
-        // Exibir uma mensagem de erro na UI se houver um elemento para isso
-        const tbody = document.querySelector("tbody");
-        if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Falha ao carregar as denúncias. ${error.message}</td></tr>`;
-        }
-    }
-}
-
-// Função para renderizar as denúncias na tabela
-function renderizarTabela(lista) {
-    const tbody = document.querySelector("tbody");
-    if (!tbody) {
-        console.error("Elemento tbody não encontrado.");
-        return;
-    }
-    tbody.innerHTML = ""; // Limpa a tabela antes de adicionar novos dados
-
-    if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center">Nenhuma denúncia encontrada.</td></tr>`;
-        return;
-    }
-
-    lista.forEach((denuncia) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${denuncia.titulo}</td>
-            <td>${denuncia.tipoProblema}</td>
-            <td class="status-col">${denuncia.statusAtual}</td>
-            <td>${formatarData(denuncia.dataRegistro)}</td>
-            <td class="text-center">
-                <a href="detalhes-denuncia.html?id=${denuncia.id}" class="btn btn-sm btn-primary">
-                    Ver Detalhes
-                </a>
+            tr.innerHTML = `
+                <td>${item.codigoOcorrencia}</td>
+                <td>${item.tipoProblema}</td>
+                <td>
+                    <span class="badge ${getStatusClass(item.statusAtual)}">${item.statusAtual}</span>
                 </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-// Função para formatar data ISO em formato BR
-function formatarData(dataISO) {
-    try {
-        const data = new Date(dataISO);
-        // Verifica se a data é válida antes de formatar
-        if (isNaN(data.getTime())) {
-            return "Data inválida";
-        }
-        return data.toLocaleDateString("pt-BR");
-    } catch (e) {
-        console.error("Erro ao formatar data:", e);
-        return "Data inválida";
+                <td>${dataFormatada}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary btn-visualizar" data-id="${item.id}">
+                        <i class="bi bi-eye me-1"></i> Visualizar
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
     }
-}
 
-// Inicializa o carregamento das denúncias quando a página estiver totalmente carregada
-document.addEventListener("DOMContentLoaded", carregarDenuncias);
+    /* Cria e renderiza os controles de paginação (1, 2, 3...)*/
+    function setupPagination() {
+        const totalPages = Math.ceil(allDenuncias.length / itemsPerPage);
+        
+        // Remove a paginação antiga, se existir
+        const oldPagination = document.getElementById('pagination-container');
+        if (oldPagination) {
+            oldPagination.remove();
+        }
+
+        // Cria o container da paginação
+        const paginationContainer = document.createElement('div');
+        paginationContainer.id = 'pagination-container';
+        paginationContainer.classList.add('d-flex', 'justify-content-center', 'mt-4'); // Centraliza
+
+        let paginationHTML = '<nav><ul class="pagination">';
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+        }
+
+        paginationHTML += '</ul></nav>';
+        paginationContainer.innerHTML = paginationHTML;
+        
+        // Adiciona a paginação ao final do card
+        cardElement.appendChild(paginationContainer);
+    }
+
+    /**
+     * Adiciona os "ouvintes" de eventos para a paginação e botões
+     * Usamos delegação de eventos para performance
+     */
+    function setupEventListeners() {
+        
+        // 1. Ouvinte para os cliques na PAGINAÇÃO
+        cardElement.addEventListener('click', (e) => {
+            // Verifica se o clique foi em um link de página
+            if (e.target.classList.contains('page-link')) {
+                e.preventDefault(); // Impede o link de navegar
+                const page = parseInt(e.target.dataset.page, 10);
+
+                if (page !== currentPage) {
+                    currentPage = page;
+                    renderTable();       // Redesenha a tabela com os novos itens
+                    setupPagination();   // Redesenha a paginação para marcar o 'active'
+                }
+            }
+        });
+
+        // 2. Ouvinte para os cliques nos botões "VISUALIZAR"
+        tableBody.addEventListener('click', (e) => {
+            // Encontra o botão mais próximo que foi clicado
+            const button = e.target.closest('.btn-visualizar');
+            if (button) {
+                const denunciaId = button.dataset.id;
+                visualizarDenuncia(denunciaId);
+            }
+        });
+    }
+
+    /**
+     * Ação do botão "Visualizar"
+     */
+    function visualizarDenuncia(id) {
+        console.log('Visualizando denúncia com ID:', id);
+        // Aqui você pode, por exemplo, abrir um modal ou navegar para outra página
+        alert(`Você clicou para visualizar a denúncia: ${id}`);
+    }
+
+    /**
+     * Helper: Retorna uma classe de cor do Bootstrap com base no status
+     */
+    function getStatusClass(status) {
+        switch (status.toLowerCase()) {
+            case 'aberto':
+                return 'bg-danger';
+            case 'em andamento':
+                return 'bg-warning text-dark'; // 'text-dark' para melhor leitura em fundo amarelo
+            case 'resolvido':
+                return 'bg-success';
+            default:
+                return 'bg-secondary';
+        }
+    }
+
+    // Inicia a aplicação
+    init();
+});

@@ -64,7 +64,6 @@ function initMap() {
     map = L.map('map', {
         center: bhCenter,
         zoom: 13,
-        maxBounds: bhBounds,
         maxBoundsViscosity: 1.0,
         zoomControl: true,
         scrollWheelZoom: true,

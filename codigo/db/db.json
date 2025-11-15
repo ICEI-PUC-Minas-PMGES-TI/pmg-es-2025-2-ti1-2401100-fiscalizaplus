@@ -3384,6 +3384,38 @@
       "contatoCidadao": "",
       "recebeNotificacoes": true,
       "id": 118
+    },
+    {
+      "titulo": "Buraco encontrado na rua Dom José Gaspar",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "dadadad",
+      "informacoesAdicionaisCidadao": "dadadad",
+      "codigoOcorrencia": "OCOR-0119",
+      "endereco": {
+        "rua": "Avenida Dom José Gaspar",
+        "numero": "",
+        "bairro": "Coração Eucarístico",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30535-610",
+        "latitude": -19.922073893296147,
+        "longitude": -43.98921503727656
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-15T03:04:18.840Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-15T03:04:18.840Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "",
+      "recebeNotificacoes": false,
+      "id": 119
     }
   ],
   "admin": {
