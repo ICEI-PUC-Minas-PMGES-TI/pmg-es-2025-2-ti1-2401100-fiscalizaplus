@@ -152,19 +152,21 @@
     btn.classList.toggle("is-voted", voted);
   }
 
-  // ----- helpers -----
-  const votedKey = "fiscaliza.community.voted";
-  function getVotedSet(){ return new Set(JSON.parse(localStorage.getItem(votedKey) || "[]")); }
-  function saveVotedSet(s){ localStorage.setItem(votedKey, JSON.stringify([...s])); }
-  function hasVoted(id){ return getVotedSet().has(id); }
-  function setVoted(id){ const s=getVotedSet(); s.add(id); saveVotedSet(s); }
-  function unsetVoted(id){ const s=getVotedSet(); s.delete(id); saveVotedSet(s); }
+    // ----- helpers -----
+  const votedInSession = new Set(); // controla votos só enquanto a aba estiver aberta
+
+  function hasVoted(id){ return votedInSession.has(String(id)); }
+  function setVoted(id){ votedInSession.add(String(id)); }
+  function unsetVoted(id){ votedInSession.delete(String(id)); }
 
   function initial(n=""){ return n.trim().charAt(0).toUpperCase() || "?"; }
-  function esc(s=""){ return String(s).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c])); }
+  function esc(s=""){ return String(s).replace(/[&<>"']/g, c => (
+    { "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]
+  )); }
   function timeago(iso){
     const d=new Date(iso), diff=(Date.now()-d.getTime())/1000, h=Math.floor(diff/3600);
     if(h<1){ const m=Math.max(1,Math.floor(diff/60)); return `${m} min atrás`; }
     return `${h}h atrás`;
   }
 })();
+

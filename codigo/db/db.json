@@ -1,4 +1,5 @@
 {
+  
   "cidadaos": [
     {
       "id": 1,
@@ -84,7 +85,10 @@
       "nome": "Secretaria de Meio Ambiente",
       "emailContato": "meioambiente@prefeitura.com"
     }
+
+
   ],
+  
   "denuncias": [
     {
       "titulo": "buraco na Rua dos Pampas, Prado, Belo Horizonte",
@@ -3418,7 +3422,7 @@
       "id": 119
     }
   ],
-  "admin": {
+    "admin": {
     "ultimasAtividadesComunidade": [
       {
         "tipo": "Iluminacao",
@@ -3436,5 +3440,35 @@
         "quantidade": 800
       }
     ]
-  }
+  },
+
+  "comunidade": [
+    {
+      "id": 1,
+      "author": "Joãozinho Silva",
+      "createdAt": "2025-11-10T10:00:00.000Z",
+      "title": "Buraco perigoso na avenida",
+      "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
+      "category": "transito",
+      "votes": 25
+    },
+    {
+      "id": 2,
+      "author": "Fernanda Lima",
+      "createdAt": "2025-11-11T15:30:00.000Z",
+      "title": "Sugestão de faixa de pedestre",
+      "excerpt": "Seria importante adicionar uma faixa perto da escola...",
+      "category": "sugestoes",
+      "votes": 12
+    },
+    {
+      "id": 3,
+      "author": "Rafael Santos",
+      "createdAt": "2025-11-12T09:15:00.000Z",
+      "title": "Alagamento recorrente na esquina",
+      "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
+      "category": "meioambiente",
+      "votes": 7
+    }
+  ]
 }
