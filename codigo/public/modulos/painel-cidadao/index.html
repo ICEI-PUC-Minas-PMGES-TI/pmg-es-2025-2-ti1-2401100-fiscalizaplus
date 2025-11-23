@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiscalizaPlus</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../assets/css/cidadaos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="../../assets/images/logo.png" alt="Logo" class="navbar-logo">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenuLg">
+                
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="comunidade/comunidade.html">Comunidade</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard_cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Guia do Cidadão</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="painel-de-usuario/index.html">Painel do Usuário</a>
+                    </li>
+                </ul>
+
+                <div class="navbar-user d-flex align-items-center dropdown">
+                    <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;" id="nomeUsuarioNav">Olá, Joãozinho</span>
+                    <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-circle-user user-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="../../index.html">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body d-flex flex-column">
+                    <ul class="navbar-nav flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../comunidade/comunidade.html">Comunidade</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard_cidadao/dashboard_cliente.html">Dashboard de
+                                Ocorrências</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Guia do Cidadão</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="painel-de-usuario/index.html">Painel do
+                                Usuário</a>
+                        </li>
+                    </ul>
+
+                    <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
+                        <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+                        <a href="#" class="user-icon-link">
+                            <i class="fa-solid fa-circle-user user-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <main>
+        <div class="container-fluid conteiner-main">
+            <!-- Header Section com Boas-vindas -->
+            <div class="welcome-header">
+                <div class="welcome-content">
+                    <h1 class="welcome-title">Bem-vindo de volta, <span id="welcome-name">Joãozinho</span>!</h1>
+                    <p class="welcome-subtitle">Acompanhe suas denúncias e o que está acontecendo na sua cidade</p>
+                </div>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-file-circle-exclamation"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="quick-total">-</div>
+                            <div class="stat-label">Total de Denúncias</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon resolved"><i class="fa-solid fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="quick-resolved">-</div>
+                            <div class="stat-label">Resolvidas</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon in-progress"><i class="fa-solid fa-clock"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="quick-progress">-</div>
+                            <div class="stat-label">Em Andamento</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layout Principal - 3 Colunas Iguais -->
+            <div class="row gx-4">
+                <!-- Coluna 1: Painel do Usuário e Impacto -->
+                <div class="col-md-4">
+                    <div class="user-preview">
+                        <div class="user-panel">
+                            <h2 class="user-preview-title">Painel do usuário</h2>
+                            <h3 id="user-name">Olá, Joãozinho</h3>
+                            <p id="user-email">joaozinho@gmail.com</p>
+                            <hr>
+                            <p style="font-weight: 600; color: #d1d1d1; margin-bottom: 12px;">Minhas últimas denúncias</p>
+                            <div id="ultimas-denuncias" class="ultimas-denuncias-container">
+                                <p class="text-muted small">Carregando...</p>
+                            </div>
+                            <a href="reportar-ocorrências/newreport.html" style="text-decoration: none;">
+                                <button class="btn-create-report">
+                                    <p>Reportar um novo problema</p>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="user-impact mt-3">
+                        <h6 class="mb-3" style="font-size: 1.1rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-chart-line"></i> Seu impacto
+                        </h6>
+                        <div id="user-impact-body">
+                            <p class="text-muted small">Carregando...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Mapa e Destaques -->
+                <div class="col-md-4">
+                    <div class="occurrence-map">
+                        <h6 class="mb-3" style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-map-location-dot"></i> Mapa de ocorrências
+                        </h6>
+                        <div id="occurrence-map-canvas"
+                            style="height:360px; width:100%; border-radius:12px; position: relative; z-index: 0;"></div>
+                    </div>
+                    <div class="users-highlights mt-3">
+                        <h6 class="mb-3" style="font-size: 1.1rem; font-weight: 700; color: #2d3748; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-fire"></i> Destaques da Comunidade
+                        </h6>
+                        <div id="forum-highlights" class="forum-mini" aria-live="polite" aria-busy="true"></div>
+                    </div>
+                </div>
+
+                <!-- Coluna 3: Relatos Recentes -->
+                <div class="col-md-4 d-flex flex-column">
+                    <div class="flex-grow-1 recent-reports">
+                        <h6 class="mb-3" style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-newspaper"></i> Relatos Recentes na Cidade
+                        </h6>
+                        <ul id="recent-reports-list" class="list-group list-group-flush"
+                            style="max-height: 700px; overflow-y: auto;">
+                            <li class="list-group-item" style="background: transparent; border: none; color: #EDEDED; padding: 12px 20px;">Carregando relatos...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/login.js"></script>
+  <script src="../../assets/js/occurrence-map.js"></script>
+  <script src="../../assets/js/painel-usuario.js"></script>
+  <script type="module" src="../../assets/js/forum-highlights.js"></script>
+        <div class="modal fade" id="impact-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content impact-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="impact-detail-title">Detalhes da ocorrência</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2"><span class="badge rounded-pill bg-success" id="impact-detail-status">Resolvido</span></div>
+                    <div class="small text-muted mb-2" id="impact-detail-dates"></div>
+                    <div class="mb-1 fw-semibold">Tipo</div>
+                    <div class="mb-3" id="impact-detail-type">-</div>
+                    <div class="mb-1 fw-semibold">Descrição</div>
+                    <div id="impact-detail-desc">-</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
