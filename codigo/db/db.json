@@ -1,8 +1,7 @@
 {
-  
   "cidadaos": [
     {
-      "id": 1,
+      "id": "1",
       "nomeCompleto": "João Pedro",
       "email": "joao.pedro@email.com",
       "senhaHash": "hash_da_senha",
@@ -11,7 +10,7 @@
       "dataCadastro": "2023-10-26T10:00:00Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "nomeCompleto": "Maria Luiza",
       "email": "maria.luiza@email.com",
       "senhaHash": "hash_da_senha",
@@ -20,7 +19,7 @@
       "dataCadastro": "2023-10-27T11:30:00Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "nomeCompleto": "Carlos Silva",
       "email": "carlos.silva@email.com",
       "senhaHash": "hash_da_senha",
@@ -31,7 +30,7 @@
   ],
   "servidores": [
     {
-      "id": 101,
+      "id": "101",
       "nomeCompleto": "Paulo Cardoso",
       "email": "paulo@prefeitura.com",
       "senhaHash": "hash_da_senha",
@@ -41,7 +40,7 @@
       "dataCadastro": "2023-10-25T09:00:00Z"
     },
     {
-      "id": 102,
+      "id": "102",
       "nomeCompleto": "Paula Fernandes",
       "email": "paula@prefeitura.com",
       "senhaHash": "hash_da_senha",
@@ -55,40 +54,39 @@
     {
       "token": "A1B9-C3D7-E5F2-G4H8",
       "usado": false,
-      "dataCriacao": "2023-10-01T08:00:00Z"
+      "dataCriacao": "2023-10-01T08:00:00Z",
+      "id": "24c7"
     },
     {
       "token": "Z9Y2-X4W6-V8U1-T3S5",
       "usado": true,
       "dataUso": "2023-10-25T09:00:00Z",
-      "servidorId": 101
+      "servidorId": 101,
+      "id": "9413"
     }
   ],
   "orgaosMunicipais": [
     {
-      "id": 1,
+      "id": "1",
       "nome": "Secretaria de Obras",
       "emailContato": "obras@prefeitura.com"
     },
     {
-      "id": 2,
+      "id": "2",
       "nome": "Secretaria de Trânsito",
       "emailContato": "transito@prefeitura.com"
     },
     {
-      "id": 3,
+      "id": "3",
       "nome": "Defesa Civil",
       "emailContato": "defesacivil@prefeitura.com"
     },
     {
-      "id": 4,
+      "id": "4",
       "nome": "Secretaria de Meio Ambiente",
       "emailContato": "meioambiente@prefeitura.com"
     }
-
-
   ],
-  
   "denuncias": [
     {
       "titulo": "buraco na Rua dos Pampas, Prado, Belo Horizonte",
@@ -122,7 +120,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 1
+      "id": "1"
     },
     {
       "titulo": "Buraco encontrado na rua das Flores",
@@ -156,7 +154,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "joao.pedro@email.com",
       "recebeNotificacoes": true,
-      "id": 2
+      "id": "2"
     },
     {
       "titulo": "Poste de luz com fiação exposta",
@@ -190,7 +188,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 3
+      "id": "3"
     },
     {
       "titulo": "Semaforo quebrado na Av. do Contorno",
@@ -224,7 +222,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 4
+      "id": "4"
     },
     {
       "titulo": "Árvore caída na rua da Bahia",
@@ -258,7 +256,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "maria.luiza@email.com",
       "recebeNotificacoes": true,
-      "id": 5
+      "id": "5"
     },
     {
       "titulo": "Iluminação pública falha no bairro Floresta",
@@ -292,7 +290,7 @@
       "servidorResponsavelId": 102,
       "contatoCidadao": "carlos.silva@email.com",
       "recebeNotificacoes": true,
-      "id": 6
+      "id": "6"
     },
     {
       "titulo": "Entulho irregular descartado em lote vago",
@@ -326,7 +324,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 7
+      "id": "7"
     },
     {
       "titulo": "Pichações em prédio histórico",
@@ -360,7 +358,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "joao.pedro@email.com",
       "recebeNotificacoes": true,
-      "id": 8
+      "id": "8"
     },
     {
       "titulo": "Vazamento de água na rua",
@@ -394,7 +392,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 9
+      "id": "9"
     },
     {
       "titulo": "Calçada esburacada na Rua Curitiba",
@@ -426,7 +424,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "maria.luiza@email.com",
       "recebeNotificacoes": true,
-      "id": 10
+      "id": "10"
     },
     {
       "titulo": "Árvore com risco de queda",
@@ -460,7 +458,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "carlos.silva@email.com",
       "recebeNotificacoes": true,
-      "id": 11
+      "id": "11"
     },
     {
       "titulo": "Lâmpada queimada na Praça da Liberdade",
@@ -492,7 +490,7 @@
       "servidorResponsavelId": 102,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 12
+      "id": "12"
     },
     {
       "titulo": "Ponto de ônibus depredado",
@@ -524,7 +522,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "joao.pedro@email.com",
       "recebeNotificacoes": true,
-      "id": 13
+      "id": "13"
     },
     {
       "titulo": "Animal morto na rua",
@@ -556,7 +554,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 14
+      "id": "14"
     },
     {
       "titulo": "Boca de lobo entupida",
@@ -590,7 +588,7 @@
       "servidorResponsavelId": 101,
       "contatoCidadao": "carlos.silva@email.com",
       "recebeNotificacoes": true,
-      "id": 15
+      "id": "15"
     },
     {
       "titulo": "Ponto de ônibus sem cobertura",
@@ -622,7 +620,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 16
+      "id": "16"
     },
     {
       "titulo": "Buraco na Rua Nova do Bairro X",
@@ -649,7 +647,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T01:00:00Z",
-      "id": 17
+      "id": "17"
     },
     {
       "titulo": "Lixo acumulado na esquina",
@@ -676,7 +674,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T09:00:00Z",
-      "id": 18
+      "id": "18"
     },
     {
       "titulo": "Poste sem luz",
@@ -703,7 +701,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T15:00:00Z",
-      "id": 19
+      "id": "19"
     },
     {
       "titulo": "Tijolos na calçada",
@@ -730,7 +728,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T04:00:00Z",
-      "id": 20
+      "id": "20"
     },
     {
       "titulo": "Buraco perigoso",
@@ -757,7 +755,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T10:00:00Z",
-      "id": 21
+      "id": "21"
     },
     {
       "titulo": "Vazamento no hidrante",
@@ -784,7 +782,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T06:00:00Z",
-      "id": 22
+      "id": "22"
     },
     {
       "titulo": "Falta de limpeza",
@@ -811,7 +809,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T11:00:00Z",
-      "id": 23
+      "id": "23"
     },
     {
       "titulo": "Lâmpada piscando",
@@ -838,7 +836,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T16:00:00Z",
-      "id": 24
+      "id": "24"
     },
     {
       "titulo": "Trânsito perigoso",
@@ -865,7 +863,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T09:00:00Z",
-      "id": 25
+      "id": "25"
     },
     {
       "titulo": "Buraco na entrada",
@@ -892,7 +890,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T12:00:00Z",
-      "id": 26
+      "id": "26"
     },
     {
       "titulo": "Lâmpada na praça",
@@ -919,7 +917,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T17:00:00Z",
-      "id": 27
+      "id": "27"
     },
     {
       "titulo": "Árvore precisa de poda",
@@ -946,7 +944,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T12:00:00Z",
-      "id": 28
+      "id": "28"
     },
     {
       "titulo": "Pichação recorrente",
@@ -973,7 +971,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T13:00:00Z",
-      "id": 29
+      "id": "29"
     },
     {
       "titulo": "Obstrução de calçada",
@@ -1000,7 +998,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T13:00:00Z",
-      "id": 30
+      "id": "30"
     },
     {
       "titulo": "Iluminação ruim",
@@ -1027,7 +1025,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T18:00:00Z",
-      "id": 31
+      "id": "31"
     },
     {
       "titulo": "Vazamento esgoto",
@@ -1054,7 +1052,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T16:00:00Z",
-      "id": 32
+      "id": "32"
     },
     {
       "titulo": "Semáforo estragado",
@@ -1081,7 +1079,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T14:00:00Z",
-      "id": 33
+      "id": "33"
     },
     {
       "titulo": "Buraco perto do hospital",
@@ -1108,7 +1106,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T19:00:00Z",
-      "id": 34
+      "id": "34"
     },
     {
       "titulo": "Lâmpada queimada na escola",
@@ -1135,7 +1133,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T19:00:00Z",
-      "id": 35
+      "id": "35"
     },
     {
       "titulo": "Bueiro entupido",
@@ -1162,7 +1160,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T15:00:00Z",
-      "id": 36
+      "id": "36"
     },
     {
       "titulo": "Lixeira pública quebrada",
@@ -1189,7 +1187,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T20:00:00Z",
-      "id": 37
+      "id": "37"
     },
     {
       "titulo": "Semáforo desregulado",
@@ -1216,7 +1214,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-23T22:00:00Z",
-      "id": 38
+      "id": "38"
     },
     {
       "titulo": "Placa de rua caída",
@@ -1243,7 +1241,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T16:00:00Z",
-      "id": 39
+      "id": "39"
     },
     {
       "titulo": "Lâmpada do viaduto queimada",
@@ -1270,7 +1268,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T00:00:00Z",
-      "id": 40
+      "id": "40"
     },
     {
       "titulo": "Calçada irregular",
@@ -1297,7 +1295,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T21:00:00Z",
-      "id": 41
+      "id": "41"
     },
     {
       "titulo": "Lixo em área de preservação",
@@ -1324,7 +1322,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T02:00:00Z",
-      "id": 42
+      "id": "42"
     },
     {
       "titulo": "Lâmpada na Rua Paraná",
@@ -1351,7 +1349,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T17:00:00Z",
-      "id": 43
+      "id": "43"
     },
     {
       "titulo": "Buraco após reparo da Copasa",
@@ -1378,7 +1376,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T22:00:00Z",
-      "id": 44
+      "id": "44"
     },
     {
       "titulo": "Mato alto no passeio",
@@ -1405,7 +1403,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T05:00:00Z",
-      "id": 45
+      "id": "45"
     },
     {
       "titulo": "Sinalização de trânsito apagada",
@@ -1432,7 +1430,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T18:00:00Z",
-      "id": 46
+      "id": "46"
     },
     {
       "titulo": "Buraco na entrada da cidade",
@@ -1459,7 +1457,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-24T23:00:00Z",
-      "id": 47
+      "id": "47"
     },
     {
       "titulo": "Lâmpada do estacionamento apagada",
@@ -1486,7 +1484,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T08:00:00Z",
-      "id": 48
+      "id": "48"
     },
     {
       "titulo": "Calçada com lodo",
@@ -1513,7 +1511,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T19:00:00Z",
-      "id": 49
+      "id": "49"
     },
     {
       "titulo": "Rua esburacada",
@@ -1540,7 +1538,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T08:00:00Z",
-      "id": 50
+      "id": "50"
     },
     {
       "titulo": "Lâmpada no parque apagada",
@@ -1567,7 +1565,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T11:00:00Z",
-      "id": 51
+      "id": "51"
     },
     {
       "titulo": "Buraco na pista expressa",
@@ -1594,7 +1592,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T09:00:00Z",
-      "id": 52
+      "id": "52"
     },
     {
       "titulo": "Sinalização danificada",
@@ -1621,7 +1619,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T10:00:00Z",
-      "id": 53
+      "id": "53"
     },
     {
       "titulo": "Lixo eletrônico descartado",
@@ -1648,7 +1646,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T14:00:00Z",
-      "id": 54
+      "id": "54"
     },
     {
       "titulo": "Calçada da praça afundando",
@@ -1675,7 +1673,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T11:00:00Z",
-      "id": 55
+      "id": "55"
     },
     {
       "titulo": "Lâmpada do coreto queimada",
@@ -1702,7 +1700,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T12:00:00Z",
-      "id": 56
+      "id": "56"
     },
     {
       "titulo": "Muro de contenção rachado",
@@ -1729,7 +1727,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T17:00:00Z",
-      "id": 57
+      "id": "57"
     },
     {
       "titulo": "Sinalização de estacionamento incorreta",
@@ -1756,7 +1754,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T13:00:00Z",
-      "id": 58
+      "id": "58"
     },
     {
       "titulo": "Buraco perto do ponto de ônibus",
@@ -1783,7 +1781,7 @@
       "isAnonimo": true,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T14:00:00Z",
-      "id": 59
+      "id": "59"
     },
     {
       "titulo": "Lâmpada no beco apagada",
@@ -1810,7 +1808,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T20:00:00Z",
-      "id": 60
+      "id": "60"
     },
     {
       "titulo": "Lixo em frente ao comércio",
@@ -1837,7 +1835,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T15:00:00Z",
-      "id": 61
+      "id": "61"
     },
     {
       "titulo": "Buraco perto do parque",
@@ -1864,7 +1862,7 @@
       "isAnonimo": true,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T16:00:00Z",
-      "id": 62
+      "id": "62"
     },
     {
       "titulo": "Lâmpada no posto de saúde",
@@ -1891,7 +1889,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-24T23:00:00Z",
-      "id": 63
+      "id": "63"
     },
     {
       "titulo": "Calçada danificada",
@@ -1918,7 +1916,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T17:00:00Z",
-      "id": 64
+      "id": "64"
     },
     {
       "titulo": "Entulho no meio-fio",
@@ -1945,7 +1943,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T18:00:00Z",
-      "id": 65
+      "id": "65"
     },
     {
       "titulo": "Sinalização de lombada",
@@ -1972,7 +1970,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-25T02:00:00Z",
-      "id": 66
+      "id": "66"
     },
     {
       "titulo": "Buraco perto da escola",
@@ -1999,7 +1997,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T19:00:00Z",
-      "id": 67
+      "id": "67"
     },
     {
       "titulo": "Lâmpada do campo de futebol",
@@ -2026,7 +2024,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T20:00:00Z",
-      "id": 68
+      "id": "68"
     },
     {
       "titulo": "Lixo em terreno baldio",
@@ -2053,7 +2051,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-25T05:00:00Z",
-      "id": 69
+      "id": "69"
     },
     {
       "titulo": "Poste de luz inclinado",
@@ -2080,7 +2078,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T21:00:00Z",
-      "id": 70
+      "id": "70"
     },
     {
       "titulo": "Iluminação em praça",
@@ -2107,7 +2105,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-25T22:00:00Z",
-      "id": 71
+      "id": "71"
     },
     {
       "titulo": "Rua sem asfalto",
@@ -2134,7 +2132,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-25T08:00:00Z",
-      "id": 72
+      "id": "72"
     },
     {
       "titulo": "Sinalização de trânsito coberta",
@@ -2161,7 +2159,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-25T23:00:00Z",
-      "id": 73
+      "id": "73"
     },
     {
       "titulo": "Lixo de hospital",
@@ -2188,7 +2186,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-26T08:00:00Z",
-      "id": 74
+      "id": "74"
     },
     {
       "titulo": "Buraco na porta da loja",
@@ -2215,7 +2213,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-25T11:00:00Z",
-      "id": 75
+      "id": "75"
     },
     {
       "titulo": "Lâmpada perto do supermercado",
@@ -2242,7 +2240,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-26T09:00:00Z",
-      "id": 76
+      "id": "76"
     },
     {
       "titulo": "Vazamento em calçada",
@@ -2269,7 +2267,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-26T10:00:00Z",
-      "id": 77
+      "id": "77"
     },
     {
       "titulo": "Lixo em frente à creche",
@@ -2296,7 +2294,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-25T14:00:00Z",
-      "id": 78
+      "id": "78"
     },
     {
       "titulo": "Buraco na rua principal",
@@ -2323,7 +2321,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-26T11:00:00Z",
-      "id": 79
+      "id": "79"
     },
     {
       "titulo": "Lâmpada no final da rua",
@@ -2350,7 +2348,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-26T12:00:00Z",
-      "id": 80
+      "id": "80"
     },
     {
       "titulo": "Sinalização danificada por acidente",
@@ -2377,7 +2375,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-25T17:00:00Z",
-      "id": 81
+      "id": "81"
     },
     {
       "titulo": "Buraco perto da lixeira",
@@ -2404,7 +2402,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-26T13:00:00Z",
-      "id": 82
+      "id": "82"
     },
     {
       "titulo": "Lâmpada no campo do cruzeiro",
@@ -2431,7 +2429,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-26T14:00:00Z",
-      "id": 83
+      "id": "83"
     },
     {
       "titulo": "Entulho em área de lazer",
@@ -2458,7 +2456,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-25T20:00:00Z",
-      "id": 84
+      "id": "84"
     },
     {
       "titulo": "Buraco perto da igreja",
@@ -2485,7 +2483,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-26T15:00:00Z",
-      "id": 85
+      "id": "85"
     },
     {
       "titulo": "Lâmpada na passarela apagada",
@@ -2512,7 +2510,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-26T16:00:00Z",
-      "id": 86
+      "id": "86"
     },
     {
       "titulo": "Calçada cedendo",
@@ -2539,7 +2537,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-25T23:00:00Z",
-      "id": 87
+      "id": "87"
     },
     {
       "titulo": "Lixo industrial",
@@ -2566,7 +2564,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-26T17:00:00Z",
-      "id": 88
+      "id": "88"
     },
     {
       "titulo": "Lâmpada no ponto de ônibus",
@@ -2593,7 +2591,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-26T18:00:00Z",
-      "id": 89
+      "id": "89"
     },
     {
       "titulo": "Buraco perto da farmácia",
@@ -2620,7 +2618,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T02:00:00Z",
-      "id": 90
+      "id": "90"
     },
     {
       "titulo": "Mato alto no passeio de novo",
@@ -2647,7 +2645,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-26T19:00:00Z",
-      "id": 91
+      "id": "91"
     },
     {
       "titulo": "Lâmpada perto do campo",
@@ -2675,7 +2673,7 @@
       "statusAtual": "Concluido",
       "contatoCidadao": "joao.pedro@email.com",
       "dataUltima AtualizacaoStatus": "2025-11-26T20:00:00Z",
-      "id": 92
+      "id": "92"
     },
     {
       "titulo": "Buraco na rua movimentada",
@@ -2702,7 +2700,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T05:00:00Z",
-      "id": 93
+      "id": "93"
     },
     {
       "titulo": "Sinalização de trânsito coberta por folhagem",
@@ -2729,7 +2727,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-26T21:00:00Z",
-      "id": 94
+      "id": "94"
     },
     {
       "titulo": "Lixo em frente ao condomínio",
@@ -2756,7 +2754,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-26T22:00:00Z",
-      "id": 95
+      "id": "95"
     },
     {
       "titulo": "Buraco perto da praça",
@@ -2783,7 +2781,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T08:00:00Z",
-      "id": 96
+      "id": "96"
     },
     {
       "titulo": "Lâmpada perto do museu",
@@ -2810,7 +2808,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-26T23:00:00Z",
-      "id": 97
+      "id": "97"
     },
     {
       "titulo": "Muro de escola caindo",
@@ -2837,7 +2835,7 @@
       "isAnonimo": true,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T08:00:00Z",
-      "id": 98
+      "id": "98"
     },
     {
       "titulo": "Mato na rua",
@@ -2864,7 +2862,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T11:00:00Z",
-      "id": 99
+      "id": "99"
     },
     {
       "titulo": "Buraco em rodovia",
@@ -2891,7 +2889,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T09:00:00Z",
-      "id": 100
+      "id": "100"
     },
     {
       "titulo": "Lâmpada no Ginásio",
@@ -2918,7 +2916,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T10:00:00Z",
-      "id": 101
+      "id": "101"
     },
     {
       "titulo": "Sinalização na avenida",
@@ -2945,7 +2943,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T14:00:00Z",
-      "id": 102
+      "id": "102"
     },
     {
       "titulo": "Buraco perto da escola",
@@ -2972,7 +2970,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T11:00:00Z",
-      "id": 103
+      "id": "103"
     },
     {
       "titulo": "Lixo em frente ao comércio",
@@ -2999,7 +2997,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T12:00:00Z",
-      "id": 104
+      "id": "104"
     },
     {
       "titulo": "Lâmpada no centro comercial",
@@ -3026,7 +3024,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T17:00:00Z",
-      "id": 105
+      "id": "105"
     },
     {
       "titulo": "Buraco perto da praça",
@@ -3053,7 +3051,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T13:00:00Z",
-      "id": 106
+      "id": "106"
     },
     {
       "titulo": "Entulho na rua",
@@ -3080,7 +3078,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T14:00:00Z",
-      "id": 107
+      "id": "107"
     },
     {
       "titulo": "Sinalização danificada",
@@ -3107,7 +3105,7 @@
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T20:00:00Z",
-      "id": 108
+      "id": "108"
     },
     {
       "titulo": "Calçada com buraco",
@@ -3134,7 +3132,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T15:00:00Z",
-      "id": 109
+      "id": "109"
     },
     {
       "titulo": "Lâmpada no estacionamento",
@@ -3161,7 +3159,7 @@
       "isAnonimo": true,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T16:00:00Z",
-      "id": 110
+      "id": "110"
     },
     {
       "titulo": "Mato alto perto do viaduto",
@@ -3188,7 +3186,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-26T23:00:00Z",
-      "id": 111
+      "id": "111"
     },
     {
       "titulo": "Buraco perto da praça",
@@ -3215,7 +3213,7 @@
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T17:00:00Z",
-      "id": 112
+      "id": "112"
     },
     {
       "titulo": "Lâmpada no ponto de ônibus",
@@ -3242,7 +3240,7 @@
       "isAnonimo": true,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T18:00:00Z",
-      "id": 113
+      "id": "113"
     },
     {
       "titulo": "Muro de contenção rachado",
@@ -3269,7 +3267,7 @@
       "isAnonimo": false,
       "statusAtual": "Pendente",
       "dataUltima AtualizacaoStatus": "2025-11-27T02:00:00Z",
-      "id": 114
+      "id": "114"
     },
     {
       "titulo": "Buraco perto da escola",
@@ -3296,7 +3294,7 @@
       "isAnonimo": true,
       "statusAtual": "Em Andamento",
       "dataUltima AtualizacaoStatus": "2025-11-27T19:00:00Z",
-      "id": 115
+      "id": "115"
     },
     {
       "titulo": "Lixo em terreno baldio",
@@ -3323,7 +3321,7 @@
       "isAnonimo": false,
       "statusAtual": "Concluido",
       "dataUltima AtualizacaoStatus": "2025-11-27T20:00:00Z",
-      "id": 116
+      "id": "116"
     },
     {
       "titulo": "Buraco encontrado no Túnel Souza Lima",
@@ -3355,7 +3353,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 117
+      "id": "117"
     },
     {
       "titulo": "Buraco encontrado na Cidade Administrativa",
@@ -3387,7 +3385,7 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": true,
-      "id": 118
+      "id": "118"
     },
     {
       "titulo": "Buraco encontrado na rua Dom José Gaspar",
@@ -3419,10 +3417,10 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "",
       "recebeNotificacoes": false,
-      "id": 119
+      "id": "119"
     }
   ],
-    "admin": {
+  "admin": {
     "ultimasAtividadesComunidade": [
       {
         "tipo": "Iluminacao",
@@ -3441,28 +3439,27 @@
       }
     ]
   },
-
   "comunidade": [
     {
-      "id": 1,
+      "id": "1",
       "author": "Joãozinho Silva",
       "createdAt": "2025-11-10T10:00:00.000Z",
       "title": "Buraco perigoso na avenida",
       "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
       "category": "transito",
-      "votes": 25
+      "votes": 27
     },
     {
-      "id": 2,
+      "id": "2",
       "author": "Fernanda Lima",
       "createdAt": "2025-11-11T15:30:00.000Z",
       "title": "Sugestão de faixa de pedestre",
       "excerpt": "Seria importante adicionar uma faixa perto da escola...",
       "category": "sugestoes",
-      "votes": 12
+      "votes": 13
     },
     {
-      "id": 3,
+      "id": "3",
       "author": "Rafael Santos",
       "createdAt": "2025-11-12T09:15:00.000Z",
       "title": "Alagamento recorrente na esquina",

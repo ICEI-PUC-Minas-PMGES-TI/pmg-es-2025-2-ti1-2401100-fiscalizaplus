@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiscalizaPlus</title>
+    
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/login_forms.css">
+
+
+</head>
+<body>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0 login-container">
+            
+            <!-- LADO ESQUERDO: FORMULÁRIO -->
+            <div class="col-md-6 col-lg-5 login-form-side">
+                <div class="logo-area">
+                    <!-- Logo  -->
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Ícone simples representando o app -->
+                        <div>
+                            <img src="../../assets/images/lupa.png" alt="" style="width: 60px;">
+                        </div>
+                        <h1 class="logo-text m-0">Fiscaliza<span>Plus</span></h1>
+                    </div>
+                </div>
+
+                <div class="welcome-text">
+                    <h2>Bem-vindo de volta! 👋</h2>
+                    <p>Por favor, insira seus dados para acessar o painel.</p>
+                </div>
+
+                <form action=""> <!-- Ação do form -->
+                    
+                    <!-- Input Email -->
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" placeholder="nome@exemplo.com" required>
+                        <label for="floatingInput">Endereço de E-mail</label>
+                    </div>
+
+                    <!-- Input Senha -->
+                    <div class="form-floating mb-3 position-relative">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" required>
+                        <label for="floatingPassword">Senha</label>
+                        <!-- Ícone de olho para mostrar senha -->
+                        <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 text-secondary" 
+                           id="togglePassword" style="cursor: pointer; z-index: 5;"></i>
+                    </div>
+
+                    <!-- Lembrar de mim e Esqueceu a senha -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                            <label class="form-check-label text-secondary small" for="rememberMe">
+                                Lembrar de mim
+                            </label>
+                        </div>
+                        <a href="#" class="link-esqueceu">Esqueceu a senha?</a>
+                    </div>
+
+                    <!-- Botão Entrar -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-login">
+                            Entrar no Sistema
+                        </button>
+                    </div>
+
+                    <!-- Cadastre-se -->
+                    <div class="register-text">
+                        Não tem uma conta? <a href="#">Cadastre-se</a>
+                        <div class="mt-2">
+                            <a href="../cadastro/cadastro-cidadao.html" class="small text-secondary" style="font-weight: 400;">Sou um Cidadão</a> | 
+                            <a href="../cadastro/token-servidor.html" class="small text-secondary" style="font-weight: 400;">Sou Servidor</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- LADO DIREITO: IMAGEM -->
+            <div class="col-md-6 col-lg-7 login-image-side">
+                <!-- Imagem de fundo definida no css-->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script para alternar visibilidade da senha -->
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#floatingPassword');
+
+        togglePassword.addEventListener('click', function (e) {
+            // Alternar o tipo do atributo
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Alternar o ícone
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
