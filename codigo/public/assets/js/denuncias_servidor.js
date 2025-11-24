@@ -21,8 +21,13 @@ async function carregarDenuncia(id = 1) {
 
     
     document.getElementById("status").value =
-      d.statusAtual || "aberto";
+      d.statusAtual || "Pendente";
 
+    document.getElementById("status").value =
+      d.statusAtual || "Em Análise";
+
+    document.getElementById("status").value =
+      d.statusAtual || "Concluído";
     
     const grid = document.querySelector(".imagens-grid");
     grid.innerHTML = "";
@@ -100,12 +105,10 @@ async function salvarAlteracoes() {
   const statusAtual = document.getElementById("status").value;
   const observacoesInternasServidor = document.getElementById("feedback").value;
 
-  // === VERIFICAÇÃO OBRIGATÓRIA DO STATUS ===
   if (!statusAtual || statusAtual === "Selecione...") {
     mostrarMensagem("Por favor, altere o status da denúncia.", "error");
     return;
   }
-  // ==========================================
 
   try {
     const response = await fetch(`${API_URL}/${id}`, {
