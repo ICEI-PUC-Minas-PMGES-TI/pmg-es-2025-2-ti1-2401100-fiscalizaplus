@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-/* Variáveis (Se você usasse) */
+/* Variáveis*/
 :root {
     --color-primary: #e53e3e;
     --color-primary-dark: #c1121f;
@@ -26,7 +26,6 @@
     padding: 40px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-    /* Já definida no body, mas mantida para garantir consistência no card */
     background-color: rgba(230, 230, 230, 0.9); 
 }
 
@@ -96,7 +95,6 @@ body::before {
 }
 
 .logo-icon {
-    /* Ajustado para uma largura mais comum para logos em formulários */
     width: 160px; 
     max-width: 100%;
     height: auto;
