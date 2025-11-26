@@ -3447,7 +3447,7 @@
       "title": "Buraco perigoso na avenida",
       "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
       "category": "transito",
-      "votes": 27
+      "votes": 28
     },
     {
       "id": "2",
@@ -3456,7 +3456,7 @@
       "title": "Sugestão de faixa de pedestre",
       "excerpt": "Seria importante adicionar uma faixa perto da escola...",
       "category": "sugestoes",
-      "votes": 13
+      "votes": 14
     },
     {
       "id": "3",
@@ -3465,7 +3465,7 @@
       "title": "Alagamento recorrente na esquina",
       "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
       "category": "meioambiente",
-      "votes": 7
+      "votes": 8
     }
   ]
 }
