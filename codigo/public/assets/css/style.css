@@ -19,7 +19,7 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* Fonte moderna (simulada) */
+    font-family: 'Poppins', sans-serif; 
     background: linear-gradient(145deg, var(--color-bg-light) 0%, #e2e4e6 100%);
     display: flex;
     justify-content: center;
@@ -37,11 +37,11 @@ body {
 
 /* 1. Header (Cabeçalho) */
 .header {
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 
 .logo {
-    font-size: 5em;
+    font-size: 3em;
     font-weight: 800;
     letter-spacing: -2px;
     margin-bottom: 5px;
@@ -55,14 +55,14 @@ body {
     font-size: 1.1em;
     color: #7f8c8d;
     font-weight: 400;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .headline {
-    font-size: 2.2em;
-    font-weight: 700;
+    font-size: 2em;
+    font-weight: 500;
     color: var(--color-text-dark);
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .description {
@@ -77,8 +77,8 @@ body {
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
-    gap: 30px; /* Mais espaço entre cards */
-    margin-bottom: 20px;
+    gap: 10px; /* Mais espaço entre cards */
+    margin-bottom: 10px;
 }
 
 .card {
@@ -196,7 +196,7 @@ body {
     height: 1px;
     background: #cccccc;
     margin-top: 60px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     opacity: 0.5;
 }
 
