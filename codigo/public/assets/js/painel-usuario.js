@@ -263,6 +263,43 @@
   }  async function fetchJson(url) {
     const normalizedUrl = url.startsWith('/') ? url : `/${url}`;
 
+    // Para denúncias, tenta API primeiro
+    if (normalizedUrl.startsWith('/denuncias')) {
+      const apiResult = await tryFetchFromApi(normalizedUrl);
+      if (apiResult !== null) return apiResult;
+      // Fallback para dados locais se API falhar
+      const localData = getLocalDb();
+      if (localData.denuncias) {
+        let denuncias = Array.isArray(localData.denuncias) ? localData.denuncias.map(d => ({ ...d })) : [];
+        // Aplica filtros de query string se houver
+        const params = new URLSearchParams(normalizedUrl.split('?')[1] || '');
+        if (params.get('_sort')) {
+          const sortField = params.get('_sort');
+          const order = params.get('_order') === 'asc' ? 1 : -1;
+          denuncias.sort((a, b) => {
+            // Para campos de data, compara como Date
+            if (sortField === 'dataRegistro' || sortField === 'dataUltimaAtualizacaoStatus') {
+              const aVal = new Date(a[sortField] || 0).getTime();
+              const bVal = new Date(b[sortField] || 0).getTime();
+              return (bVal - aVal) * order;
+            }
+            // Para outros campos, compara como string
+            const aVal = a[sortField] || '';
+            const bVal = b[sortField] || '';
+            if (aVal < bVal) return -1 * order;
+            if (aVal > bVal) return 1 * order;
+            return 0;
+          });
+        }
+        if (params.get('_limit')) {
+          const limit = parseInt(params.get('_limit'), 10);
+          denuncias = denuncias.slice(0, limit);
+        }
+        return denuncias;
+      }
+      return [];
+    }
+
     // Para ocorrências, sempre tenta API primeiro
     if (normalizedUrl.startsWith('/ocorrencias')) {
       const apiResult = await fetchOcorrenciasFromApi(normalizedUrl);
@@ -335,15 +372,24 @@
       const days = Math.floor(diff / 86400);
 
       let text;
-      if (diff < 60) text = 'há poucos segundos';
-      else if (minutes < 60) text = `há ${minutes}m`;
-      else if (hours < 24) text = `há ${hours}h`;
-      else if (days === 1) text = `Ontem ${d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
-      else if (days < 7) text = `há ${days}d`;
-      else text = d.toLocaleDateString('pt-BR');
+      // Se for dentro de 24h do dia atual, mostra "X horas atrás"
+      if (hours < 24 && days === 0) {
+        if (diff < 60) text = 'há poucos segundos';
+        else if (minutes < 60) text = `há ${minutes} minuto${minutes > 1 ? 's' : ''}`;
+        else text = `há ${hours} hora${hours > 1 ? 's' : ''}`;
+      } else {
+        // Caso contrário, mostra só a data
+        text = d.toLocaleDateString('pt-BR', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric' 
+        });
+      }
 
-      return { text, title: d.toLocaleString() };
-    } catch { return { text: '', title: '' }; }
+      return { text, title: d.toLocaleString('pt-BR') };
+    } catch {
+      return { text: '', title: '' };
+    }
   }
 
   function statusBadge(status) {
@@ -369,37 +415,32 @@
 
   async function populateRecentReports() {
     try {
-      const user = getUsuarioCorrente();
-      if (!user) return;
+      // Busca TODAS as denúncias primeiro (sem limite) para garantir que pegue as mais recentes
+      const todasDenuncias = await fetchJson(`/denuncias?_sort=dataRegistro&_order=desc`);
       
-      const usuario = await fetchJson(`/usuarios/${user.id}`);
-      if (!usuario) {
-        console.warn('Usuário não encontrado');
-        return;
-      }
+      let recentes = Array.isArray(todasDenuncias) ? todasDenuncias : [];
       
-      // Não buscar bairros - usaremos bairroNome direto das ocorrências
+      console.log('[Recentes] Total de denúncias encontradas:', recentes.length);
       
-      // Recentes na cidade - filtra por nome da cidade, não ID
-      const todasOcorrencias = await fetchJson(`/ocorrencias?_sort=createdAt&_order=desc&_limit=20`);
-      const cidadeUsuario = usuario.cidade || (usuario.cidadeId ? '' : '');
-      const cidadeUsuarioNorm = normalizeText(cidadeUsuario);
-
-      let recentes = Array.isArray(todasOcorrencias) 
-        ? todasOcorrencias.filter(o => {
-            const cidadeOc = o.cidadeNome || (o.endereco ? o.endereco.cidade : '');
-            return normalizeText(cidadeOc) === cidadeUsuarioNorm;
-          })
-        : [];
-
-      // Fallback: se não houver nenhum da mesma cidade, mostra os mais recentes gerais
-      if (!recentes || recentes.length === 0) {
-        console.warn('[Recentes] Nenhuma ocorrência encontrada para a cidade do usuário:', cidadeUsuario);
-        recentes = Array.isArray(todasOcorrencias) ? todasOcorrencias.slice() : [];
+      // Garante que está ordenado do mais recente ao mais antigo (caso o sort não funcione)
+      if (recentes.length > 0) {
+        recentes.sort((a, b) => {
+          const dateA = new Date(a.dataRegistro || a.dataUltimaAtualizacaoStatus || 0);
+          const dateB = new Date(b.dataRegistro || b.dataUltimaAtualizacaoStatus || 0);
+          return dateB.getTime() - dateA.getTime(); // Mais recente primeiro
+        });
+        
+        // Log das 3 mais recentes para debug
+        console.log('[Recentes] 3 mais recentes:', recentes.slice(0, 3).map(d => ({
+          id: d.id,
+          codigo: d.codigoOcorrencia,
+          titulo: d.titulo,
+          dataRegistro: d.dataRegistro
+        })));
       }
 
-      // Limita a 7 itens após filtro/fallback
-      recentes = recentes.slice(0, 7);
+      // Limita a 10 denúncias APÓS ordenar (ou o máximo que couber no card)
+      recentes = recentes.slice(0, 10);
       
       const ul = document.getElementById('recent-reports-list');
       if (ul) {
@@ -409,35 +450,22 @@
         }
         
         ul.innerHTML = '';
-        recentes.forEach((o, index) => {
+        recentes.forEach((d, index) => {
           const li = document.createElement('li');
           li.setAttribute('tabindex', '0');
           li.className = 'recent-item';
 
-          const time = timeAgoPt(o.createdAt || o.dataRegistro || o.data || '');
-
-          const normalizedStatus = normalizeStatus(o.status || o.statusOriginal);
-          li.setAttribute('data-status', normalizedStatus);
-          const statusLabel = getStatusLabel(o.status || o.statusOriginal);
-          const statusClass = normalizedStatus === 'aberto'
-            ? 'status-aberto'
-            : (normalizedStatus === 'em_andamento' ? 'status-em_andamento' : 'status-resolvido');
-
-          const tipoHtml = `<span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(o.tipo || o.tipoProblema || 'n/d')}</span>`;
-          const bairroNome = o.bairroNome || (o.endereco ? o.endereco.bairro : '');
-          const bairroHtml = bairroNome
-            ? `<span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome)}</span>`
-            : '';
+          const time = timeAgoPt(d.dataRegistro || '');
+          const bairroNome = d.endereco ? d.endereco.bairro : '';
+          const tipoDenuncia = d.tipoProblema || 'n/d';
 
           li.innerHTML = `
-            <div class="index-badge" aria-hidden>${index + 1}</div>
             <div class="recent-content">
-              <h3 class="recent-title">${escapeHtml(o.titulo)}</h3>
+              <h3 class="recent-title">${escapeHtml(d.titulo || 'Sem título')}</h3>
               <div class="recent-meta">
-                <span class="status-pill ${statusClass}"><span class="dot"></span><span class="pill-text">${escapeHtml(statusLabel)}</span></span>
-                ${tipoHtml}
-                ${bairroHtml}
-                <span class="time" title="${fmtDate(o.createdAt || o.dataRegistro)}">${escapeHtml(time.text)}</span>
+                <span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome || 'Bairro não informado')}</span>
+                <span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(tipoDenuncia)}</span>
+                <span class="time">${escapeHtml(time.text)}</span>
               </div>
             </div>
           `;
@@ -770,7 +798,37 @@
       populateRecentReports(),
       populateUserImpact()
     ]);
+
+    // Inicia atualização automática a cada 30 segundos
+    startAutoRefresh();
   }
+
+  // Variável para armazenar o intervalo de atualização
+  let refreshInterval = null;
+
+  function startAutoRefresh() {
+    // Limpa intervalo anterior se existir
+    if (refreshInterval) {
+      clearInterval(refreshInterval);
+    }
+
+    // Atualiza a lista de denúncias recentes a cada 30 segundos
+    refreshInterval = setInterval(async () => {
+      try {
+        console.log('[Auto-refresh] Atualizando lista de denúncias recentes...');
+        await populateRecentReports();
+      } catch (error) {
+        console.error('Erro ao atualizar denúncias recentes:', error);
+      }
+    }, 30000); // 30 segundos
+  }
+
+  // Limpa o intervalo quando a página é fechada ou recarregada
+  window.addEventListener('beforeunload', () => {
+    if (refreshInterval) {
+      clearInterval(refreshInterval);
+    }
+  });
 
   document.addEventListener('DOMContentLoaded', () => {
     init().catch(err => console.error('Erro ao preencher painel do usuário:', err));

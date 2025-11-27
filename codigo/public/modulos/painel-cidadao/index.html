@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../../assets/images/logo.png" alt="Logo" class="navbar-logo">
+                <img src="../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -41,25 +41,29 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Guia do Cidadão</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="painel-de-usuario/index.html">Painel do Usuário</a>
-                    </li>
                 </ul>
 
-                <div class="navbar-user d-flex align-items-center dropdown">
-                    <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;" id="nomeUsuarioNav">Olá, Joãozinho</span>
-                    <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fa-solid fa-circle-user user-icon"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="../../index.html">Sair</a></li>
-                    </ul>
+                <div class="navbar-actions d-flex align-items-center gap-3">
+                    <!-- Botão de Toggle de Tema -->
+                    <button class="theme-toggle-btn" id="themeToggle" aria-label="Alternar tema">
+                        <i class="fa-solid fa-moon" id="themeIcon"></i>
+                    </button>
+                    
+                    <div class="navbar-user d-flex align-items-center dropdown">
+                        <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;" id="nomeUsuarioNav">Olá, Joãozinho</span>
+                        <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-circle-user user-icon"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+                            <li><a class="dropdown-item" href="painel-de-usuario/index.html">Minhas Denúncias</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="../../index.html">Sair</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -91,11 +95,16 @@
                         </li>
                     </ul>
 
-                    <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
-                        <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
-                        <a href="#" class="user-icon-link">
-                            <i class="fa-solid fa-circle-user user-icon"></i>
-                        </a>
+                    <div class="navbar-user d-flex align-items-center justify-content-between mt-auto border-top pt-3">
+                        <div class="d-flex align-items-center">
+                            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+                            <a href="#" class="user-icon-link">
+                                <i class="fa-solid fa-circle-user user-icon"></i>
+                            </a>
+                        </div>
+                        <button class="theme-toggle-btn" id="themeToggleMobile" aria-label="Alternar tema">
+                            <i class="fa-solid fa-moon" id="themeIconMobile"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -142,11 +151,13 @@
                 <div class="col-md-4">
                     <div class="user-preview">
                         <div class="user-panel">
-                            <h2 class="user-preview-title">Painel do usuário</h2>
+                            <h2 class="user-preview-title">
+                                <i class="fa-solid fa-user"></i> Painel do usuário
+                            </h2>
                             <h3 id="user-name">Olá, Joãozinho</h3>
                             <p id="user-email">joaozinho@gmail.com</p>
                             <hr>
-                            <p style="font-weight: 600; color: #d1d1d1; margin-bottom: 12px;">Minhas últimas denúncias</p>
+                            <p class="ultimas-denuncias-title" style="font-weight: 600; margin-bottom: 12px;">Minhas últimas denúncias</p>
                             <div id="ultimas-denuncias" class="ultimas-denuncias-container">
                                 <p class="text-muted small">Carregando...</p>
                             </div>
@@ -159,7 +170,7 @@
                     </div>
 
                     <div class="user-impact mt-3">
-                        <h6 class="mb-3" style="font-size: 1.1rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;">
+                        <h6>
                             <i class="fa-solid fa-chart-line"></i> Seu impacto
                         </h6>
                         <div id="user-impact-body">
@@ -171,14 +182,14 @@
                 <!-- Coluna 2: Mapa e Destaques -->
                 <div class="col-md-4">
                     <div class="occurrence-map">
-                        <h6 class="mb-3" style="display: flex; align-items: center; gap: 8px;">
+                        <h6>
                             <i class="fa-solid fa-map-location-dot"></i> Mapa de ocorrências
                         </h6>
                         <div id="occurrence-map-canvas"
-                            style="height:360px; width:100%; border-radius:12px; position: relative; z-index: 0;"></div>
+                            style="width:100%; border-radius:12px; position: relative; z-index: 0;"></div>
                     </div>
                     <div class="users-highlights mt-3">
-                        <h6 class="mb-3" style="font-size: 1.1rem; font-weight: 700; color: #2d3748; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;">
+                        <h6>
                             <i class="fa-solid fa-fire"></i> Destaques da Comunidade
                         </h6>
                         <div id="forum-highlights" class="forum-mini" aria-live="polite" aria-busy="true"></div>
@@ -188,11 +199,10 @@
                 <!-- Coluna 3: Relatos Recentes -->
                 <div class="col-md-4 d-flex flex-column">
                     <div class="flex-grow-1 recent-reports">
-                        <h6 class="mb-3" style="display: flex; align-items: center; gap: 8px;">
+                        <h6>
                             <i class="fa-solid fa-newspaper"></i> Relatos Recentes na Cidade
                         </h6>
-                        <ul id="recent-reports-list" class="list-group list-group-flush"
-                            style="max-height: 700px; overflow-y: auto;">
+                        <ul id="recent-reports-list" class="list-group list-group-flush">
                             <li class="list-group-item" style="background: transparent; border: none; color: #EDEDED; padding: 12px 20px;">Carregando relatos...</li>
                         </ul>
                     </div>
@@ -210,6 +220,7 @@
   <script src="../../assets/js/occurrence-map.js"></script>
   <script src="../../assets/js/painel-usuario.js"></script>
   <script type="module" src="../../assets/js/forum-highlights.js"></script>
+  <script src="../../assets/js/tema.js"></script>
         <div class="modal fade" id="impact-detail-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content impact-modal">

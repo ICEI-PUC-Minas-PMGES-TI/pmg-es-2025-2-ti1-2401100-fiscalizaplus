@@ -5,7 +5,6 @@
 
   // 1) Skeleton
   root.innerHTML = `
-    <div class="forum-mini__title">Destaques da Comunidade</div>
     <div class="forum-mini__skeleton">
       <div class="forum-mini__sk"></div><div class="forum-mini__sk"></div><div class="forum-mini__sk"></div>
     </div>
@@ -26,7 +25,6 @@
     const found = await findWorking();
     if (!found) {
       root.innerHTML = `
-        <div class="forum-mini__title">Destaques da Comunidade</div>
         <div class="text-muted small">Não foi possível carregar os tópicos (API offline ou rota incorreta).</div>
       `;
       console.warn("[Forum] Nenhum endpoint respondeu. Verifique json-server / rotas.");
@@ -41,7 +39,6 @@
       render(posts, base, path);
     } catch (err) {
       root.innerHTML = `
-        <div class="forum-mini__title">Destaques da Comunidade</div>
         <div class="text-muted small">Erro ao buscar tópicos: ${String(err)}</div>
       `;
       console.error("[Forum] Falha ao buscar posts:", err);
@@ -64,7 +61,6 @@
     root.setAttribute("aria-busy", "false");
     if (!Array.isArray(list) || list.length === 0) {
       root.innerHTML = `
-        <div class="forum-mini__title">Destaques da Comunidade</div>
         <div class="text-muted small">Nenhum tópico encontrado.</div>
         <div class="forum-mini__footer">
           <a href="/codigo/public/pages/comunidade/comunidade.html">Abrir Comunidade →</a>
@@ -74,7 +70,6 @@
     }
 
     root.innerHTML = `
-      <div class="forum-mini__title">Destaques da Comunidade</div>
       <ul class="forum-mini__list">
         ${list.map(liHTML).join("")}
       </ul>
