@@ -1,0 +1,233 @@
+:root {
+    /* Paleta de cores */
+    --color-bg-light: #f4f7f6; /* Fundo principal mais claro */
+    --color-bg-dark: #3a415a;  /* Cinza-azulado escuro para cards */
+    --color-text-light: #ffffff;
+    --color-text-dark: #2c3e50; /* Azul escuro quase preto */
+    --color-primary-base: #e74c3c; /* Vermelho mais vívido */
+    --color-primary-dark: #c0392b;
+    --color-primary-light: #f1c40f; /* Amarelo/Ouro para contraste */
+    
+    --transition-fast: 0.2s ease-out;
+    --transition-slow: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito "pula" */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background: linear-gradient(145deg, var(--color-bg-light) 0%, #e2e4e6 100%);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 10px;
+    color: var(--color-text-dark);
+}
+
+.page-container {
+    max-width: 1080px; 
+    width: 90%;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+/* 1. Header (Cabeçalho) */
+.header {
+    margin-bottom: 10px;
+}
+
+.logo {
+    font-size: 3em;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 5px;
+}
+
+.logo-plus {
+    color: var(--color-primary-base);
+}
+
+.subtitle {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.headline {
+    font-size: 2em;
+    font-weight: 500;
+    color: var(--color-text-dark);
+    margin-bottom: 5px;
+}
+
+.description {
+    font-size: 1.1em;
+    color: #7f8c8d;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* 2. Cards Grid (Interatividade e Efeitos Visuais) */
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; /* Mais espaço entre cards */
+    margin-bottom: 10px;
+}
+
+.card {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-light);
+    padding: 30px 20px;
+    border-radius: 15px; 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+}
+
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    transition: opacity var(--transition-fast);
+}
+
+
+.card:hover {
+    transform: translateY(-10px) scale(1.03); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); 
+    border: 1px solid var(--color-primary-light); 
+}
+
+.card-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px; 
+    height: 70px;
+    margin: 0 auto 20px;
+    background: var(--color-primary-base); 
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-slow);
+}
+
+.card:hover .card-icon-wrapper {
+    background: var(--color-primary-light); 
+    transform: scale(1.1);
+}
+
+.card-icon {
+    font-size: 2.2em;
+    color: var(--color-text-light);
+    transition: color var(--transition-fast);
+}
+
+.card:hover .card-icon {
+    color: var(--color-bg-dark); 
+}
+
+.card-title {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.card-text {
+    font-size: 0.95em;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+/* 3. Botão de Chamada para Ação (CTA Button) */
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, var(--color-primary-base), var(--color-primary-dark));
+    color: var(--color-text-light);
+    text-decoration: none;
+    padding: 18px 40px;
+    border-radius: 50px; /* Pill shape */
+    font-size: 1.2em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 15px rgba(231, 76, 60, 0.4);
+    transition: all var(--transition-fast);
+    border: none;
+}
+
+
+.cta-button:hover {
+    background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary-base));
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(231, 76, 60, 0.6);
+}
+
+.cta-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.6);
+}
+
+.cta-button .fas {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* 4. Footer */
+
+.footer-separator {
+    border: 0;
+    height: 1px;
+    background: #cccccc;
+    margin-top: 60px;
+    margin-bottom: 5px;
+    opacity: 0.5;
+}
+
+.footer {
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+
+/* =========================
+/* 5. Responsividade
+=========================
+*/
+@media (max-width: 992px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas em tablets */
+        gap: 25px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cards-grid {
+        grid-template-columns: 1fr; /* 1 coluna em celulares */
+        gap: 20px;
+    }
+    .logo {
+        font-size: 3.5em;
+    }
+    .headline {
+        font-size: 1.8em;
+    }
+    .card {
+        padding: 25px 15px;
+    }
+}

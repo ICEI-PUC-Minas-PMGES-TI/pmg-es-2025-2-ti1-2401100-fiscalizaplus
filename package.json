@@ -1,0 +1,24 @@
+{
+  "name": "pmg-es-2025-2-ti1-2401100-fiscalizaplus",
+  "version": "1.0.0",
+  "description": "Escreva um ou dois parágrafo resumindo o objetivo do seu projeto.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus/issues"
+  },
+  "homepage": "https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus#readme"
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiscalizaPlus</title>
+    <link rel="stylesheet" href="../../assets/css/cadastro.css"> 
+    <link rel="stylesheet" href="../../assets/images/favicon.ico">
+</head>
+<body>
+    <div class="container-token">
+        
+        <div class="form-wrapper">
+            
+            <div class="logo">
+                <img src="../../assets/images/logo.png" alt="FiscalizaPlus logo" class="logo-icon">
+            </div>
+
+            <div class="form-header">
+                <h2 class="form-title">Resgate seu token de acesso</h2>
+                
+                <p class="form-subtitle">Insira sua chave de acesso para liberar o acesso ao formulário de cadastro de servidores</p>
+            </div>
+
+            <form id="tokenForm" class="cadastro-form"> 
+                
+                <div class="form-group">
+                    <input type="text" id="tokenInput" name="token" placeholder="Ex: 1A2B-3C4D-5E6F" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="btn-icon">🔑</i> Validar token
+                </button>
+                
+            </form>
+
+            <div class="login-link">
+                Já possui uma conta? 
+                <a href="../login/login.html" class="login-text">Entrar</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="../../assets/js/cadastro-servidor.js"></script>
+</body>
+</html>
