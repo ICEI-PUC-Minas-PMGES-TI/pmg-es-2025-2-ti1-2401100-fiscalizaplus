@@ -7,7 +7,8 @@ let form, estadoSelect, cidadeSelect;
 
 // Constantes de Controle
 const URL_CADASTRO = '../../modulos/cadastro/cadastro-cidadao.html';
-const URL_LOGIN = '#'; 
+const URL_LOGIN = '../login/login.html'; 
+const API_BASE = 'http://localhost:3000';
 // FUNÇÕES DE CADASTRO
 
 
@@ -45,7 +46,7 @@ function togglePassword(fieldId) {
 }
 
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
     event.preventDefault(); 
 
     if (!validateForm()) {
@@ -60,32 +61,43 @@ function handleSubmit(event) {
         email: formData.get('email'),
         estado: formData.get('estado'),
         cidade: formData.get('cidade'),
-        senha: formData.get('senha'),
-        dataCadastro: new Date().toISOString(),
-        tipoUsuario: 'cidadao'
+        senhaHash: formData.get('senha'), 
+        dataCadastro: new Date().toISOString()
     };
     
-    // Salvar no localStorage
+    // Salvar no json-server
     try {
-        const key = 'cidadaos_cadastrados';
-        const existing = JSON.parse(localStorage.getItem(key) || '[]');
-        
         // Verifica se o e-mail já existe
-        const emailExists = existing.some(user => user.email === cidadaoData.email);
-        if (emailExists) {
+        const response = await fetch(`${API_BASE}/cidadaos?email=${encodeURIComponent(cidadaoData.email)}`);
+        const existing = await response.json();
+        
+        if (Array.isArray(existing) && existing.length > 0) {
             alert('Este e-mail já está cadastrado.');
             return;
         }
         
-        existing.push(cidadaoData);
-        localStorage.setItem(key, JSON.stringify(existing));
+        // Salva o novo cadastro
+        const saveResponse = await fetch(`${API_BASE}/cidadaos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cidadaoData)
+        });
         
+        if (!saveResponse.ok) {
+            throw new Error(`Erro HTTP: ${saveResponse.status}`);
+        }
+        
+        // Mostra mensagem de sucesso e redireciona após 1 segundo
         alert('Cadastro realizado com sucesso! Você será redirecionado para a página de login.');
-        window.location.href = URL_LOGIN;
+        setTimeout(() => {
+            window.location.href = URL_LOGIN;
+        }, 1000);
         
     } catch (error) {
         console.error('Erro ao salvar cadastro:', error);
-        alert('Erro ao salvar cadastro. Tente novamente.');
+        alert('Erro ao salvar cadastro. Verifique se o servidor está rodando e tente novamente.');
     }
 }
 

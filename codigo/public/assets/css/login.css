@@ -89,6 +89,47 @@ body {
     box-shadow: 0 6px 15px rgba(214, 40, 40, 0.4);
 }
 
+/* Botão Entrar sem Login */
+.btn-login-guest {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    color: #666;
+    background-color: #fff;
+}
+
+.btn-login-guest:hover {
+    border-color: var(--cor-principal);
+    color: var(--cor-principal);
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(214, 40, 40, 0.2);
+}
+
+/* Divisor */
+.divider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.divider-line {
+    flex: 1;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 0;
+}
+
+.divider-text {
+    color: var(--texto-cinza);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 /* Links e Checkbox */
 .form-check-input:checked {
     background-color: var(--cor-principal);
