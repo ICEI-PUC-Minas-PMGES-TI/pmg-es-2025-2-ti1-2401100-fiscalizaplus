@@ -1,29 +1,3 @@
-// JSON de tokens de acesso (Usado para a página de resgate de token)
-const tokensData = {
-    "tokensAcessoServidor": [
-        "A1B9-C3D7-E5F2-G4H8",
-        "Z9Y2-X4W6-V8U1-T3S5", 
-        "P7O3-N5M1-L9K6-J4I0", 
-        "H2G8-F6E0-D4C1-B5A7", 
-        "Q5R1-S9T4-U7V3-W0X6", 
-        "M0N6-O2P8-Q4R1-S3T7", 
-        "C4B7-A1D9-E5F3-G8H2", 
-        "V3U9-T6S2-R8Q4-P1O5", 
-        "K7J0-I4L6-M2N9-O5P3", 
-        "E9F5-G1H8-I3J7-K2L4", 
-        "D6C2-B8A4-Z0Y7-X5W9", 
-        "R1Q5-P9O3-N7M2-L4K6", 
-        "J8I4-H6G2-F0E5-D3C7", 
-        "T2S6-R9Q5-P1O4-N7M0", 
-        "G3H7-I0J4-K6L8-M2N5", 
-        "W9V5-U1T3-S7R4-Q0P8", 
-        "L5K1-J7I3-H9G4-F2E6", 
-        "A7B3-C9D5-E1F4-G6H0", 
-        "Y4X8-W0V2-U6T1-S5R9", 
-        "P6O2-N8M4-L0K7-J3I5"
-    ]
-};
-
 // Dados das cidades por estado (Usado para a página de cadastro)
 const cidadesPorEstado = {
     'MG': ['Belo Horizonte']
@@ -32,46 +6,79 @@ const cidadesPorEstado = {
 let form, estadoSelect, cidadeSelect;
 
 // Constantes de Controle
-const TOKENS_KEY = 'tokens_validos_e_usados';
 const URL_CADASTRO = '../../modulos/cadastro/cadastro-servidor.html';
 const URL_TOKEN = '../../modulos/cadastro/token-servidor.html';
-const URL_LOGIN = '#';
+const URL_LOGIN = '../login/login.html';
+const API_BASE = 'http://localhost:3000';
+
+// Mapeamento de órgãos do formulário para nomes no banco
+const orgaoNomeMapping = {
+    'camara': 'Câmara Municipal',
+    'secretaria-saude': 'Secretaria de Saúde',
+    'secretaria-educacao': 'Secretaria de Educação',
+    'secretaria-obras': 'Secretaria de Obras',
+    'secretaria-transito': 'Secretaria de Trânsito',
+    'defesa-civil': 'Defesa Civil'
+};
 
 
 // FUNÇÕES DE INICIALIZAÇÃO E TOKENS
 
-function inicializarTokens() {
-    if (!localStorage.getItem(TOKENS_KEY)) {
-        localStorage.setItem(TOKENS_KEY, JSON.stringify(tokensData.tokensAcessoServidor));
-    }
-}
-
-
-function validarToken(token) {
-    let tokensValidos;
+/**
+ * Valida um token buscando do json-server
+ * Se o token for válido e não usado, marca como usado e salva o tokenId na sessão
+ */
+async function validarToken(token) {
     try {
-        tokensValidos = JSON.parse(localStorage.getItem(TOKENS_KEY) || '[]');
-    } catch (e) {
-        return false;
-    }
-
-    const tokenLimpo = token.trim().toUpperCase().replace(/-/g, '');
-    
-    const tokenFormatado = (tokenLimpo.match(/.{1,4}/g) || []).join('-'); 
-
-    const index = tokensValidos.indexOf(tokenFormatado);
-
-    if (index > -1) {
-        // Token encontrado! Remover para garantir uso único.
-        tokensValidos.splice(index, 1);
-        localStorage.setItem(TOKENS_KEY, JSON.stringify(tokensValidos));
+        // Formata o token (remove espaços, converte para maiúsculo, formata com hífens)
+        const tokenLimpo = token.trim().toUpperCase().replace(/-/g, '');
+        const tokenFormatado = (tokenLimpo.match(/.{1,4}/g) || []).join('-');
         
-        // Salva o token validado na sessão para liberar o cadastro
-        sessionStorage.setItem('token_servidor_validado', 'true'); 
+        // Busca o token no json-server
+        const response = await fetch(`${API_BASE}/tokensAcessoServidor?token=${encodeURIComponent(tokenFormatado)}`);
+        const tokens = await response.json();
+        
+        if (!Array.isArray(tokens) || tokens.length === 0) {
+            return false; // Token não encontrado
+        }
+        
+        const tokenEncontrado = tokens[0];
+        
+        // Verifica se o token já foi usado
+        if (tokenEncontrado.usado === true) {
+            return false; // Token já foi usado
+        }
+        
+        // Marca o token como usado
+        const tokenAtualizado = {
+            ...tokenEncontrado,
+            usado: true,
+            dataUso: new Date().toISOString()
+        };
+        
+        // Atualiza o token no json-server
+        const updateResponse = await fetch(`${API_BASE}/tokensAcessoServidor/${tokenEncontrado.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tokenAtualizado)
+        });
+        
+        if (!updateResponse.ok) {
+            console.error('Erro ao atualizar token:', updateResponse.status);
+            return false;
+        }
+        
+        // Salva o tokenId e indicação de validação na sessão
+        sessionStorage.setItem('token_servidor_validado', 'true');
+        sessionStorage.setItem('token_id', tokenEncontrado.id);
         
         return true;
+    } catch (error) {
+        console.error('Erro ao validar token:', error);
+        return false;
     }
-    return false;
 }
 
 /**
@@ -127,7 +134,7 @@ function togglePassword(fieldId) {
 }
 
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
     event.preventDefault();
     
     const tokenValidado = sessionStorage.getItem('token_servidor_validado');
@@ -146,40 +153,110 @@ function handleSubmit(event) {
     
     // Coletar dados do formulário
     const formData = new FormData(form);
+    const orgaoValue = formData.get('orgao');
+    
+    // Buscar o ID do órgão através da API
+    let orgaoId = null;
+    try {
+        const orgaosResponse = await fetch(`${API_BASE}/orgaosMunicipais`);
+        const orgaos = await orgaosResponse.json();
+        
+        const nomeOrgao = orgaoNomeMapping[orgaoValue];
+        if (nomeOrgao && Array.isArray(orgaos)) {
+            const orgaoEncontrado = orgaos.find(o => o.nome === nomeOrgao);
+            if (orgaoEncontrado) {
+                orgaoId = orgaoEncontrado.id;
+            }
+        }
+    } catch (error) {
+        console.warn('Erro ao buscar órgãos da API:', error);
+        // Fallback: mapeamento direto para IDs conhecidos
+        const fallbackMapping = {
+            'secretaria-obras': '1',
+            'secretaria-transito': '2',
+            'defesa-civil': '3'
+        };
+        orgaoId = fallbackMapping[orgaoValue] || null;
+    }
+    
     const servidorData = {
         nomeCompleto: formData.get('nomeCompleto'),
         email: formData.get('email'),
         estado: formData.get('estado'),
         cidade: formData.get('cidade'),
-        orgao: formData.get('orgao'),
-        senha: formData.get('senha'),
-        dataCadastro: new Date().toISOString(),
-        tipoUsuario: 'servidor'
+        orgaoId: orgaoId ? parseInt(orgaoId) : null,
+        senhaHash: formData.get('senha'), // Por enquanto mantém a senha como está, pode ser convertida para hash depois
+        dataCadastro: new Date().toISOString()
     };
     
-    // Salvar no localStorage
+    // Salvar no json-server
     try {
-        const key = 'servidores_cadastrados';
-        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        // Verifica se o e-mail já existe
+        const response = await fetch(`${API_BASE}/servidores?email=${encodeURIComponent(servidorData.email)}`);
+        const existing = await response.json();
         
-        const emailExists = existing.some(servidor => servidor.email === servidorData.email);
-        if (emailExists) {
+        if (Array.isArray(existing) && existing.length > 0) {
             alert('Este e-mail já está cadastrado.');
             return;
         }
         
-        existing.push(servidorData);
-        localStorage.setItem(key, JSON.stringify(existing));
+        // Salva o novo cadastro
+        const saveResponse = await fetch(`${API_BASE}/servidores`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(servidorData)
+        });
         
+        if (!saveResponse.ok) {
+            throw new Error(`Erro HTTP: ${saveResponse.status}`);
+        }
+        
+        // Obtém o servidor criado para pegar o ID
+        const servidorCriado = await saveResponse.json();
+        const servidorId = servidorCriado.id;
+        
+        // Atualiza o token com o servidorId
+        const tokenId = sessionStorage.getItem('token_id');
+        if (tokenId) {
+            try {
+                // Busca o token atual
+                const tokenResponse = await fetch(`${API_BASE}/tokensAcessoServidor/${tokenId}`);
+                const tokenAtual = await tokenResponse.json();
+                
+                // Atualiza o token com o servidorId
+                const tokenAtualizado = {
+                    ...tokenAtual,
+                    servidorId: parseInt(servidorId)
+                };
+                
+                await fetch(`${API_BASE}/tokensAcessoServidor/${tokenId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tokenAtualizado)
+                });
+            } catch (error) {
+                console.warn('Erro ao atualizar token com servidorId:', error);
+                // Não bloqueia o cadastro se houver erro ao atualizar o token
+            }
+        }
+        
+        // Remove os dados do token da sessão antes de redirecionar
+        sessionStorage.removeItem('token_servidor_validado');
+        sessionStorage.removeItem('token_id');
+        
+        // Mostra mensagem de sucesso e redireciona após 1 segundo
         alert('Cadastro realizado com sucesso! Você será redirecionado para a página de login.');
-        
-        sessionStorage.removeItem('token_servidor_validado'); 
-
-        window.location.href = URL_LOGIN;
+        setTimeout(() => {
+            window.location.href = URL_LOGIN;
+        }, 1000);
         
     } catch (error) {
         console.error('Erro ao salvar cadastro:', error);
-        alert('Erro ao salvar cadastro. Tente novamente.');
+        alert('Erro ao salvar cadastro. Verifique se o servidor está rodando e tente novamente.');
     }
 }
 
@@ -319,20 +396,19 @@ function validateForm() {
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    inicializarTokens();
-
     const tokenForm = document.getElementById('tokenForm');
     const tokenInput = document.getElementById('tokenInput');
     
     // Inicialização da Lógica do Token
     if (tokenForm) {
-        tokenForm.addEventListener('submit', function(event) {
+        tokenForm.addEventListener('submit', async function(event) {
             event.preventDefault(); 
 
             if (tokenInput && tokenInput.value) {
                 clearError({ target: tokenInput }); 
                 
-                if (validarToken(tokenInput.value)) {
+                const tokenValido = await validarToken(tokenInput.value);
+                if (tokenValido) {
                     alert('Token validado com sucesso! Redirecionando para o cadastro.');
                     window.location.href = URL_CADASTRO; 
                 } else {

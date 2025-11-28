@@ -1,14 +1,22 @@
+
 (function () {
   const API_BASE = 'http://localhost:3000';
   function getUsuarioCorrente() {
     try {
+      // Verifica se é visitante (entrou sem login)
+      const isGuest = sessionStorage.getItem('isGuest') === 'true';
+      if (isGuest) {
+        return null; // Retorna null para visitante
+      }
+      
       // Tenta múltiplas chaves de sessão
       const keys = ['usuarioCorrente', 'fp_user', 'user'];
       for (const key of keys) {
         const raw = sessionStorage.getItem(key);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && (parsed.id || parsed.nome || parsed.email)) {
+          // Verifica se tem ID válido (não aceita dados sem ID)
+          if (parsed && parsed.id && (parsed.id !== 'admin' && parsed.id !== 'administrador')) {
             return parsed;
           }
         }
@@ -111,6 +119,7 @@
       return normalizeOcorrenciaFromApi(denuncia, data);
     }
 
+    // Busca todas as denúncias primeiro
     const denuncias = await tryFetchFromApi('/denuncias');
     if (!Array.isArray(denuncias)) return null;
 
@@ -118,35 +127,89 @@
     const params = new URLSearchParams(query);
     const all = denuncias.map(d => normalizeOcorrenciaFromApi(d, data));
     let result = all;
+    
+    console.log('[fetchOcorrenciasFromApi] Total de denúncias carregadas:', all.length);
 
-    // Filtro por usuarioId: busca ocorrências onde o email bate
+    // Filtro por usuarioId: busca ocorrências por cidadaoId ou email
     if (params.get('usuarioId')) {
-      const usuarioId = parseInt(params.get('usuarioId'), 10);
+      const usuarioIdParam = params.get('usuarioId');
+      const usuarioId = parseInt(usuarioIdParam, 10);
+      const usuarioIdString = String(usuarioIdParam);
+      
       if (!Number.isNaN(usuarioId)) {
-        // Busca cidadãos da API primeiro
-        let targetEmail = null;
-        const cidadaosFromApi = await tryFetchFromApi('/cidadaos');
-        if (Array.isArray(cidadaosFromApi)) {
-          const targetUser = cidadaosFromApi.find(u => u.id === usuarioId);
-          targetEmail = targetUser ? (targetUser.email || '').toLowerCase().trim() : null;
-        }
+        console.log('[Filtro] Buscando denúncias para usuário ID:', usuarioId, 'ou string:', usuarioIdString);
         
-        // Fallback para banco local se não encontrou na API
-        if (!targetEmail) {
-          const usuarios = data.usuarios || data.cidadaos || [];
-          const targetUser = usuarios.find(u => u.id === usuarioId);
-          targetEmail = targetUser ? (targetUser.email || '').toLowerCase().trim() : null;
-        }
-        
-        if (targetEmail) {
-          result = result.filter(o => {
-            const oEmail = (o.usuarioEmail || '').toLowerCase().trim();
-            return oEmail === targetEmail;
+        // Filtra diretamente no array já carregado (mais confiável que buscar na API)
+        // pois o json-server pode não filtrar corretamente strings
+        result = all.filter(o => {
+            const oCidadaoId = o.cidadaoId;
+            const oUsuarioId = o.usuarioId;
+            
+            // Verifica cidadaoId (aceita string ou número)
+            if (oCidadaoId) {
+              const oCidadaoIdNum = parseInt(oCidadaoId, 10);
+              const oCidadaoIdStr = String(oCidadaoId);
+              
+              if ((!Number.isNaN(oCidadaoIdNum) && oCidadaoIdNum === usuarioId) || 
+                  (oCidadaoIdStr === usuarioIdString) ||
+                  (String(oCidadaoId) === String(usuarioIdParam))) {
+                console.log('[Filtro] Match encontrado por cidadaoId:', oCidadaoId, 'com usuário:', usuarioIdParam);
+                return true;
+              }
+            }
+            
+            // Verifica usuarioId (aceita string ou número)
+            if (oUsuarioId) {
+              const oUsuarioIdNum = parseInt(oUsuarioId, 10);
+              const oUsuarioIdStr = String(oUsuarioId);
+              
+              if ((!Number.isNaN(oUsuarioIdNum) && oUsuarioIdNum === usuarioId) || 
+                  (oUsuarioIdStr === usuarioIdString) ||
+                  (String(oUsuarioId) === String(usuarioIdParam))) {
+                console.log('[Filtro] Match encontrado por usuarioId:', oUsuarioId, 'com usuário:', usuarioIdParam);
+                return true;
+              }
+            }
+            
+            return false;
           });
-        } else {
-          // Se não encontrou email do usuário, retorna vazio
-          result = [];
-        }
+          
+          console.log('[Filtro] Após filtro local, encontradas', result.length, 'denúncias');
+          
+          // Se não encontrou nada, tenta buscar diretamente na API como fallback
+          if (result.length === 0) {
+            let denunciasComCidadaoId = await tryFetchFromApi(`/denuncias?cidadaoId=${usuarioId}`);
+            if (!Array.isArray(denunciasComCidadaoId) || denunciasComCidadaoId.length === 0) {
+              denunciasComCidadaoId = await tryFetchFromApi(`/denuncias?cidadaoId=${usuarioIdString}`);
+            }
+            
+            if (Array.isArray(denunciasComCidadaoId) && denunciasComCidadaoId.length > 0) {
+              console.log('[Filtro] Encontradas', denunciasComCidadaoId.length, 'denúncias via API (fallback)');
+              result = denunciasComCidadaoId.map(d => normalizeOcorrenciaFromApi(d, data));
+            }
+          }
+          
+          // Se ainda não encontrou, tenta por email (compatibilidade com dados antigos)
+          if (result.length === 0) {
+            let targetEmail = null;
+            const cidadaosFromApi = await tryFetchFromApi('/cidadaos');
+            if (Array.isArray(cidadaosFromApi)) {
+              const targetUser = cidadaosFromApi.find(u => {
+                const uId = parseInt(u.id, 10);
+                const uIdStr = String(u.id);
+                return (uId === usuarioId) || (uIdStr === usuarioIdString);
+              });
+              targetEmail = targetUser ? (targetUser.email || '').toLowerCase().trim() : null;
+            }
+            
+            if (targetEmail) {
+              result = all.filter(o => {
+                const oEmail = (o.usuarioEmail || o.contatoCidadao || '').toLowerCase().trim();
+                return oEmail === targetEmail;
+              });
+              console.log('[Filtro] Encontradas', result.length, 'denúncias por email');
+            }
+          }
       }
     }
 
@@ -232,6 +295,11 @@
       : (denuncia.dataResolucao || null);
     const updatedAt = denuncia.dataUltimaAtualizacaoStatus || resolvedAt || createdAt;
 
+    // Prioriza cidadaoId direto da denúncia, depois tenta pelo match de email
+    const cidadaoId = denuncia.cidadaoId 
+      ? parseInt(denuncia.cidadaoId) 
+      : (usuarioMatch ? usuarioMatch.id : null);
+
     return {
       id: denuncia.id,
       titulo: denuncia.titulo,
@@ -250,7 +318,8 @@
       bairroId: bairroMatch ? bairroMatch.id : null,
       cidadeNome: cidadeMatch ? cidadeMatch.nome : cidadeNome,
       bairroNome: bairroMatch ? bairroMatch.nome : bairroNome,
-      usuarioId: usuarioMatch ? usuarioMatch.id : null,
+      usuarioId: cidadaoId || (usuarioMatch ? usuarioMatch.id : null),
+      cidadaoId: cidadaoId, // Campo direto do cidadão que reportou
       usuarioNome: usuarioMatch ? (usuarioMatch.nome || usuarioMatch.nomeCompleto) : autorNome,
       usuarioEmail: autorEmail,
       endereco: denuncia.endereco || null,
@@ -455,17 +524,31 @@
           li.setAttribute('tabindex', '0');
           li.className = 'recent-item';
 
-          const time = timeAgoPt(d.dataRegistro || '');
-          const bairroNome = d.endereco ? d.endereco.bairro : '';
-          const tipoDenuncia = d.tipoProblema || 'n/d';
+          // Garante que os dados estão disponíveis
+          const dataRegistro = d.dataRegistro || d.createdAt || '';
+          const time = timeAgoPt(dataRegistro);
+          const bairroNome = (d.endereco && d.endereco.bairro) ? d.endereco.bairro : 'Bairro não informado';
+          const tipoDenuncia = d.tipoProblema || d.tipo || 'Tipo não informado';
+          const dataFormatada = formatDate(dataRegistro);
+          const timeText = (time && time.text) ? time.text : dataFormatada;
+
+          // Debug log
+          console.log('[Relatos Recentes] Denúncia:', {
+            titulo: d.titulo,
+            bairro: bairroNome,
+            tipo: tipoDenuncia,
+            data: dataFormatada,
+            timeText: timeText,
+            endereco: d.endereco
+          });
 
           li.innerHTML = `
             <div class="recent-content">
               <h3 class="recent-title">${escapeHtml(d.titulo || 'Sem título')}</h3>
               <div class="recent-meta">
-                <span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome || 'Bairro não informado')}</span>
+                <span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome)}</span>
                 <span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(tipoDenuncia)}</span>
-                <span class="time">${escapeHtml(time.text)}</span>
+                <span class="time" title="${escapeHtml(dataFormatada)}">${escapeHtml(timeText)}</span>
               </div>
             </div>
           `;
@@ -690,23 +773,41 @@
 
       console.log('[Seu Impacto] Usuário logado:', user);
 
-      await ensureSeedOccorrenciasIfEmpty();
+      // Busca denúncias do usuário, filtrando por cidadaoId e excluindo denúncias LEGACY/simuladas
       const fetched = await fetchJson(`/ocorrencias?usuarioId=${user.id}&status=resolvido&_sort=resolvedAt&_order=desc&_limit=10`);
       
       console.log('[Seu Impacto] Denúncias resolvidas encontradas:', fetched);
       
+      // Filtra apenas denúncias reais do usuário (com cidadaoId correto e sem código LEGACY)
       const resolvidasDoUsuario = Array.isArray(fetched)
-        ? fetched.map(o => ({
-            ...o,
-            _resolvedAt: o.resolvedAt
-              ? new Date(o.resolvedAt)
-              : (o.updatedAt ? new Date(o.updatedAt) : (o.createdAt ? new Date(o.createdAt) : new Date(0)))
-          }))
+        ? fetched
+            .filter(o => {
+              // Exclui denúncias LEGACY/simuladas
+              if (o.codigoOcorrencia && o.codigoOcorrencia.startsWith('LEGACY-')) {
+                return false;
+              }
+              // Garante que a denúncia pertence ao usuário atual
+              const cidadaoId = o.cidadaoId ? parseInt(o.cidadaoId) : null;
+              const usuarioId = o.usuarioId ? parseInt(o.usuarioId) : null;
+              return (cidadaoId === parseInt(user.id)) || (usuarioId === parseInt(user.id));
+            })
+            .map(o => ({
+              ...o,
+              _resolvedAt: o.resolvedAt
+                ? new Date(o.resolvedAt)
+                : (o.updatedAt ? new Date(o.updatedAt) : (o.createdAt ? new Date(o.createdAt) : new Date(0)))
+            }))
         : [];
 
       const total = resolvidasDoUsuario.length;
       
-      console.log('[Seu Impacto] Total de problemas resolvidos:', total);
+      console.log('[Seu Impacto] Total de problemas resolvidos (após filtro):', total);
+
+      if (total === 0) {
+        // Se não houver denúncias resolvidas, mostra mensagem apropriada
+        container.innerHTML = '<p class="text-muted small mb-0">Você ainda não possui denúncias resolvidas. Quando uma denúncia sua for concluída, ela aparecerá aqui.</p>';
+        return;
+      }
 
       // Monta o HTML do cartão
       const header = `
@@ -714,11 +815,6 @@
           <i class="fa-solid fa-star text-warning"></i>
           <span class="fw-semibold">Você já ajudou a resolver ${total} problema${total === 1 ? '' : 's'}!</span>
         </div>`;
-
-      if (total === 0) {
-        container.innerHTML = header + '<p class="text-muted small mb-0">Quando uma denúncia sua for concluída, ela aparecerá aqui.</p>';
-        return;
-      }
 
       const ultimos = resolvidasDoUsuario.slice(0, 6);
       const itens = ultimos.map(o => {
@@ -762,30 +858,374 @@
     }
   }
 
+  // Função para atualizar informações do usuário no painel
+  function updateUserInfo(usuario) {
+    const nomeCompleto = usuario.nomeCompleto || usuario.nome || 'Usuário';
+    const primeiroNome = nomeCompleto.split(' ')[0];
+    const email = usuario.email || '';
+
+    // Atualiza nome em todos os lugares
+    const welcomeName = document.getElementById('welcome-name');
+    if (welcomeName) welcomeName.textContent = primeiroNome;
+
+    const userName = document.getElementById('user-name');
+    if (userName) userName.textContent = `Olá, ${primeiroNome}`;
+
+    const userEmail = document.getElementById('user-email');
+    if (userEmail) userEmail.textContent = email;
+
+    const nameUserLg = document.getElementById('name-user-lg');
+    if (nameUserLg) nameUserLg.textContent = `Olá, ${primeiroNome}`;
+
+    const nameUserOffcanvas = document.getElementById('name-user-offcanvas');
+    if (nameUserOffcanvas) nameUserOffcanvas.textContent = `Olá, ${primeiroNome}`;
+
+    // Atualiza também o elemento com id nomeUsuarioNav se existir
+    const nomeUsuarioNav = document.querySelector('#nomeUsuarioNav');
+    if (nomeUsuarioNav) nomeUsuarioNav.textContent = `Olá, ${primeiroNome}`;
+  }
+
+  // Função para atualizar estatísticas do usuário
+  async function updateUserStats(usuarioId) {
+    try {
+      console.log('[Estatísticas] Buscando para usuário ID:', usuarioId);
+      // Busca todas as denúncias do usuário
+      const todasDenuncias = await fetchJson(`/ocorrencias?usuarioId=${usuarioId}`);
+      console.log('[Estatísticas] Total encontrado antes do filtro:', Array.isArray(todasDenuncias) ? todasDenuncias.length : 0);
+      
+      // Prepara IDs para comparação (aceita string ou número)
+      const usuarioIdNum = parseInt(usuarioId, 10);
+      const usuarioIdStr = String(usuarioId);
+      
+      // Filtra apenas denúncias reais do usuário (exclui LEGACY/simuladas)
+      const denunciasReais = Array.isArray(todasDenuncias)
+        ? todasDenuncias.filter(d => {
+            // Exclui denúncias LEGACY/simuladas
+            if (d.codigoOcorrencia && d.codigoOcorrencia.startsWith('LEGACY-')) {
+              return false;
+            }
+            
+            // Garante que a denúncia pertence ao usuário atual (aceita string ou número)
+            const cidadaoId = d.cidadaoId;
+            const usuarioIdDenuncia = d.usuarioId;
+            
+            if (cidadaoId) {
+              const cidadaoIdNum = parseInt(cidadaoId, 10);
+              const cidadaoIdStr = String(cidadaoId);
+              if ((!Number.isNaN(cidadaoIdNum) && cidadaoIdNum === usuarioIdNum) || 
+                  (cidadaoIdStr === usuarioIdStr) || 
+                  (String(cidadaoId) === String(usuarioId))) {
+                return true;
+              }
+            }
+            
+            if (usuarioIdDenuncia) {
+              const usuarioIdNumDenuncia = parseInt(usuarioIdDenuncia, 10);
+              const usuarioIdStrDenuncia = String(usuarioIdDenuncia);
+              if ((!Number.isNaN(usuarioIdNumDenuncia) && usuarioIdNumDenuncia === usuarioIdNum) || 
+                  (usuarioIdStrDenuncia === usuarioIdStr) || 
+                  (String(usuarioIdDenuncia) === String(usuarioId))) {
+                return true;
+              }
+            }
+            
+            return false;
+          })
+        : [];
+      
+      console.log('[Estatísticas] Após filtro:', denunciasReais.length, 'denúncias reais');
+      
+      if (denunciasReais.length === 0) {
+        // Se não houver denúncias, zera as estatísticas
+        const quickTotal = document.getElementById('quick-total');
+        const quickResolved = document.getElementById('quick-resolved');
+        const quickProgress = document.getElementById('quick-progress');
+        
+        if (quickTotal) quickTotal.textContent = '0';
+        if (quickResolved) quickResolved.textContent = '0';
+        if (quickProgress) quickProgress.textContent = '0';
+        
+        return;
+      }
+
+      // Calcula estatísticas apenas com denúncias reais
+      const total = denunciasReais.length;
+      const resolvidas = denunciasReais.filter(d => {
+        const status = normalizeStatus(d.status || d.statusOriginal);
+        return status === 'resolvido';
+      }).length;
+      const emAndamento = denunciasReais.filter(d => {
+        const status = normalizeStatus(d.status || d.statusOriginal);
+        return status === 'em_andamento';
+      }).length;
+
+      // Atualiza elementos
+      const quickTotal = document.getElementById('quick-total');
+      const quickResolved = document.getElementById('quick-resolved');
+      const quickProgress = document.getElementById('quick-progress');
+      
+      if (quickTotal) quickTotal.textContent = total;
+      if (quickResolved) quickResolved.textContent = resolvidas;
+      if (quickProgress) quickProgress.textContent = emAndamento;
+    } catch (error) {
+      console.error('Erro ao atualizar estatísticas do usuário:', error);
+    }
+  }
+
   async function init() {
     const user = getUsuarioCorrente();
-    if (!user) return;
-    const usuario = await fetchJson(`/usuarios/${user.id}`);
+    if (!user || !user.id) {
+      // Atualiza elementos do painel para mostrar mensagens ao invés de dados
+      const userName = document.getElementById('user-name');
+      const userEmail = document.getElementById('user-email');
+      const welcomeSubtitle = document.getElementById('welcome-subtitle');
+      
+      if (userName) {
+        userName.innerHTML = '<i class="fa-solid fa-info-circle me-2"></i>Faça login ou registre-se';
+        userName.style.color = 'var(--text-muted)';
+        userName.style.fontSize = '1rem';
+      }
+      if (userEmail) {
+        userEmail.innerHTML = 'para visualizar seus dados e acompanhar suas denúncias';
+        userEmail.style.color = 'var(--text-muted)';
+        userEmail.style.fontSize = '0.9rem';
+      }
+      if (welcomeSubtitle) {
+        welcomeSubtitle.textContent = 'Registre-se para acompanhar suas denúncias e o que está acontecendo na cidade';
+      }
+      
+      // Carrega relatos recentes mesmo sem login (visível para todos)
+      await populateRecentReports();
+      
+      // Se não houver usuário logado, mostra mensagens explicativas
+      const ultimasDenunciasContainer = document.getElementById('ultimas-denuncias');
+      if (ultimasDenunciasContainer) {
+        const currentPath = window.location.pathname;
+        let loginPath = '';
+        let cadastroPath = '';
+        
+        if (currentPath.includes('/painel-cidadao/')) {
+          if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
+            // Subpasta: comunidade, dashboard, etc
+            loginPath = '../../login/login.html';
+            cadastroPath = '../../cadastro/cadastro-cidadao.html';
+          } else {
+            // Pasta principal: painel-cidadao/index.html
+            loginPath = '../login/login.html';
+            cadastroPath = '../cadastro/cadastro-cidadao.html';
+          }
+        } else {
+          loginPath = '../modulos/login/login.html';
+          cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+        }
+        ultimasDenunciasContainer.innerHTML = `
+          <div class="text-center p-3">
+            <p class="text-muted mb-3">Faça login ou registre-se para ver suas denúncias e acompanhar o status dos problemas reportados.</p>
+            <div class="d-flex gap-2 justify-content-center">
+              <a href="${loginPath}" class="btn btn-primary btn-sm">Fazer Login</a>
+              <a href="${cadastroPath}" class="btn btn-outline-primary btn-sm">Cadastrar-se</a>
+            </div>
+          </div>
+        `;
+      }
+      
+      const userImpactBody = document.getElementById('user-impact-body');
+      if (userImpactBody) {
+        const currentPath = window.location.pathname;
+        let loginPath = '';
+        let cadastroPath = '';
+        
+        if (currentPath.includes('/painel-cidadao/')) {
+          if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
+            // Subpasta: comunidade, dashboard, etc
+            loginPath = '../../login/login.html';
+            cadastroPath = '../../cadastro/cadastro-cidadao.html';
+          } else {
+            // Pasta principal: painel-cidadao/index.html
+            loginPath = '../login/login.html';
+            cadastroPath = '../cadastro/cadastro-cidadao.html';
+          }
+        } else {
+          loginPath = '../modulos/login/login.html';
+          cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+        }
+        userImpactBody.innerHTML = `
+          <div class="text-center p-3">
+            <p class="text-muted mb-3">Faça login ou registre-se para ver seu impacto na comunidade e acompanhar as denúncias resolvidas.</p>
+            <div class="d-flex gap-2 justify-content-center">
+              <a href="${loginPath}" class="btn btn-primary btn-sm">Fazer Login</a>
+              <a href="${cadastroPath}" class="btn btn-outline-primary btn-sm">Cadastrar-se</a>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Atualiza estatísticas para mostrar zero
+      const quickTotal = document.getElementById('quick-total');
+      const quickResolved = document.getElementById('quick-resolved');
+      const quickProgress = document.getElementById('quick-progress');
+      if (quickTotal) quickTotal.textContent = '0';
+      if (quickResolved) quickResolved.textContent = '0';
+      if (quickProgress) quickProgress.textContent = '0';
+      
+      // Calcula caminhos uma vez para reutilizar
+      const currentPath = window.location.pathname;
+      let loginPath = '';
+      let cadastroPath = '';
+      
+      if (currentPath.includes('/painel-cidadao/')) {
+        if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
+          // Subpasta: comunidade, dashboard, etc
+          loginPath = '../../login/login.html';
+          cadastroPath = '../../cadastro/cadastro-cidadao.html';
+        } else {
+          // Pasta principal: painel-cidadao/index.html
+          loginPath = '../login/login.html';
+          cadastroPath = '../cadastro/cadastro-cidadao.html';
+        }
+      } else {
+        loginPath = '../modulos/login/login.html';
+        cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+      }
+      
+      // Bloqueia o botão de reportar e adiciona aviso
+      const linkReportar = document.getElementById('link-reportar');
+      const btnReportar = document.getElementById('btn-reportar');
+      const userPanelContent = document.querySelector('.user-panel-content');
+      
+      if (linkReportar && btnReportar) {
+        linkReportar.href = loginPath;
+        linkReportar.onclick = function(e) {
+          e.preventDefault();
+          alert('Você precisa estar logado para reportar uma ocorrência. Por favor, faça login ou cadastre-se primeiro.');
+          window.location.href = loginPath;
+        };
+        btnReportar.innerHTML = '<p>Faça login para reportar</p>';
+      }
+      
+      // Adiciona aviso no card do painel do usuário
+      if (userPanelContent) {
+        // Remove aviso anterior se existir
+        const avisoAnterior = userPanelContent.querySelector('.alert-info');
+        if (avisoAnterior) {
+          avisoAnterior.remove();
+        }
+        
+        const avisoDiv = document.createElement('div');
+        avisoDiv.className = 'alert alert-info mt-3 mb-0';
+        avisoDiv.innerHTML = `
+          <i class="fa-solid fa-info-circle me-2"></i>
+          <strong>Você precisa estar logado</strong> para reportar denúncias e acompanhar seus problemas. 
+          <a href="${loginPath}" class="alert-link">Faça login</a> ou 
+          <a href="${cadastroPath}" class="alert-link">cadastre-se</a> para começar.
+        `;
+        
+        // Insere o aviso antes do footer
+        const userPanelFooter = document.getElementById('user-panel-footer');
+        if (userPanelFooter && userPanelFooter.parentNode) {
+          userPanelFooter.parentNode.insertBefore(avisoDiv, userPanelFooter);
+        } else if (userPanelContent) {
+          // Se não encontrar o footer, adiciona no final do content
+          userPanelContent.appendChild(avisoDiv);
+        }
+      }
+      
+      return;
+    }
+    
+    // Tenta buscar do endpoint /cidadaos primeiro, depois /usuarios como fallback
+    let usuario = await fetchJson(`/cidadaos/${user.id}`);
+    if (!usuario || !usuario.id) {
+      usuario = await fetchJson(`/usuarios/${user.id}`);
+    }
+    if (!usuario) usuario = user; // Fallback para dados da sessão
 
-    const ultimasDenuncias = await fetchJson(`/ocorrencias?usuarioId=${usuario.id}&_sort=createdAt&_order=desc&_limit=2`);
+    // Atualiza informações do usuário no painel
+    updateUserInfo(usuario);
+
+    // Atualiza estatísticas do usuário
+    await updateUserStats(usuario.id);
+
+    // Busca denúncias do usuário usando cidadaoId, filtrando denúncias LEGACY/simuladas
+    console.log('[Últimas Denúncias] Buscando para usuário ID:', usuario.id, 'tipo:', typeof usuario.id);
+    // Busca de /denuncias ao invés de /ocorrencias
+    const todasDenuncias = await fetchJson(`/denuncias?cidadaoId=${usuario.id}&_sort=dataRegistro&_order=desc`);
+    console.log('[Últimas Denúncias] Total encontrado antes do filtro:', Array.isArray(todasDenuncias) ? todasDenuncias.length : 0);
+    
+    // Prepara IDs para comparação (aceita string ou número)
+    const usuarioIdNum = parseInt(usuario.id, 10);
+    const usuarioIdStr = String(usuario.id);
+    
+    // Filtra apenas denúncias reais do usuário (exclui LEGACY e verifica cidadaoId)
+    const denunciasFiltradas = Array.isArray(todasDenuncias)
+      ? todasDenuncias.filter(d => {
+            // Exclui denúncias LEGACY/simuladas
+            if (d.codigoOcorrencia && d.codigoOcorrencia.startsWith('LEGACY-')) {
+              return false;
+            }
+            
+            // Garante que a denúncia pertence ao usuário atual (aceita string ou número)
+            const cidadaoId = d.cidadaoId;
+            const usuarioId = d.usuarioId;
+            
+            if (cidadaoId) {
+              const cidadaoIdNum = parseInt(cidadaoId, 10);
+              const cidadaoIdStr = String(cidadaoId);
+              // Compara de múltiplas formas para garantir match
+              if ((!Number.isNaN(cidadaoIdNum) && cidadaoIdNum === usuarioIdNum) || 
+                  (cidadaoIdStr === usuarioIdStr) || 
+                  (String(cidadaoId) === String(usuario.id))) {
+                console.log('[Últimas Denúncias] Match por cidadaoId:', cidadaoId, 'com usuário:', usuario.id);
+                return true;
+              }
+            }
+            
+            if (usuarioId) {
+              const usuarioIdNumDenuncia = parseInt(usuarioId, 10);
+              const usuarioIdStrDenuncia = String(usuarioId);
+              if ((!Number.isNaN(usuarioIdNumDenuncia) && usuarioIdNumDenuncia === usuarioIdNum) || 
+                  (usuarioIdStrDenuncia === usuarioIdStr) || 
+                  (String(usuarioId) === String(usuario.id))) {
+                console.log('[Últimas Denúncias] Match por usuarioId:', usuarioId, 'com usuário:', usuario.id);
+                return true;
+              }
+            }
+            
+            return false;
+          })
+      : [];
+    
+    // Ordena por data de registro (mais recentes primeiro) e limita a 2 denúncias
+    const ultimasDenuncias = denunciasFiltradas
+      .sort((a, b) => {
+        const dateA = new Date(a.dataRegistro || a.createdAt || 0);
+        const dateB = new Date(b.dataRegistro || b.createdAt || 0);
+        return dateB.getTime() - dateA.getTime(); // Ordem decrescente (mais recente primeiro)
+      })
+      .slice(0, 2); // Limita a no máximo 2 denúncias
+    
+    console.log('[Últimas Denúncias] Após filtro:', ultimasDenuncias.length, 'denúncias');
+    
     const ultimasDenunciasContainer = document.getElementById('ultimas-denuncias');
     
     if (ultimasDenunciasContainer) {
       if (ultimasDenuncias.length === 0) {
-        ultimasDenunciasContainer.innerHTML = '<p class="text-muted small">Nenhuma denúncia encontrada.</p>';
+        ultimasDenunciasContainer.innerHTML = '<p class="text-muted small">Você ainda não possui denúncias.</p>';
       } else {
         ultimasDenunciasContainer.innerHTML = '';
         ultimasDenuncias.forEach((denuncia, index) => {
           const denunciaDiv = document.createElement('div');
-          denunciaDiv.className = `denuncia-item status-${denuncia.status}`;
+          const statusValue = denuncia.statusAtual || denuncia.status || denuncia.statusOriginal || 'Pendente';
+          denunciaDiv.className = `denuncia-item status-${normalizeStatus(statusValue)}`;
           const safeTitulo = escapeHtml(denuncia.titulo || 'Ocorrência');
-          const safeStatus = escapeHtml(getStatusLabel(denuncia.status || denuncia.statusOriginal));
-          const safeTipo = escapeHtml(denuncia.tipo || denuncia.tipoProblema || 'Tipo');
-          const safeData = escapeHtml(formatDate(denuncia.createdAt || denuncia.dataRegistro));
+          const safeStatus = escapeHtml(getStatusLabel(statusValue));
+          const safeTipo = escapeHtml(denuncia.tipoProblema || denuncia.tipo || 'Tipo');
+          const safeBairro = escapeHtml(denuncia.endereco?.bairro || 'Bairro não informado');
+          const safeData = escapeHtml(formatDate(denuncia.dataRegistro || denuncia.createdAt));
           denunciaDiv.innerHTML = `
             <div class="denuncia-titulo">${index + 1}. ${safeTitulo}</div>
             <div class="denuncia-meta">
-              ${safeStatus} • ${safeTipo} • ${safeData}
+              ${safeStatus} • ${safeTipo} • ${safeBairro} • ${safeData}
             </div>
           `;
           ultimasDenunciasContainer.appendChild(denunciaDiv);
@@ -793,10 +1233,16 @@
       }
     }
 
-    // Populate recent reports e impacto do usuário
+    // Atualiza o subtítulo para o texto padrão quando há usuário logado
+    const welcomeSubtitle = document.getElementById('welcome-subtitle');
+    if (welcomeSubtitle) {
+      welcomeSubtitle.textContent = 'Acompanhe suas denúncias e o que está acontecendo na sua cidade';
+    }
+    
+    // Populate recent reports (da cidade - mantém padrão) e impacto do usuário
     await Promise.all([
-      populateRecentReports(),
-      populateUserImpact()
+      populateRecentReports(), // Mantém padrão - mostra da cidade
+      populateUserImpact() // Apenas do usuário
     ]);
 
     // Inicia atualização automática a cada 30 segundos

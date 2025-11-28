@@ -20,33 +20,88 @@ const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
 const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`;
 const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';
 
-// Função para carregar dados do usuário do json-server
-async function loadUserData() {
+// Função para obter o usuário corrente do sessionStorage
+function getUsuarioCorrente() {
     try {
-        const response = await fetch(CIDADAOS_ENDPOINT);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Verifica se é visitante (entrou sem login)
+        const isGuest = sessionStorage.getItem('isGuest') === 'true';
+        if (isGuest) {
+            return null; // Retorna null para visitante
         }
         
-        const data = await response.json();
-        
-        if (data && data.length > 0) {
-            currentUser = data[0]; 
-            console.log("Usuário carregado com sucesso:", currentUser.nomeCompleto);
+        // Tenta múltiplas chaves de sessão
+        const keys = ['usuarioCorrente', 'fp_user', 'user'];
+        for (const key of keys) {
+            const raw = sessionStorage.getItem(key);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                // Verifica se tem ID válido (não aceita dados sem ID ou admin)
+                if (parsed && parsed.id && (parsed.id !== 'admin' && parsed.id !== 'administrador')) {
+                    return parsed;
+                }
+            }
+        }
+        return null;
+    } catch (_) {
+        return null;
+    }
+}
 
-            const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
-            if (nomeUsuarioNav) {
-                nomeUsuarioNav.textContent = `Olá, ${currentUser.nomeCompleto.split(' ')[0]}`;
+// Função para carregar dados do usuário corrente
+async function loadUserData() {
+    try {
+        // Primeiro tenta obter do sessionStorage
+        let usuario = getUsuarioCorrente();
+        
+        // Se não há usuário logado, redireciona para login
+        if (!usuario || !usuario.id) {
+            alert('Você precisa estar logado para reportar uma ocorrência. Por favor, faça login primeiro.');
+            // Calcula o caminho correto para login
+            const loginPath = '../../modulos/login/login.html';
+            window.location.href = loginPath;
+            return;
+        }
+        
+        if (usuario && usuario.id) {
+            // Se encontrou no sessionStorage, busca dados completos do json-server
+            const response = await fetch(`${CIDADAOS_ENDPOINT}/${usuario.id}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                currentUser = {
+                    ...usuario,
+                    ...data,
+                    nomeCompleto: data.nomeCompleto || usuario.nome || usuario.nomeCompleto || 'Usuário'
+                };
+            } else {
+                // Se não encontrou no servidor, usa os dados do sessionStorage
+                currentUser = usuario;
             }
         } else {
-            console.error("Nenhum cidadão encontrado no json-server. Defininindo usuário de fallback.");
-            currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
+            // Fallback: busca o primeiro usuário (para desenvolvimento)
+            const response = await fetch(CIDADAOS_ENDPOINT);
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    currentUser = data[0];
+                } else {
+                    currentUser = { nomeCompleto: "Usuário de Teste (Fallback)", id: null };
+                }
+            } else {
+                currentUser = { nomeCompleto: "Usuário de Teste (Fallback)", id: null };
+            }
+        }
+
+        console.log("Usuário carregado:", currentUser.nomeCompleto, "ID:", currentUser.id);
+
+        const nomeUsuarioNav = document.querySelector('.navbar-user .name-user');
+        if (nomeUsuarioNav && currentUser.nomeCompleto) {
+            nomeUsuarioNav.textContent = `Olá, ${currentUser.nomeCompleto.split(' ')[0]}`;
         }
         
     } catch (error) {
-        console.error("Erro ao carregar dados do usuário do json-server:", error);
-        currentUser = { nomeCompleto: "Usuário de Teste (Fallback)" };
+        console.error("Erro ao carregar dados do usuário:", error);
+        currentUser = { nomeCompleto: "Usuário de Teste (Fallback)", id: null };
     }
 }
 
@@ -424,10 +479,17 @@ async function handleSubmit(event) {
     console.log("Novo Código de Ocorrência gerado:", novoCodigoOcorrencia);
     // ----------------------------------------
 
+    // Verifica se há usuário logado
+    if (!currentUser || !currentUser.id) {
+        alert('Você precisa estar logado para reportar uma ocorrência. Por favor, faça login primeiro.');
+        window.location.href = '../../modulos/login/login.html';
+        return;
+    }
+
     const isAnonimo = document.getElementById('anonimo').checked;
     const nomeReal = currentUser?.nomeCompleto || 'Usuário Desconhecido';
     const autorCidadao = isAnonimo ? 'Anônimo' : nomeReal;
-    const recebeNotificacoes = document.getElementById('notificacoes').checked;
+    const recebeNotificacoes = document.getElementById('notificacoes')?.checked || false;
 
 
     const uploadedImageUrls = selectedFilesList.map((file, index) => {
@@ -447,6 +509,11 @@ async function handleSubmit(event) {
         // --- ADICIONADO O CAMPO codigoOcorrencia ---
         codigoOcorrencia: novoCodigoOcorrencia, 
         // ------------------------------------------
+
+        // --- ADICIONADO O ID DO CIDADÃO QUE REPORTOU ---
+        // Garante que o ID seja salvo como string (json-server geralmente usa strings para IDs)
+        cidadaoId: currentUser.id ? String(currentUser.id) : null,
+        // -----------------------------------------------
 
         endereco: {
             // Agora usa os dados armazenados pelo reverse geocoding
@@ -472,11 +539,13 @@ async function handleSubmit(event) {
         observacoesInternasServidor: '',
         servidorResponsavelId: null,
         
-        contatoCidadao: document.getElementById('contato').value,
+        contatoCidadao: document.getElementById('contato').value || currentUser.email || '',
         recebeNotificacoes: recebeNotificacoes
     };
 
     console.log("Dados do relatório para envio (com URLs de imagens):", reportData);
+    console.log("[Nova Denúncia] cidadaoId sendo salvo:", reportData.cidadaoId, "tipo:", typeof reportData.cidadaoId, "currentUser.id:", currentUser.id);
+    console.log("[Nova Denúncia] cidadaoId sendo salvo:", reportData.cidadaoId, "tipo:", typeof reportData.cidadaoId, "currentUser.id:", currentUser.id);
 
     try {
         const response = await fetch(DENUNCIAS_ENDPOINT, {

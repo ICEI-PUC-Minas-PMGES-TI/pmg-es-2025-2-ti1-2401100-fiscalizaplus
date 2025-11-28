@@ -1,61 +1,35 @@
 {
   "cidadaos": [
     {
-      "id": "1",
-      "nomeCompleto": "João Pedro",
-      "email": "joao.pedro@email.com",
-      "senhaHash": "hash_da_senha",
+      "id": "6cf7",
+      "nomeCompleto": "Italo Eduardo Carneiro da Silva",
+      "email": "contatoitalocnr@gmail.com",
       "estado": "MG",
       "cidade": "Belo Horizonte",
-      "dataCadastro": "2023-10-26T10:00:00Z"
-    },
-    {
-      "id": "2",
-      "nomeCompleto": "Maria Luiza",
-      "email": "maria.luiza@email.com",
-      "senhaHash": "hash_da_senha",
-      "estado": "SP",
-      "cidade": "São Paulo",
-      "dataCadastro": "2023-10-27T11:30:00Z"
-    },
-    {
-      "id": "3",
-      "nomeCompleto": "Carlos Silva",
-      "email": "carlos.silva@email.com",
-      "senhaHash": "hash_da_senha",
-      "estado": "MG",
-      "cidade": "Belo Horizonte",
-      "dataCadastro": "2023-11-01T14:00:00Z"
+      "senhaHash": "i#t*a&l$o",
+      "dataCadastro": "2025-11-28T13:33:44.969Z"
     }
   ],
   "servidores": [
     {
-      "id": "101",
-      "nomeCompleto": "Paulo Cardoso",
-      "email": "paulo@prefeitura.com",
-      "senhaHash": "hash_da_senha",
+      "id": "9560",
+      "nomeCompleto": "Italo Eduardo Carneiro da Silva",
+      "email": "italoeduardo@bhtrans.com.br",
       "estado": "MG",
       "cidade": "Belo Horizonte",
-      "orgaoId": 1,
-      "dataCadastro": "2023-10-25T09:00:00Z"
-    },
-    {
-      "id": "102",
-      "nomeCompleto": "Paula Fernandes",
-      "email": "paula@prefeitura.com",
-      "senhaHash": "hash_da_senha",
-      "estado": "SP",
-      "cidade": "São Paulo",
       "orgaoId": 2,
-      "dataCadastro": "2023-10-25T09:00:00Z"
+      "senhaHash": "Italo.bh",
+      "dataCadastro": "2025-11-28T13:41:58.008Z"
     }
   ],
   "tokensAcessoServidor": [
     {
       "token": "A1B9-C3D7-E5F2-G4H8",
-      "usado": false,
+      "usado": true,
       "dataCriacao": "2023-10-01T08:00:00Z",
-      "id": "24c7"
+      "id": "24c7",
+      "dataUso": "2025-11-28T13:41:36.274Z",
+      "servidorId": 9560
     },
     {
       "token": "Z9Y2-X4W6-V8U1-T3S5",
@@ -3418,6 +3392,103 @@
       "contatoCidadao": "",
       "recebeNotificacoes": false,
       "id": "119"
+    },
+    {
+      "id": "9901",
+      "titulo": "Buraco proximo a cidade administrativa",
+      "tipoProblema": "transito",
+      "descricaoCompleta": "Tem um buraco proximo a cidade administrativa ",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0120",
+      "endereco": {
+        "rua": "Rua Ibirapuera",
+        "numero": "",
+        "bairro": "Palmital",
+        "cidade": "Santa Luzia",
+        "estado": "Minas Gerais",
+        "cep": "31630-903",
+        "latitude": -19.78231230204192,
+        "longitude": -43.94690013401034
+      },
+      "imagens": [],
+      "prioridadeCidadao": "alta",
+      "urgenciaCidadao": "alta",
+      "impactoComunidade": "regional",
+      "dataRegistro": "2025-11-27T17:13:42.639Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-27T17:13:42.640Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "",
+      "recebeNotificacoes": true
+    },
+    {
+      "id": "26f4",
+      "titulo": "Rua com semafafo queimado",
+      "tipoProblema": "transito",
+      "descricaoCompleta": "Tem um semaforo queimado na rua",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0121",
+      "endereco": {
+        "rua": "Rua dos Timbiras",
+        "numero": "",
+        "bairro": "Lourdes",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30170-012",
+        "latitude": -19.92647820390139,
+        "longitude": -43.94095722024532
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-27T17:27:39.654Z",
+      "autorCidadao": "Anônimo",
+      "isAnonimo": true,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-11-27T17:27:39.654Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "",
+      "recebeNotificacoes": true
+    },
+    {
+      "id": "c61d",
+      "titulo": "Calçada danificada",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Tem uma calçada danificada na rua dos timbiras no Lourdes",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0123",
+      "cidadaoId": "6cf7",
+      "endereco": {
+        "rua": "Rua dos Timbiras",
+        "numero": "",
+        "bairro": "Lourdes",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30170-081",
+        "latitude": -19.9255174,
+        "longitude": -43.944531
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-11-28T17:29:37.508Z",
+      "autorCidadao": "Italo Eduardo Carneiro da Silva",
+      "isAnonimo": false,
+      "statusAtual": "Em andamento",
+      "dataUltimaAtualizacaoStatus": "2025-11-28T17:29:37.509Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "contatoitalocnr@gmail.com",
+      "recebeNotificacoes": true
     }
   ],
   "admin": {
@@ -3447,7 +3518,7 @@
       "title": "Buraco perigoso na avenida",
       "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
       "category": "transito",
-      "votes": 28
+      "votes": 31
     },
     {
       "id": "2",
@@ -3456,7 +3527,7 @@
       "title": "Sugestão de faixa de pedestre",
       "excerpt": "Seria importante adicionar uma faixa perto da escola...",
       "category": "sugestoes",
-      "votes": 14
+      "votes": 15
     },
     {
       "id": "3",
@@ -3465,7 +3536,7 @@
       "title": "Alagamento recorrente na esquina",
       "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
       "category": "meioambiente",
-      "votes": 8
+      "votes": 9
     }
   ]
 }

@@ -64,13 +64,27 @@
                                 Lembrar de mim
                             </label>
                         </div>
-                        <a href="#" class="link-esqueceu">Esqueceu a senha?</a>
+                        <a href="#" class="link-esqueceu" id="linkEsqueceuSenha">Esqueceu a senha?</a>
                     </div>
 
                     <!-- Botão Entrar -->
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-login">
                             Entrar no Sistema
+                        </button>
+                    </div>
+
+                    <!-- Divisor -->
+                    <div class="divider-container my-4">
+                        <hr class="divider-line">
+                        <span class="divider-text">ou</span>
+                        <hr class="divider-line">
+                    </div>
+
+                    <!-- Botão Entrar sem Login -->
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-login-guest" id="btnEntrarSemLogin">
+                            Entrar sem Login
                         </button>
                     </div>
 
@@ -94,22 +108,303 @@
         </div>
     </div>
 
-    <!-- Script para alternar visibilidade da senha -->
-    <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#floatingPassword');
-
-        togglePassword.addEventListener('click', function (e) {
-            // Alternar o tipo do atributo
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            
-            // Alternar o ícone
-            this.classList.toggle('bi-eye');
-            this.classList.toggle('bi-eye-slash');
-        });
-    </script>
+    <!-- Modal Esqueci Minha Senha -->
+    <div class="modal fade" id="modalEsqueceuSenha" tabindex="-1" aria-labelledby="modalEsqueceuSenhaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEsqueceuSenhaLabel">
+                        <i class="bi bi-key me-2"></i>Recuperar Senha
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Digite seu e-mail cadastrado para recuperar sua senha.</p>
+                    <form id="formRecuperarSenha">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="emailRecuperacao" placeholder="nome@exemplo.com" required>
+                            <label for="emailRecuperacao">Endereço de E-mail</label>
+                        </div>
+                        <div id="mensagemRecuperacao" class="alert d-none" role="alert"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnRecuperarSenha">Recuperar Senha</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/login.js"></script>
+
+    <!-- Script para alternar visibilidade da senha e funcionalidades -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#floatingPassword');
+
+            if (togglePassword && password) {
+                togglePassword.addEventListener('click', function (e) {
+                    // Alternar o tipo do atributo
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    
+                    // Alternar o ícone
+                    this.classList.toggle('bi-eye');
+                    this.classList.toggle('bi-eye-slash');
+                });
+            }
+
+            // Script para entrar sem login
+            const btnEntrarSemLogin = document.querySelector('#btnEntrarSemLogin');
+            if (btnEntrarSemLogin) {
+                btnEntrarSemLogin.addEventListener('click', function() {
+                    // Limpa todos os dados de sessão para garantir estado de visitante
+                    sessionStorage.removeItem('usuarioCorrente');
+                    sessionStorage.removeItem('fp_user');
+                    sessionStorage.removeItem('user');
+                    sessionStorage.removeItem('token_servidor_validado');
+                    sessionStorage.removeItem('token_id');
+                    
+                    // Define flag de visitante
+                    sessionStorage.setItem('isGuest', 'true');
+                    
+                    // Redireciona para o painel do cidadão sem criar sessão de usuário
+                    window.location.href = '../painel-cidadao/index.html';
+                });
+            }
+
+            // ========== FUNCIONALIDADE "LEMBRE-ME" ==========
+            const rememberMeCheckbox = document.getElementById('rememberMe');
+            const emailInput = document.getElementById('floatingInput');
+            const STORAGE_KEY_EMAIL = 'fiscalizaplus_remember_email';
+
+            // Carrega email salvo ao carregar a página
+            function loadRememberedEmail() {
+                try {
+                    const savedEmail = localStorage.getItem(STORAGE_KEY_EMAIL);
+                    if (savedEmail && emailInput) {
+                        emailInput.value = savedEmail;
+                        if (rememberMeCheckbox) {
+                            rememberMeCheckbox.checked = true;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar email salvo:', error);
+                }
+            }
+
+            // Salva ou remove email do localStorage
+            function saveRememberedEmail(email, shouldRemember) {
+                try {
+                    if (shouldRemember && email) {
+                        localStorage.setItem(STORAGE_KEY_EMAIL, email);
+                        console.log('Email salvo:', email);
+                    } else {
+                        localStorage.removeItem(STORAGE_KEY_EMAIL);
+                        console.log('Email removido do storage');
+                    }
+                } catch (error) {
+                    console.error('Erro ao salvar email:', error);
+                }
+            }
+
+            // Carrega email salvo ao iniciar
+            loadRememberedEmail();
+
+            // ========== FUNCIONALIDADE "ESQUECI MINHA SENHA" ==========
+            const linkEsqueceuSenha = document.getElementById('linkEsqueceuSenha');
+            const modalElement = document.getElementById('modalEsqueceuSenha');
+            let modalEsqueceuSenha = null;
+            
+            if (modalElement && typeof bootstrap !== 'undefined') {
+                modalEsqueceuSenha = new bootstrap.Modal(modalElement);
+            }
+            
+            const btnRecuperarSenha = document.getElementById('btnRecuperarSenha');
+            const emailRecuperacao = document.getElementById('emailRecuperacao');
+            const mensagemRecuperacao = document.getElementById('mensagemRecuperacao');
+
+            // Abre modal ao clicar em "Esqueceu a senha?"
+            if (linkEsqueceuSenha) {
+                linkEsqueceuSenha.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (modalEsqueceuSenha) {
+                        modalEsqueceuSenha.show();
+                    } else if (modalElement && typeof bootstrap !== 'undefined') {
+                        modalEsqueceuSenha = new bootstrap.Modal(modalElement);
+                        modalEsqueceuSenha.show();
+                    } else {
+                        console.error('Bootstrap não está disponível');
+                        alert('Erro ao abrir modal. Verifique se o Bootstrap está carregado.');
+                    }
+                });
+            }
+
+            // Função para recuperar senha
+            async function recuperarSenha() {
+                if (!emailRecuperacao) {
+                    console.error('Campo de email de recuperação não encontrado');
+                    return;
+                }
+                
+                const email = emailRecuperacao.value.trim();
+                
+                if (!email) {
+                    mostrarMensagemRecuperacao('Por favor, digite seu e-mail.', 'danger');
+                    return;
+                }
+
+                // Mostra loading
+                if (btnRecuperarSenha) {
+                    btnRecuperarSenha.disabled = true;
+                    btnRecuperarSenha.textContent = 'Buscando...';
+                }
+
+                // Garante que os usuários foram carregados
+                if (typeof db_usuarios === 'undefined' || !Array.isArray(db_usuarios) || db_usuarios.length === 0) {
+                    console.log('Carregando usuários para recuperação de senha...');
+                    await new Promise((resolve) => {
+                        if (typeof carregarUsuarios === 'function') {
+                            carregarUsuarios(() => {
+                                console.log('Usuários carregados para recuperação');
+                                resolve();
+                            });
+                        } else {
+                            console.warn('Função carregarUsuarios não encontrada');
+                            setTimeout(resolve, 1000);
+                        }
+                    });
+                }
+
+                // Busca usuário pelo email
+                const usuario = db_usuarios.find(u => {
+                    const emailLower = (u.email || '').toLowerCase();
+                    return emailLower === email.toLowerCase();
+                });
+
+                // Restaura botão
+                if (btnRecuperarSenha) {
+                    btnRecuperarSenha.disabled = false;
+                    btnRecuperarSenha.textContent = 'Recuperar Senha';
+                }
+
+                if (usuario) {
+                    // Como não há sistema de email real, mostra a senha diretamente
+                    const senha = usuario.senha || usuario.senhaHash || 'Não disponível';
+                    mostrarMensagemRecuperacao(
+                        `<div class="mb-2">
+                            <strong><i class="bi bi-check-circle me-2"></i>E-mail encontrado!</strong><br>
+                            <small class="text-muted">Sua senha cadastrada:</small>
+                        </div>
+                        <div class="alert alert-light border d-flex align-items-center justify-content-center py-3">
+                            <code class="fs-5 fw-bold text-primary">${senha}</code>
+                        </div>`,
+                        'success'
+                    );
+                } else {
+                    mostrarMensagemRecuperacao(
+                        '<i class="bi bi-exclamation-triangle me-2"></i>E-mail não encontrado em nosso sistema. Verifique o e-mail digitado e tente novamente.',
+                        'danger'
+                    );
+                }
+            }
+
+            function mostrarMensagemRecuperacao(mensagem, tipo) {
+                if (!mensagemRecuperacao) {
+                    console.error('Elemento de mensagem não encontrado');
+                    return;
+                }
+                mensagemRecuperacao.className = `alert alert-${tipo}`;
+                mensagemRecuperacao.innerHTML = mensagem;
+                mensagemRecuperacao.classList.remove('d-none');
+            }
+
+            // Event listener para botão de recuperar senha
+            if (btnRecuperarSenha) {
+                btnRecuperarSenha.addEventListener('click', async function() {
+                    await recuperarSenha();
+                });
+            }
+
+            // Permite recuperar senha ao pressionar Enter no campo de email
+            if (emailRecuperacao) {
+                emailRecuperacao.addEventListener('keypress', async function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        await recuperarSenha();
+                    }
+                });
+            }
+
+            // Limpa mensagem ao fechar modal
+            if (modalElement) {
+                modalElement.addEventListener('hidden.bs.modal', function() {
+                    if (emailRecuperacao) emailRecuperacao.value = '';
+                    if (mensagemRecuperacao) {
+                        mensagemRecuperacao.classList.add('d-none');
+                        mensagemRecuperacao.innerHTML = '';
+                    }
+                });
+            }
+
+            // ========== FUNCIONALIDADE DE LOGIN ==========
+            const loginForm = document.querySelector('form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    
+                    const email = emailInput ? emailInput.value.trim() : '';
+                    const senha = document.getElementById('floatingPassword') ? document.getElementById('floatingPassword').value : '';
+                    const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
+                    
+                    if (!email || !senha) {
+                        alert('Por favor, preencha todos os campos.');
+                        return;
+                    }
+                    
+                    // Salva ou remove email baseado no checkbox "Lembre-me"
+                    saveRememberedEmail(email, rememberMe);
+                    
+                    // Garante que os usuários foram carregados antes de tentar fazer login
+                    if (typeof db_usuarios === 'undefined' || !Array.isArray(db_usuarios) || db_usuarios.length === 0) {
+                        console.log('Carregando usuários antes do login...');
+                        await new Promise((resolve) => {
+                            if (typeof carregarUsuarios === 'function') {
+                                carregarUsuarios(() => {
+                                    console.log('Usuários carregados, tentando login...');
+                                    resolve();
+                                });
+                            } else {
+                                setTimeout(resolve, 1000); // Aguarda 1 segundo se a função não existir
+                            }
+                        });
+                    }
+                    if (typeof loginUser === 'function') {
+                        try {
+                            const success = await loginUser(email, senha);
+                            if (success) {
+                                alert('Login realizado com sucesso!');
+                                // Redireciona para o painel do cidadão
+                                window.location.href = '../painel-cidadao/index.html';
+                            } else {
+                                alert('Email ou senha incorretos. Verifique os dados e tente novamente.');
+                            }
+                        } catch (error) {
+                            console.error('Erro ao fazer login:', error);
+                            alert('Erro ao processar login. Tente novamente.');
+                        }
+                    } else {
+                        console.error('Função loginUser não encontrada. Certifique-se de que login.js está carregado.');
+                        alert('Erro ao processar login. Tente novamente.');
+                    }
+                });
+            }
+            }, 100);
+        });
+    </script>
 </body>
 </html>

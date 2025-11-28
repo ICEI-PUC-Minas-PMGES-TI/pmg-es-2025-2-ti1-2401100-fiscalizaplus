@@ -2,7 +2,6 @@
 // - Carrega os posts do json-server
 // - Permite votar (com toggle) e atualizar no servidor
 // - Cadastra novas discussões via modal Bootstrap
-// - NÃO usa localStorage, só memória da aba
 
 const API_BASE = window.FP_API_BASE || "http://localhost:3000";
 const COMUNIDADE_ENDPOINT = `${API_BASE}/comunidade`;
@@ -18,11 +17,73 @@ const els = {
   cardTpl: document.getElementById("post-card-tpl"), // <template> do card
 };
 
+// Função para verificar se há usuário logado
+function getUsuarioCorrente() {
+  try {
+    // Verifica se é visitante (entrou sem login)
+    const isGuest = sessionStorage.getItem('isGuest') === 'true';
+    if (isGuest) {
+      return null; // Retorna null para visitante
+    }
+    
+    const keys = ['usuarioCorrente', 'fp_user', 'user'];
+    for (const key of keys) {
+      const raw = sessionStorage.getItem(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Verifica se tem ID válido (não aceita dados sem ID ou admin)
+        if (parsed && parsed.id && (parsed.id !== 'admin' && parsed.id !== 'administrador')) {
+          return parsed;
+        }
+      }
+    }
+    return null;
+  } catch (_) {
+    return null;
+  }
+}
+
 // ========== Init ==========
 init();
 
 async function init() {
   wireCategoryClicks();
+  
+  // Bloqueia criação de mensagens se não houver login
+  const btnNew = document.getElementById('btn-new');
+  const newPostForm = document.getElementById('new-post-form');
+  
+  if (btnNew) {
+    btnNew.addEventListener('click', function(e) {
+      const user = getUsuarioCorrente();
+      if (!user || !user.id) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Só mostra mensagem, não redireciona
+        alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
+        return false;
+      }
+    });
+  }
+  
+  if (newPostForm) {
+    newPostForm.addEventListener('submit', function(e) {
+      const user = getUsuarioCorrente();
+      if (!user || !user.id) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Só mostra mensagem, não redireciona
+        alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
+        // Fecha o modal
+        const modalEl = document.getElementById('newPostModal');
+        if (modalEl) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+        return false;
+      }
+    });
+  }
 
   if (els.cardTpl && els.cards) {
     // Comunidade dinâmica vinda do servidor
@@ -230,6 +291,17 @@ function initial(name = "") {
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
+    
+    // Verifica se há usuário logado
+    const user = getUsuarioCorrente();
+    if (!user || !user.id) {
+      // Só mostra mensagem, não redireciona
+      alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
+      // Fecha o modal
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+      return;
+    }
 
     const fd = new FormData(form);
     const title = (fd.get("title") || "").toString().trim();
