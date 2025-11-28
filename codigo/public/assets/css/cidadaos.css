@@ -283,7 +283,7 @@ main {
   color: #e5e5e5;
 }
 
-/* Setinha do dropdown no tema claro */
+/* Setinha do dropdown no tema claro - mesma cor do ícone mas mais escura */
 :root .user-icon-link.dropdown-toggle::after {
   border-top-color: #2d3748 !important;
 }
@@ -307,7 +307,7 @@ main {
   filter: drop-shadow(0 4px 8px rgba(255, 77, 90, 0.5));
 }
 
-/* Dropdown Menu */
+/* Dropdown Menu - Garantir que fique acima do welcome-header */
 .dropdown-menu {
   z-index: 1050 !important;
   border-radius: 12px;
@@ -585,6 +585,11 @@ main {
     color: var(--text-primary);
 }
 
+[data-theme="dark"] .stat-value {
+    color: #c5c5c5; /* Mais escuro que #f5f5f5 para melhor visibilidade no tema escuro */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Adiciona sombra sutil para melhor contraste */
+}
+
 .stat-label {
     font-size: 0.875rem;
     color: var(--text-muted);
@@ -595,6 +600,11 @@ main {
     color: var(--text-secondary);
 }
 
+[data-theme="dark"] .stat-label {
+    color: #a5a5a5; /* Mais escuro que #8a8a8a para melhor visibilidade no tema escuro */
+}
+
+/* Main Grid Layout - Removido, usando Bootstrap grid padrão */
 
 /* Painel de pré visualização do painel do usuário*/
 .user-preview{
@@ -634,6 +644,18 @@ main {
     padding: 20px;
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.user-panel-content {
+    flex: 1;
+}
+
+.user-panel-footer {
+    margin-top: auto;
+    padding-top: 16px;
 }
 
 .user-preview-title {
@@ -762,12 +784,12 @@ main {
 /* Botão de criar um novo relato*/
 .btn-create-report{
     background: linear-gradient(135deg, #c1121f 0%, #e53e3e 100%);
-    color: white;
+    color: #ffffff;
     border-radius: 12px;
     border: none;
     width: 100%;
     height: 48px;
-    margin-top: 16px;
+    margin-top: 0;
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
@@ -775,6 +797,11 @@ main {
     box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
     position: relative;
     overflow: hidden;
+}
+
+/* Garante melhor visibilidade no modo claro */
+:root .btn-create-report {
+    color: #ffffff;
 }
 
 .btn-create-report::before {
@@ -796,8 +823,17 @@ main {
     margin: 0;
     position: relative;
     z-index: 1;
-    color: #ffffff;
-    font-weight: 600;
+    color: #ffffff !important;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 1px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.3px;
+}
+
+/* Garante visibilidade no modo claro */
+:root .btn-create-report p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.4);
+    font-weight: 700;
 }
 
 .btn-create-report:hover{
@@ -2245,8 +2281,10 @@ textarea.form-control {
 /* Últimas denúncias do usuário */
 .ultimas-denuncias-container {
     max-height: 200px;
+    min-height: 40px;
     overflow-y: auto;
     padding-right: 8px;
+    flex-grow: 0;
 }
 
 .ultimas-denuncias-container::-webkit-scrollbar {
@@ -2289,16 +2327,68 @@ textarea.form-control {
     border-left-width: 6px;
 }
 
-.denuncia-item.status-aberto {
-    border-left-color: #ffc107;
+/* Hover específico por status */
+.denuncia-item.status-aberto:hover,
+.denuncia-item.status-pendente:hover {
+    border-left-color: #c82333;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.denuncia-item.status-em_andamento:hover {
+    border-left-color: #e0a800;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.denuncia-item.status-resolvido:hover,
+.denuncia-item.status-concluido:hover {
+    border-left-color: #218838;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Cores para status das denúncias - Minhas últimas denúncias */
+.denuncia-item.status-aberto,
+.denuncia-item.status-pendente {
+    border-left-color: #dc3545; /* Vermelho para Pendente */
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.1) 0%, var(--card-bg-dark) 5%);
+}
+
+:root .denuncia-item.status-aberto,
+:root .denuncia-item.status-pendente {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.08) 0%, #ffffff 5%);
+}
+
+[data-theme="dark"] .denuncia-item.status-aberto,
+[data-theme="dark"] .denuncia-item.status-pendente {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.15) 0%, #4a4a4a 5%);
 }
 
 .denuncia-item.status-em_andamento {
-    border-left-color: #0dcaf0;
+    border-left-color: #ffc107; /* Amarelo para Em Andamento */
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.1) 0%, var(--card-bg-dark) 5%);
 }
 
-.denuncia-item.status-resolvido {
-    border-left-color: #198754;
+:root .denuncia-item.status-em_andamento {
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.08) 0%, #ffffff 5%);
+}
+
+[data-theme="dark"] .denuncia-item.status-em_andamento {
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.15) 0%, #4a4a4a 5%);
+}
+
+.denuncia-item.status-resolvido,
+.denuncia-item.status-concluido {
+    border-left-color: #28a745; /* Verde para Concluído */
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, var(--card-bg-dark) 5%);
+}
+
+:root .denuncia-item.status-resolvido,
+:root .denuncia-item.status-concluido {
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.08) 0%, #ffffff 5%);
+}
+
+[data-theme="dark"] .denuncia-item.status-resolvido,
+[data-theme="dark"] .denuncia-item.status-concluido {
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.15) 0%, #4a4a4a 5%);
 }
 
 .denuncia-titulo {
@@ -2798,3 +2888,4 @@ button,input,select,textarea{ font:inherit }
   background-size:200% 100%; animation: fmShimmer 1.2s infinite linear;
 }
 @keyframes fmShimmer { to { background-position:-200% 0; } }
+
