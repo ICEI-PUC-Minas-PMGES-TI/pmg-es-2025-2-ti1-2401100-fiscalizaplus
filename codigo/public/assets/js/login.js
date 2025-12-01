@@ -11,9 +11,12 @@
 
 
 // Página inicial de Login
-const LOGIN_URL = "/modulos/login/login.html";
-let RETURN_URL = "/modulos/login/index.html";
-const API_URL = '/usuarios';
+const LOGIN_URL = "/index.html";
+let RETURN_URL = "/index.html";
+
+const API_BASE = 'http://localhost:3000';
+
+const API_URL = `${API_BASE}/cidadaos`;
 
 // Objeto para o banco de dados de usuários baseado em JSON
 var db_usuarios = {};
@@ -32,15 +35,32 @@ function initLoginApp () {
         // INICIALIZA USUARIOCORRENTE A PARTIR DE DADOS NO LOCAL STORAGE, CASO EXISTA
         usuarioCorrenteJSON = sessionStorage.getItem('usuarioCorrente');
         if (usuarioCorrenteJSON) {
-            usuarioCorrente = JSON.parse (usuarioCorrenteJSON);
-        } else {
-            window.location.href = LOGIN_URL;
+            try {
+                const parsed = JSON.parse(usuarioCorrenteJSON);
+                // Só aceita se não for administrador e tiver ID válido
+                if (parsed && parsed.id && parsed.id !== 'admin' && parsed.id !== 'administrador' && 
+                    parsed.nome !== 'Administrador' && parsed.nomeCompleto !== 'Administrador' &&
+                    !parsed.nome?.toLowerCase().includes('admin') && !parsed.nomeCompleto?.toLowerCase().includes('admin')) {
+                    usuarioCorrente = parsed;
+                } else {
+                    // Remove dados inválidos
+                    sessionStorage.removeItem('usuarioCorrente');
+                    sessionStorage.removeItem('fp_user');
+                    sessionStorage.removeItem('user');
+                }
+            } catch (e) {
+                // Se houver erro ao parsear, remove
+                sessionStorage.removeItem('usuarioCorrente');
+                sessionStorage.removeItem('fp_user');
+                sessionStorage.removeItem('user');
+            }
         }
 
         // REGISTRA LISTENER PARA O EVENTO DE CARREGAMENTO DA PÁGINA PARA ATUALIZAR INFORMAÇÕES DO USUÁRIO
-        document.addEventListener('DOMContentLoaded', function () {
-            showUserInfo ('userInfo');
-        });
+        // Comentado - não deve atualizar automaticamente, deixa o current-user.js fazer isso
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     showUserInfo ('userInfo');
+        // });
     }
     else {
         // VERIFICA SE A URL DE RETORNO ESTÁ DEFINIDA NO SESSION STORAGE, CASO CONTRARIO USA A PÁGINA INICIAL
@@ -56,49 +76,117 @@ function initLoginApp () {
 
 
 function carregarUsuarios(callback) {
-    fetch(API_URL)
-    .then(response => response.json())
-    .then(data => {
-        db_usuarios = data;
-        callback ()
-    })
-    .catch(error => {
-        console.error('Erro ao ler usuários via API JSONServer:', error);
-        displayMessage("Erro ao ler usuários");
-    });
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                // O arquivo db.json possui cidadãos com campos: id, nomeCompleto, email, senhaHash.
+                // Adaptamos para a estrutura esperada pelo restante do login:
+                db_usuarios = (Array.isArray(data) ? data : []).map(c => {
+                    const emailLower = (c.email || '').toLowerCase();
+                    const loginGerado = emailLower ? emailLower.split('@')[0] : `cidadao${c.id}`;
+                    
+                    return {
+                        id: c.id,
+                        // Geramos um "login" sintético a partir do email (antes do @) caso não exista campo login
+                        login: c.login || loginGerado,
+                        // Usa senhaHash diretamente (sem fallback para '123')
+                        senha: c.senha || c.senhaHash || '',
+                        email: c.email,
+                        emailLower: emailLower, // Armazena email em lowercase para comparação
+                        nome: c.nome || c.nomeCompleto || c.login || 'Usuário'
+                    };
+                });
+                
+                console.log('Usuários carregados:', db_usuarios.length);
+                console.log('Usuários disponíveis:', db_usuarios.map(u => ({ email: u.email, login: u.login })));
+                
+                callback();
+            })
+            .catch(error => {
+                console.error('Erro ao ler cidadãos via API JSONServer:', error);
+                displayMessage("Erro ao ler cidadãos");
+            });
 }
 
 // Verifica se o login do usuário está ok e, se positivo, direciona para a página inicial
-function loginUser (login, senha) {
+async function loginUser (emailOuLogin, senha) {
+    // Normaliza o input: pode ser email completo ou apenas a parte antes do @
+    const emailOuLoginNormalizado = emailOuLogin.trim().toLowerCase();
+    const loginExtraido = emailOuLoginNormalizado.includes('@') 
+        ? emailOuLoginNormalizado.split('@')[0] 
+        : emailOuLoginNormalizado;
+
+    console.log('Tentativa de login:', { emailOuLogin: emailOuLoginNormalizado, loginExtraido, senhaLength: senha.length });
 
     // Verifica todos os itens do banco de dados de usuarios 
     // para localizar o usuário informado no formulario de login
     for (var i = 0; i < db_usuarios.length; i++) {
         var usuario = db_usuarios[i];
 
-        // Se encontrou login, carrega usuário corrente e salva no Session Storage
-        if (login == usuario.login && senha == usuario.senha) {
-            usuarioCorrente.id = usuario.id;
-            usuarioCorrente.login = usuario.login;
-            usuarioCorrente.email = usuario.email;
-            usuarioCorrente.nome = usuario.nome;
+        // Compara tanto por email quanto por login, e verifica a senha
+        const emailMatch = usuario.emailLower === emailOuLoginNormalizado;
+        const loginMatch = usuario.login && usuario.login.toLowerCase() === loginExtraido;
+        const senhaMatch = senha === usuario.senha;
 
-            // Salva os dados do usuário corrente no Session Storage, mas antes converte para string
-            sessionStorage.setItem ('usuarioCorrente', JSON.stringify (usuarioCorrente));
+        console.log('Comparando com usuário:', {
+            email: usuario.email,
+            emailLower: usuario.emailLower,
+            login: usuario.login,
+            emailMatch,
+            loginMatch,
+            senhaMatch,
+            senhaDigitada: senha,
+            senhaBanco: usuario.senha
+        });
 
-            // Retorna true para usuário encontrado
+        // Se encontrou usuário (por email ou login) e a senha está correta
+        if ((emailMatch || loginMatch) && senhaMatch) {
+            try {
+                // Busca dados completos do usuário no json-server
+                const response = await fetch(`${API_URL}/${usuario.id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Preenche todos os dados do usuário
+                    usuarioCorrente.id = data.id || usuario.id;
+                    usuarioCorrente.login = usuario.login;
+                    usuarioCorrente.email = data.email || usuario.email;
+                    usuarioCorrente.nome = data.nome || data.nomeCompleto || usuario.nome;
+                    usuarioCorrente.nomeCompleto = data.nomeCompleto || data.nome || usuario.nome;
+                    usuarioCorrente.estado = data.estado || null;
+                    usuarioCorrente.cidade = data.cidade || null;
+                } else {
+                    throw new Error('Usuário não encontrado no servidor');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados completos do usuário:', error);
+                // Fallback: usa apenas os dados já carregados
+                usuarioCorrente.id = usuario.id;
+                usuarioCorrente.login = usuario.login;
+                usuarioCorrente.email = usuario.email;
+                usuarioCorrente.nome = usuario.nome;
+                usuarioCorrente.nomeCompleto = usuario.nome;
+            }
+
+            // Remove flag de visitante ao fazer login
+            sessionStorage.removeItem('isGuest');
+            
+            const userJson = JSON.stringify(usuarioCorrente);
+            sessionStorage.setItem('usuarioCorrente', userJson);
+            sessionStorage.setItem('fp_user', userJson);
+            sessionStorage.setItem('user', userJson);
+
             return true;
         }
     }
 
-    // Se chegou até aqui é por que não encontrou o usuário e retorna falso
     return false;
 }
 
-// Apaga os dados do usuário corrente no sessionStorage
 function logoutUser () {
-    sessionStorage.removeItem ('usuarioCorrente');
-    window.location = LOGIN_URL;
+    sessionStorage.removeItem('usuarioCorrente');
+    sessionStorage.removeItem('fp_user');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('isGuest'); // Remove flag de visitante também
 }
 
 function addUser (nome, login, senha, email) {
@@ -136,3 +224,6 @@ function showUserInfo (element) {
 
 // Inicializa as estruturas utilizadas pelo LoginApp
 initLoginApp ();
+
+// Login automático temporário REMOVIDO - não deve fazer login automático
+// O usuário deve fazer login manualmente ou entrar como visitante

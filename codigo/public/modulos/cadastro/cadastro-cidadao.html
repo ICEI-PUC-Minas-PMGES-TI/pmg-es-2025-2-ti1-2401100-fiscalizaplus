@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiscalizaPlus</title>
+    <link rel="stylesheet" href="../../assets/css/cadastro.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="logo">
+                <img src="../../assets/images/logo.png" alt="" class="logo-icon">
+            </div>
+
+            <div class="form-header">
+                <h2 class="form-title">Cadastro de Cidadão</h2>
+                <p class="form-subtitle">Junte-se a nós para fiscalizar e melhorar as vias públicas de sua cidade. O cadastro é rápido e simples</p>
+            </div>
+
+            <form id="cadastroForm" class="cadastro-form">
+                <div class="form-group">
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                </div>
+
+                <div class="form-group">
+                    <select id="estado" name="estado" required>
+                        <option value="">Estado</option>
+                        <option value="MG">Minas Gerais</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select id="cidade" name="cidade" required disabled>
+                        <option value="">Cidade</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="password-input">
+                        <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                        <button type="button" class="toggle-password" data-target="senha">
+                            <span class="material-icons eye-icon">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="password-input">
+                        <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar senha" required>
+                        <button type="button" class="toggle-password" data-target="confirmarSenha">
+                            <span class="material-icons eye-icon">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="separator"></div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="material-icons btn-icon">person_add</span>
+                    Cadastrar
+                </button>
+            </form>
+
+            <div class="login-link">
+                <span>Já possui uma conta? </span>
+                <a href="../login/login.html" class="login-text">Entrar</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../assets/js/cadastro-cidadao.js"></script>
+</body>
+</html>
