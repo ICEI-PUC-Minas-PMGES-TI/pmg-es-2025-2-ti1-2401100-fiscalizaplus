@@ -3502,39 +3502,6 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
-    },
-    {
-      "titulo": "Buraco no chão",
-      "tipoProblema": "infraestrutura",
-      "descricaoCompleta": "buraco no chão, grande buraco",
-      "informacoesAdicionaisCidadao": "Cai no buraco",
-      "codigoOcorrencia": "OCOR-0124",
-      "cidadaoId": "u123",
-      "endereco": {
-        "rua": "Rua Martim de Carvalho",
-        "numero": "",
-        "bairro": "Santo Agostinho",
-        "cidade": "Belo Horizonte",
-        "estado": "Minas Gerais",
-        "cep": "30170-041",
-        "latitude": -19.9294976,
-        "longitude": -43.9549952
-      },
-      "imagens": [],
-      "prioridadeCidadao": "critica",
-      "urgenciaCidadao": "media",
-      "impactoComunidade": "local",
-      "dataRegistro": "2025-12-01T16:47:31.670Z",
-      "autorCidadao": "Lucas Azevedo",
-      "isAnonimo": false,
-      "statusAtual": "Pendente",
-      "dataUltimaAtualizacaoStatus": "2025-12-01T16:47:31.670Z",
-      "prioridadeInterna": null,
-      "observacoesInternasServidor": "",
-      "servidorResponsavelId": null,
-      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
-      "recebeNotificacoes": true,
-      "id": "eooNYu9"
     }
   ],
   "admin": {
