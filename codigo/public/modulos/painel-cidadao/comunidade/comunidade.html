@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FiscalizaPlus</title>
-  <link rel="stylesheet" href="../../assets/css/cidadaos.css">
+  <link rel="stylesheet" href="../../../assets/css/cidadaos.css">
   <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,7 @@
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="../../assets/images/logo.png" alt="Logo" class="navbar-logo">
+        <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -28,36 +28,40 @@
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">Home</a>
+            <a class="nav-link" href="../index.html">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="comunidade.html">Comunidade</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../painel-cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
+            <a class="nav-link" href="../dashboard_cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="../guia/guia-cidadao.html">Guia do Cidadão</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../painel-cidadao/painel-de-usuario/index.html">Painel do Usuário</a>
-          </li>
         </ul>
 
-        <div class="navbar-user d-flex align-items-center dropdown">
-          <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Joãozinho</span>
-          <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <i class="fa-solid fa-circle-user user-icon"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-            <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#">Sair</a></li>
-          </ul>
+        <div class="navbar-actions d-flex align-items-center gap-3">
+          <!-- Botão de Toggle de Tema -->
+          <button class="theme-toggle-btn" id="themeToggle" aria-label="Alternar tema">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+          
+          <div class="navbar-user d-flex align-items-center dropdown">
+            <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Joãozinho</span>
+            <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="fa-solid fa-circle-user user-icon"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+              <li><a class="dropdown-item" href="../painel-de-usuario/index.html">Minhas Denúncias</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Sair</a></li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -71,31 +75,35 @@
         <div class="offcanvas-body d-flex flex-column">
           <ul class="navbar-nav flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" href="../../index.html">Home</a>
+              <a class="nav-link active" href="../index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Comunidade</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../painel-cidadao/dashboard_cliente.html">Dashboard de
+              <a class="nav-link" href="../dashboard_cidadao/dashboard_cliente.html">Dashboard de
                 Ocorrências</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../guia/guia-cidadao.html">Guia do Cidadão</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../painel-cidadao/painel-de-usuario/index.html">Painel do
+              <a class="nav-link" href="../painel-de-usuario/index.html">Painel do
                 Usuário</a>
             </li>
           </ul>
 
-          <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
-            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
-            <a href="#" class="user-icon-link">
-              <i class="fa-solid fa-circle-user user-icon"></i>
-            </a>
+          <div class="navbar-user d-flex align-items-center justify-content-between mt-auto border-top pt-3">
+            <div class="d-flex align-items-center">
+              <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+              <a href="#" class="user-icon-link">
+                <i class="fa-solid fa-circle-user user-icon"></i>
+              </a>
+            </div>
+            <button class="theme-toggle-btn" id="themeToggleMobile" aria-label="Alternar tema">
+              <i class="fa-solid fa-moon" id="themeIconMobile"></i>
+            </button>
           </div>
-        </div>
       </div>
     </div>
   </nav>
@@ -104,13 +112,58 @@
     <div class="page__grid">
       <!-- ===== Sidebar ===== -->
       <aside class="sidebar">
-        <button class="btn btn--danger btn--lg" id="btn-new">Iniciar nova discussão</button>
+        <button class="btn btn--danger btn--lg"
+        id="btn-new"
+        data-bs-toggle="modal"
+        data-bs-target="#newPostModal">
+          Iniciar nova discussão</button>
+
+        <!-- Modal: Nova Discussão -->
+<div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" id="new-post-form">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newPostModalLabel">Nova discussão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Título</label>
+          <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Categoria</label>
+          <select name="category" class="form-select" required>
+            <option value="todas">Todas</option>
+            <option value="transito">Trânsitos</option>
+            <option value="meio_ambiente">Meio ambiente</option>
+            <option value="sugestoes">Sugestões</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Descrição</label>
+          <textarea name="body" rows="5" class="form-control" required></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Publicar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 
         <div class="profile">
-          <div class="avatar" aria-hidden="true">J</div>
+          <div class="avatar" aria-hidden="true" id="user-avatar-initial">J</div>
           <div class="profile__info">
-            <strong>Joãozinho Silva</strong>
-            <small>email@gmail.com</small>
+            <strong id="user-name-profile">Joãozinho Silva</strong>
+            <small id="user-email-profile">email@gmail.com</small>
           </div>
         </div>
 
@@ -267,10 +320,12 @@
   </main>
 
   <!-- Script do app (separado) -->
-  <script type="module" src="/codigo/public/assets/js/comunidade.js"></script>
+  <script type="module" src="../../../assets/js/comunidade.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
+  <script src="../../../assets/js/tema.js"></script>
+  <script src="../../../assets/js/current-user.js"></script>
 </body>
 
 </html>

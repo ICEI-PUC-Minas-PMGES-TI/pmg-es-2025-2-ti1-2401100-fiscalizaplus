@@ -1,30 +1,35 @@
 cff-version: 1.0.1
-message: Please cite this software using these metadata.
-title: 
+message: Sistema de gerenciamento de denúncias de vias públicas.
+title: FiscalizaPlus
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
+  - family-names: Carneiro da Silva
+    given-names: Italo Eduardo
+  - family-names: Freitas Gonçalves
+    given-names: Ulisses Miguel de
+  - family-names: Aguiar Prado  
+    given-names: João Paulo
+  - family-names: Parreiras Prado
+    given-names: Bernardo
+  - family-names: Barbosa Silva
+    given-names: Luiz Rithiely
+  - family-names: Vaz Lomba
+    given-names: Vinicius Gabriel
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Machado Osório Pereira
+    given-names: Daniel
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Soares de Paiva Lacerda
+    given-names: Lucca
+    family-names: Soares de Andrade
+    given-names: Michelle Hanne
 keywords:
-  - 
-  - 
+  - fiscalização
+  - denúncias
+  - dashboards
+  - cidadãos
+  - servidores
 repository-code: 
 license: CC-BY-4.0
 version: 1.0.0

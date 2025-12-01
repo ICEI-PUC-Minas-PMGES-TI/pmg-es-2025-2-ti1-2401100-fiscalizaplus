@@ -1,137 +1,212 @@
 // Renders the Occurrence Map on the dashboard using Leaflet and JSON Server data
 (function () {
   const MAP_ID = 'occurrence-map-canvas';
-  const container = document.getElementById(MAP_ID);
-  if (!container) return;
 
-  // Helper to get current logged user from sessionStorage (set by login.js)
-  function getUsuarioCorrente() {
+  // Configuração do JSON Server (igual ao mapa_ocorrencias.js)
+  const API_BASE_URL = 'http://localhost:3000';
+  const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
+
+  let map;
+  let todasDenuncias = [];
+
+  // --- Carregamento de Dados do JSON Server ---
+  async function carregarDenuncias() {
     try {
-      const raw = sessionStorage.getItem('usuarioCorrente');
-      return raw ? JSON.parse(raw) : null;
-    } catch (_) {
-      return null;
+      const response = await fetch(DENUNCIAS_ENDPOINT);
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP! Status: ${response.status}`);
+      }
+
+      todasDenuncias = await response.json();
+      console.log("Denúncias carregadas com sucesso:", todasDenuncias.length, "denúncias");
+
+      // Renderizar marcadores no mapa
+      if (map) {
+        renderizarMarcadores(todasDenuncias);
+        console.log("Marcadores renderizados no mapa");
+      } else {
+        console.error("Mapa não está inicializado");
+      }
+
+    } catch (error) {
+      console.error("Erro ao carregar denúncias:", error);
+      // Em caso de erro, não renderiza nada
     }
   }
 
-  function fetchJson(url) {
-    // Usar dados locais (sem requisições)
-    const data = window.DB_DATA;
-    
-    // Simular consultas da API localmente
-    if (url.startsWith('/usuarios/')) {
-      const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.usuarios.find(u => u.id === id));
-    }
-    
-    if (url.startsWith('/bairros/')) {
-      const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.bairros.find(b => b.id === id));
-    }
-    
-    if (url.startsWith('/cidades/')) {
-      const id = parseInt(url.split('/')[2]);
-      return Promise.resolve(data.cidades.find(c => c.id === id));
-    }
-    
-    if (url.startsWith('/ocorrencias') || url.startsWith('/denuncias')) {
-      const params = new URLSearchParams(url.split('?')[1] || '');
-      // prefer 'denuncias' if available
-      let result = data.denuncias || data.ocorrencias || [];
-      
-      // Filtrar por cidadeId
-      if (params.get('cidadeId')) {
-        const cidadeId = parseInt(params.get('cidadeId'));
-        result = result.filter(o => o.cidadeId === cidadeId);
-      }
-
-      // Optional limit
-      if (params.get('_limit')) {
-        const limit = parseInt(params.get('_limit')) || result.length;
-        result = result.slice(0, limit);
-      }
-      
-      return Promise.resolve(result);
-    }
-    
-    return Promise.resolve(data);
-  }
-
-  async function init() {
-    // Create map centered on BH as default
-    const map = L.map(MAP_ID);
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Default view if we don't know user/city yet
-    map.setView([-19.9191, -43.9386], 12);
-
-    const user = getUsuarioCorrente();
-    if (!user) {
-      // Anonymous: just show BH area, try to load some occurrences city 1 if available
-      try {
-        const ocorrencias = await fetchJson('/denuncias?cidadeId=1&_limit=100');
-        addMarkers(map, ocorrencias);
-      } catch (e) {
-        console.warn(e);
-      }
+  // --- Inicialização do Mapa ---
+  function initMap() {
+    const container = document.getElementById(MAP_ID);
+    if (!container) {
+      console.error('Container do mapa não encontrado:', MAP_ID);
       return;
     }
 
-    // Ensure we have fresh user data (in case session has minimal fields)
-    const usuario = await fetchJson(`/usuarios/${user.id}`);
-    const { cidadeId, bairroId } = usuario;
+    const bhCenter = [-19.9167, -43.9345];
 
-    // Load neighborhood to draw circle and recenter
-    const bairro = await fetchJson(`/bairros/${bairroId}`);
-    const cidade = await fetchJson(`/cidades/${cidadeId}`);
+    try {
+      map = L.map(MAP_ID, {
+        center: bhCenter,
+        zoom: 12,
+        minZoom: 10,
+        maxZoom: 18,
+        zoomControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true,
+        dragging: true,
+        touchZoom: true,
+      }).setView(bhCenter, 12);
 
+      // Camada de tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18,
+        minZoom: 10,
+        opacity: 1.0
+      }).addTo(map);
 
-  // City-wide occurrences - fetch more items to better populate the map
-  const ocorrencias = await fetchJson(`/denuncias?cidadeId=${cidadeId}&_limit=100`);
-
-    // Fit map to either bairro circle or city center
-    const center = [bairro.lat, bairro.lng];
-  const circle = L.circle(center, { radius: bairro.raio || 800, color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.08 });
-  circle.addTo(map);
-  // Slightly zoom out so markers across the bairro are more visible and less visually concentrated
-  map.setView(center, 13);
-
-    addMarkers(map, ocorrencias);
+      L.control.scale().addTo(map);
+      
+      console.log('Mapa inicializado com sucesso');
+    } catch (error) {
+      console.error('Erro ao inicializar o mapa:', error);
+    }
   }
 
-  function addMarkers(map, ocorrencias) {
-    const icon = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
-
-    ocorrencias.forEach(o => {
-      if (typeof o.lat !== 'number' || typeof o.lng !== 'number') return;
-      const marker = L.marker([o.lat, o.lng], { icon }).addTo(map);
-      const statusBadge = `<span class="badge text-bg-${statusToColor(o.status)}">${o.status}</span>`;
-      marker.bindPopup(`
-        <div>
-          <strong>${escapeHtml(o.titulo || 'Ocorrência')}</strong><br/>
-          <small>Tipo: ${escapeHtml(o.tipo || 'n/d')} · ${statusBadge}</small><br/>
-          <small>Bairro ID: ${o.bairroId ?? 'n/d'}</small>
-        </div>
-      `);
-    });
+  async function init() {
+    initMap();
+    
+    // Aguardar um pouco para garantir que o mapa foi renderizado
+    setTimeout(() => {
+      if (map) {
+        map.invalidateSize();
+      }
+    }, 300);
+    
+    await carregarDenuncias();
+    
+    // Ajustar tamanho novamente após carregar dados
+    setTimeout(() => {
+      if (map) {
+        map.invalidateSize();
+      }
+    }, 500);
   }
 
-  function statusToColor(status) {
-    switch (String(status || '').toLowerCase()) {
-      case 'aberto': return 'warning';
-      case 'em_andamento': return 'info';
-      case 'resolvido': return 'success';
-      default: return 'secondary';
+  // Funções auxiliares para estilização dos marcadores (igual ao mapa_ocorrencias.js)
+  function getMarkerClassByStatus(status) {
+    if (!status) return 'marker-default';
+    const statusNormalized = String(status).toLowerCase().replace(/\s/g, '-').replace(/ã/g, 'a').replace(/é/g, 'e');
+    switch (statusNormalized) {
+      case "pendente": return "marker-pending";
+      case "em-andamento": return "marker-in-progress";
+      case "concluido": case "concluída": case "resolvido": return "marker-completed";
+      case "cancelado": return "marker-rejected";
+      default: return "marker-default";
+    }
+  }
+
+  function getBadgeClassByStatus(status) {
+    if (!status) return 'bg-primary';
+    const statusNormalized = String(status).toLowerCase().replace(/\s/g, '-').replace(/ã/g, 'a').replace(/é/g, 'e');
+    switch (statusNormalized) {
+      case "pendente": return "bg-danger";
+      case "em-andamento": return "bg-warning text-dark";
+      case "concluido": case "concluída": case "resolvido": return "bg-success";
+      case "cancelado": return "bg-secondary";
+      default: return "bg-primary";
+    }
+  }
+
+  function getIconClassByTipo(tipoProblema) {
+    if (!tipoProblema) return "bi-info-circle-fill";
+    const tipoNormalized = String(tipoProblema).toLowerCase();
+    if (tipoNormalized.includes("infraestrutura")) return "bi-tools";
+    if (tipoNormalized.includes("iluminacao") || tipoNormalized.includes("iluminação")) return "bi-lightbulb-fill";
+    if (tipoNormalized.includes("limpeza")) return "bi-trash-fill";
+    if (tipoNormalized.includes("transito") || tipoNormalized.includes("trânsito")) return "bi-bus-front";
+    if (tipoNormalized.includes("seguranca") || tipoNormalized.includes("segurança")) return "bi-shield-fill-exclamation";
+    return "bi-info-circle-fill";
+  }
+
+  function formatarData(dataISO) {
+    try {
+      const data = new Date(dataISO);
+      if (isNaN(data.getTime())) {
+        return "Data inválida";
+      }
+      return data.toLocaleDateString("pt-BR") + " " + data.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      console.error("Erro ao formatar data:", e);
+      return "Data inválida";
+    }
+  }
+
+  // --- Renderização dos Marcadores (igual ao mapa_ocorrencias.js) ---
+  let currentMarkers = [];
+
+  function renderizarMarcadores(denunciasParaExibir) {
+    if (!map) {
+      console.warn('Mapa não inicializado');
+      return;
+    }
+
+    // Limpar marcadores existentes
+    currentMarkers.forEach(marker => {
+      map.removeLayer(marker);
+    });
+    currentMarkers = [];
+
+    const latLngs = [];
+
+    denunciasParaExibir.forEach(denuncia => {
+      if (denuncia.endereco && typeof denuncia.endereco.latitude === 'number' && typeof denuncia.endereco.longitude === 'number') {
+        const lat = denuncia.endereco.latitude;
+        const lng = denuncia.endereco.longitude;
+        latLngs.push([lat, lng]);
+
+        const customIcon = L.divIcon({
+          className: `custom-div-icon ${getMarkerClassByStatus(denuncia.statusAtual)}`,
+          html: `<div class="marker-pin"></div><i class="bi ${getIconClassByTipo(denuncia.tipoProblema)}"></i>`,
+          iconSize: [30, 42],
+          iconAnchor: [15, 42]
+        });
+
+        const marker = L.marker([lat, lng], { icon: customIcon });
+
+        const popupContent = `
+          <div class="popup-info">
+            <h5 class="text-truncate" style="max-width: 250px;">${escapeHtml(denuncia.titulo || 'Ocorrência')}</h5>
+            <p class="mb-1"><strong>Código:</strong> ${escapeHtml(denuncia.codigoOcorrencia || denuncia.id || 'N/A')}</p>
+            <p class="mb-1"><strong>Tipo:</strong> ${escapeHtml(denuncia.tipoProblema || 'N/A')}</p>
+            <p class="mb-1"><strong>Status:</strong> <span class="badge ${getBadgeClassByStatus(denuncia.statusAtual)}">${escapeHtml(denuncia.statusAtual || 'Pendente')}</span></p>
+            <p class="mb-1"><strong>Endereço:</strong> ${escapeHtml(denuncia.endereco?.rua || 'Não informado')}</p>
+            <p class="mb-2 small text-muted">Registro: ${formatarData(denuncia.dataRegistro || new Date().toISOString())}</p>
+          </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+        marker.addTo(map);
+        currentMarkers.push(marker);
+      }
+    });
+
+    // Ajustar zoom para mostrar todos os marcadores
+    if (latLngs.length > 0) {
+      const bounds = L.latLngBounds(latLngs);
+      if (latLngs.length === 1) {
+        map.setView(bounds.getCenter(), 16);
+      } else {
+        map.fitBounds(bounds, {
+          padding: [50, 50],
+          maxZoom: 15
+        });
+      }
+    } else {
+      map.setView([-19.9167, -43.9345], 12); // Volta ao centro de BH se não houver denúncias
     }
   }
 
@@ -139,38 +214,37 @@
     return String(str).replace(/[&<>"]+/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));
   }
 
-  // Run
-  if (typeof L !== 'undefined') {
-    init().catch(err => console.error('Erro ao inicializar o mapa de ocorrências:', err));
+  // Run - Aguardar DOM e Leaflet estarem prontos
+  function startMap() {
+    const container = document.getElementById(MAP_ID);
+    if (!container) {
+      console.warn('Container do mapa não encontrado:', MAP_ID);
+      // Tentar novamente após um delay
+      setTimeout(startMap, 200);
+      return;
+    }
+
+    if (typeof L === 'undefined') {
+      console.warn('Leaflet (L) não carregado. Aguardando...');
+      // Tentar novamente após um delay
+      setTimeout(startMap, 200);
+      return;
+    }
+
+    console.log('Inicializando mapa...');
+    // Aguardar um pouco mais para garantir que tudo está carregado
+    setTimeout(() => {
+      init().catch(err => console.error('Erro ao inicializar o mapa de ocorrências:', err));
+    }, 100);
+  }
+
+  // Aguardar DOM estar pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(startMap, 200);
+    });
   } else {
-    console.error('Leaflet (L) não carregado');
+    // DOM já está pronto, aguardar um pouco para garantir que scripts estão carregados
+    setTimeout(startMap, 200);
   }
 })();
-document.addEventListener('DOMContentLoaded', () => {
-  // Seleciona todas as divs com classe .occurrence-map-canvas
-  const maps = document.querySelectorAll('.occurrence-map-canvas');
-  if (!maps.length) return;
-
-  maps.forEach((mapDiv, index) => {
-    // Exemplo: você pode definir coordenadas diferentes com data-atributos
-    const lat = parseFloat(mapDiv.dataset.lat) || -23.55052;
-    const lng = parseFloat(mapDiv.dataset.lng) || -46.633308;
-
-    // Cria o mapa
-    const map = L.map(mapDiv, {
-      zoomControl: false,
-      attributionControl: false
-    }).setView([lat, lng], 15);
-
-    // Tiles do OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
-    }).addTo(map);
-
-    // Marcador
-    L.marker([lat, lng]).addTo(map);
-
-    // Corrige renderização
-    setTimeout(() => map.invalidateSize(), 0);
-  });
-});

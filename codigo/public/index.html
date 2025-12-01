@@ -1,76 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FiscalizaPlus</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/cidadaos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="assets/images/logo.png" alt="Logo" class="navbar-logo">
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <div class="page-container">
+        <header class="header">
+            <h1 class="logo">Fiscaliza<span class="logo-plus">Plus</span></h1>
+            <p class="subtitle">Plataforma municipal de denúncias de vias públicas</p>
+            <h2 class="headline">
+                Transforme sua Cidade: Sua denúncia, Nosso Foco.
+            </h2>
+        </header>
 
-            <div class="collapse navbar-collapse" id="navbarMenuLg">
-                
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="modulos/comunidade/comunidade.html">Comunidade</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="modulos/guia/guia-cidadao.html">Guia do Cidadão</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do Usuário</a>
-                    </li>
-                </ul>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                    aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                <div class="navbar-user d-flex align-items-center dropdown">
-                    <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;" id="nomeUsuarioNav">Olá, Joãozinho</span>
-                    <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fa-solid fa-circle-user user-icon"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Sair</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body d-flex flex-column">
-                    <ul class="navbar-nav flex-grow-1 pe-3">
+                <div class="collapse navbar-collapse" id="navbarMenuLg">
+                    
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" href="index.html">Home</a>
                         </li>
@@ -78,110 +36,121 @@
                             <a class="nav-link" href="modulos/comunidade/comunidade.html">Comunidade</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de
-                                Ocorrências</a>
+                            <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="modulos/guia/guia-cidadao.html">Guia do Cidadão</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do
-                                Usuário</a>
+                            <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do Usuário</a>
                         </li>
                     </ul>
 
-                    <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
-                        <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
-                        <a href="#" class="user-icon-link">
+                    <div class="navbar-user d-flex align-items-center dropdown">
+                        <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;" id="nomeUsuarioNav">Olá, Joãozinho</span>
+                        <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             <i class="fa-solid fa-circle-user user-icon"></i>
                         </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
-    <main>
-        <div class="container-fluid conteiner-main">
-            <div class="row gx-4">
-                <div class="col-md-4">
-                    <div class="p-2 border user-preview">
-                        <div class="user-panel">
-                            <h2 class="user-preview-title">Painel do usuário</h2>
-                            <h3 id="user-name">Olá, Joãozinho</h3>
-                            <p id="user-email">joaozinho@gmail.com</p>
-                            <hr>
-                            <p>Minhas últimas denúncias</p>
-                            <div id="ultimas-denuncias" class="ultimas-denuncias-container">
-                                <p class="text-muted small">Carregando...</p>
-                            </div>
-                            <a href="modulos/painel-cidadao/reportar-ocorrências/newreport.html">
-                                <button class="btn-create-report">
-                                    <p>Reportar um novo problema</p>
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-2 border mt-2 user-impact">
-                        <h6 class="mb-2">Seu impacto</h6>
-                        <div id="user-impact-body">
-                            <p class="text-muted small">Carregando...</p>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-md-4">
-                    <div class="p-2 border occurrence-map">
-                        <h6 class="mb-2">Mapa de ocorrências</h6>
-                        <div id="occurrence-map-canvas"
-                            style="height:360px; width:100%; border-radius:8px; overflow:hidden;"></div>
-                    </div>
-                    <div class="p-2 border mt-2 users-highlights">
-                        User Hightlights
-                    </div>
-                </div>
-
-                <div class="col-md-4 d-flex flex-column">
-                    <div class="p-2 border flex-grow-1 recent-reports">
-                        <h6 class="mb-3" style="color: white;">Relatos Recentes na Cidade</h6>
-                        <ul id="recent-reports-list" class="list-group list-group-flush"
-                            style="max-height: 700px; overflow-y: auto;">
-                            <li class="list-group-item">Carregando relatos...</li>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Sair</a></li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/login.js"></script>
-  <script src="assets/js/occurrence-map.js"></script>
-  <script src="assets/js/painel-usuario.js"></script>
-  <script>
-    // Initialize dashboard with user data
-    document.addEventListener('DOMContentLoaded', function() {
-      const user = JSON.parse(sessionStorage.getItem('usuarioCorrente') || '{}');
-      if (user.nome) {
-        // Update navbar user name
-        const nameUser = document.getElementById('name-user');
-        if (nameUser) nameUser.textContent = `Olá, ${user.nome}`;
-        
-        // Update user panel
-        const userName = document.getElementById('user-name');
-        const userEmail = document.getElementById('user-email');
-        if (userName) userName.textContent = `Olá, ${user.nome}`;
-        if (userEmail) userEmail.textContent = user.email || '';
-      }
-    });
-  </script>
-</body>
 
+                <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body d-flex flex-column">
+                        <ul class="navbar-nav flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="index.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="modulos/comunidade/comunidade.html">Comunidade</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="modulos/painel-cidadao/dashboard_cliente.html">Dashboard de
+                                    Ocorrências</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="modulos/guia/guia-cidadao.html">Guia do Cidadão</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="modulos/painel-cidadao/painel-de-usuario/index.html">Painel do
+                                    Usuário</a>
+                            </li>
+                        </ul>
+
+                        <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
+                            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+                            <a href="#" class="user-icon-link">
+                                <i class="fa-solid fa-circle-user user-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="cards-grid">
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-street-view card-icon"></i></div>
+                <h3 class="card-title">Localização Precisa</h3>
+                <p class="card-text">Geolocalize o problema com exatidão para um atendimento rápido.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-camera-retro card-icon"></i></div>
+                <h3 class="card-title">Mídia e Evidência</h3>
+                <p class="card-text">Anexe fotos e vídeos de alta qualidade para comprovar a situação.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-tasks card-icon"></i></div>
+                <h3 class="card-title">Acompanhamento Total</h3>
+                <p class="card-text">Monitore o progresso da sua denúncia, do registro à solução final.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-hands-helping card-icon"></i></div>
+                <h3 class="card-title">Comunidade Ativa</h3>
+                <p class="card-text">Interaja com outros cidadãos, apoie e priorize denúncias coletivas.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-chart-pie card-icon"></i></div>
+                <h3 class="card-title">Transparência e Dados</h3>
+                <p class="card-text">Acompanhe estatísticas, tempo de resposta e o impacto na cidade.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-wrapper"><i class="fas fa-balance-scale card-icon"></i></div>
+                <h3 class="card-title">Guia do Cidadão</h3>
+                <p class="card-text">Aprenda sobre seus direitos e como reportar problemas legalmente.</p>
+            </div>
+            
+        </main>
+
+        <a href="modulos/login/login.html" class="cta-button">
+            <i class="fas fa-arrow-circle-right"></i> Fazer Login e Começar
+        </a>
+
+        <hr class="footer-separator">
+
+        <footer class="footer">
+            Copyright © 2025 Fiscaliza+ - Todos os direitos reservados
+        </footer>
+    </div>
+    
+</body>
 </html>

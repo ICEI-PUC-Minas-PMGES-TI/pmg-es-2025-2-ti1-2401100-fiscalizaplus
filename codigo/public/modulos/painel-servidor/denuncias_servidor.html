@@ -3,106 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FiscalizaPlus</title>
+  <title>Gerenciar Denúncia</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
   <link rel="stylesheet" href="../../assets/css/servidor.css">
-  <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
 </head>
+
 <body class="bodyDenuncia">
+
   <div class="layout">
+
     <!-- Sidebar -->
     <aside class="sidebar d-flex flex-column p-3">
+      
       <a href="#">
-        <img src="../../assets/images/logo.png" alt="Logo" style="width : 150px; margin-left: 25px; margin-top: 15px;">
+        <img src="../../assets/images/logo.png" alt="Logo" style="width:150px; margin-left:25px; margin-top:15px;">
       </a>
 
       <div class="user-info text-center mb-4">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuário" class="user-img mb-2">
-        <p class="mb-0 fw-semibold">Paulo Cardoso</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="user-img mb-2" alt="Usuário">
+        <p class="fw-semibold mb-0">Paulo Cardoso</p>
         <p class="text-white-50 small">paulo@prefeitura.com</p>
       </div>
 
       <nav class="flex-grow-1">
         <ul class="nav flex-column">
+
           <li class="nav-item mb-2">
-            <a href="dashboard_admin.html" class="nav-link text-white"><i class="bi bi-house-door me-2"></i>Home</a>
+            <a href="dashboard_admin.html" class="nav-link text-white">
+              <i class="bi bi-house-door me-2"></i>Home
+            </a>
           </li>
+
           <li class="nav-item mb-2">
-            <a href="report_manager.html" class="nav-link active"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
+            <a href="report_manager.html" class="nav-link active">
+              <i class="bi bi-gear me-2"></i>Gerenciar denúncias
+            </a>
           </li>
+
           <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
+            <a href="#" class="nav-link text-white">
+              <i class="bi bi-geo-alt me-2"></i>Mapas de denúncia
+            </a>
           </li>
+
           <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-white"><i class="bi bi-thermometer-snow me-2"></i>Mapa de calor</a>
+            <a href="#" class="nav-link text-white">
+              <i class="bi bi-thermometer-snow me-2"></i>Mapa de calor
+            </a>
           </li>
+
           <li class="nav-item mb-4">
-            <a href="#" class="nav-link text-white"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
+            <a href="#" class="nav-link text-white">
+              <i class="bi bi-clipboard-data me-2"></i>Relatórios
+            </a>
           </li>
+
         </ul>
       </nav>
 
-      <a href="#" class="nav-link text-danger mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Sair</a>
+      <a href="#" class="nav-link text-danger mt-auto">
+        <i class="bi bi-box-arrow-right me-2"></i>Sair
+      </a>
+
     </aside>
+
     <!-- Conteúdo principal -->
-     <main class="main-content">
+    <main class="main-content">
+
       <section class="denuncia-container">
+
         <h1>Gerenciamento de Denúncia</h1>
 
         <form class="denuncia-form">
+
           <div class="form-grid">
+
             <div class="form-group">
               <label>ID <span>*</span></label>
-              <input type="text" value="OCOR-0001" readonly>
+              <input id="campoId" type="text" readonly>
             </div>
 
             <div class="form-group">
               <label>Categoria <span>*</span></label>
-              <input type="text" value="Infraestrutura" readonly>
+              <input id="campoCategoria" type="text" readonly>
             </div>
 
             <div class="form-group">
               <label>Título do problema <span>*</span></label>
-              <input type="text" value="Buraco encontrado na Rua X na Savassi" readonly>
+              <input id="campoTitulo" type="text" readonly>
             </div>
 
             <div class="form-group">
               <label>Prioridade</label>
-              <input type="text" value="Média" readonly>
+              <input id="campoPrioridade" type="text" readonly>
             </div>
 
             <div class="form-group">
               <label>Urgência</label>
-              <input type="text" value="Média" readonly>
+              <input id="campoUrgencia" type="text" readonly>
             </div>
 
             <div class="form-group">
               <label>Impacto na Comunidade</label>
-              <input type="text" value="Local" readonly>
+              <input id="campoImpacto" type="text" readonly>
             </div>
+
           </div>
 
           <div class="form-group full-width">
-            <label>Descrição detalhada <span>*</span></label>
-            <textarea rows="5" readonly>“Encontrei um buraco de tamanho considerável na Rua das Palmeiras, próximo ao cruzamento com a Rua dos Lírios. O buraco tem aproximadamente 50cm de diâmetro e uns 15–20cm de profundidade. Está bem no meio da pista, em uma área com pouca iluminação à noite, o que torna o risco de acidentes ainda maior. Nos últimos dias houve chuva e observei que ele tem aumentado de tamanho, pois a água acumulada agrava o problema. Por favor, solicito uma rápida intervenção para reparo.”</textarea>
+            <label>Descrição detalhada</label>
+            <textarea id="campoDescricao" rows="5" readonly></textarea>
           </div>
+
         </form>
 
-        <div class="map-section">
+        <!-- Mapa -->
+        <div class="map-section mt-4">
           <h2>Localização</h2>
+
           <div class="map-container">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=-43.990, -19.940, -43.910, -19.870&layer=mapnik"
-              style="border: none;">
-            </iframe>
+            <iframe width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
           </div>
         </div>
+        <section class="denuncia-detalhes">
+          <div class="imagens-problema">
+            <h2>Imagens do Problema</h2>
+
+            <div class="imagens-grid"></div>
+          </div>
+
+          <!-- Feback e status -->
+          <div class="feedback-section">
+            <label for="feedback">Enviar feedback ao usuário</label>
+            <textarea id="feedback" rows="4" placeholder="Digite informações adicionais..."></textarea>
+          </div>
+          <div class="status-section">
+            <label for="status">Alterar status da denúncia</label>
+            <select id="status">
+              <option disabled selected>Selecione...</option>
+              <option value="aberto">Em Análise</option>
+              <option value="em_andamento">Pendente</option>
+              <option value="resolvido">Concluído</option>
+            </select>
+          </div>
+          <div class="acoes-denuncia">
+            <button type="button" class="btn-cancelar">Cancelar</button>
+            <button type="button" class="btn-salvar">Salvar</button>
+          </div>
+
+        </section>
+
       </section>
+
     </main>
+
   </div>
+
   
+  <script src="../../assets/js/denuncias_servidor.js"></script>
+
 </body>
+</html>

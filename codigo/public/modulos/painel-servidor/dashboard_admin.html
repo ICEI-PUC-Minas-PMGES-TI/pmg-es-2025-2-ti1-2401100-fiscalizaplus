@@ -1,115 +1,184 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FiscalizaPlus - Dashboard Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiscalizaPlus</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/css/servidor.css">
-  <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
-  <script src="../../assets/js/main_admin.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../assets/css/servidor.css">
+
 </head>
 <body>
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar d-flex flex-column p-3">
-      <a href="#">
-        <img src="../../assets/images/logo.png" alt="Logo" style="width : 150px; margin-left: 25px; margin-top: 15px;">
-      </a>
+    <div class="layout">
+        <aside class="sidebar d-flex flex-column p-3">
+            <a href="#" class="text-center mb-4">
+                <img src="https://placehold.co/150x50/343a40/ffffff?text=FiscalizaPlus" alt="Logo FiscalizaPlus"
+                    style="width : 150px; margin-top: 15px;">
+            </a>
 
-      <div class="user-info text-center mb-4">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuário" class="user-img mb-2">
-        <p class="mb-0 fw-semibold">Paulo Cardoso</p>
-        <p class="text-white-50 small">paulo@prefeitura.com</p>
-      </div>
+            <div class="user-info text-center mb-4 dropdown">
+                <a class="d-block dropdown-toggle text-decoration-none" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="color: white; cursor: pointer;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do Usuário Paulo Cardoso"
+                        class="user-img mb-2">
+                    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
+                    <p class="text-white-50 small">paulo@prefeitura.com</p>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark mx-auto text-start" style="width: 250px;">
+                    <li class="dropdown-header text-uppercase small">Conta & Sistema</li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i> Meu Perfil</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i> Notificações</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-journal-check me-2"></i> Registro de Atividades</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-tags me-2"></i> Gerenciar Categorias</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-stopwatch me-2"></i> Configurações</a></li> 
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i> Sair</a></li>
+                </ul>
+            </div>
 
-      <nav class="flex-grow-1">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a href="dashboard_admin.html" class="nav-link active"><i class="bi bi-house-door me-2"></i>Home</a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="report_manager.html" class="nav-link text-white"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="mapa_ocorrencias.html" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
-          </li>
-          <li class="nav-item mb-4">
-            <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i class="bi bi-clipboard-data me-2"></i>Relatórios</a>
-          </li>
-        </ul>
-      </nav>
+            <nav class="flex-grow-1">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="dashboard_admin.html" class="nav-link active"><i class="bi bi-house-door me-2"></i>Home</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="report_manager.html" class="nav-link text-white"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="mapa_ocorrencias.html" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
+                    </li>
+                    <li class="nav-item mb-4">
+                        <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i
+                                class="bi bi-clipboard-data me-2"></i>Relatórios</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-      <a href="#" class="nav-link text-danger mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Sair</a>
-    </aside>
+        <main class="admin-dashboard">
+            <header class="topbar">
+                <h1>Dashboard Administrativo</h1>
+                <p>Análise e Visão Geral do Sistema</p>
+            </header>
 
-    <!-- Conteúdo principal -->
-    <main class="admin-dashboard">
-      <header class="topbar" style="background:transparent; color:var(--texto); padding:0;">
-        <h1 style="margin:0; font-size:2rem; color:var(--azul-principal)">Dashboard Administrativo</h1>
-        <p style="margin:6px 0 0 0; color:#666">Bem-vindo, Administrador 👋</p>
-      </header>
+            <div id="data-load-alert" class="alert alert-danger d-none" role="alert">
+                ❌ Erro ao carregar dados
+            </div>
 
-      <!-- Cards -->
-      <section class="dashboard-area">
-        <div class="card estatistica">
-          <h2>Total de Denúncias</h2>
-          <p class="valor" id="totalAdmin">0</p>
-        </div>
-        <div class="card estatistica">
-          <h2>Denúncias Resolvidas</h2>
-          <p class="valor" id="resolvidasAdmin">0</p>
-        </div>
-        <div class="card estatistica">
-          <h2>Em Andamento</h2>
-          <p class="valor" id="andamentoAdmin">0</p>
-        </div>
-        <div class="card estatistica">
-          <h2>Em andamento hoje</h2>
-          <p class="valor" id="hojeAdmin">0</p>
-        </div>
-      </section>
+            <section class="dashboard-area">
+                <div class="card estatistica">
+                    <h2>Total de Denúncias</h2>
+                    <p class="valor text-dark" id="totalAdmin">0</p>
+                </div>
+                <div class="card estatistica destaque-alerta">
+                    <h2>Denúncias Pendentes</h2>
+                    <p class="valor" id="pendentesAdmin">0</p>
+                </div>
+                <div class="card estatistica destaque-aviso">
+                    <h2>Denúncias Em Andamento</h2>
+                    <p class="valor text-warning" id="andamentoAdmin">0</p>
+                </div>
+                <div class="card estatistica destaque-informacao">
+                    <h2>Tempo Médio de Resolução</h2>
+                    <p class="valor text-info" id="tempoMedioAdmin">--</p>
+                </div>
+                <div class="card estatistica destaque-sucesso">
+                    <h2>Taxa de Resolução</h2>
+                    <p class="valor text-success" id="taxaResolucao">0%</p>
+                </div>
+            </section>
+            
+            <section class="graficos-container">
+                <div class="graficos-linha">
+                    <div class="card grafico-item">
+                        <h2 class="text-start">Tendência Semanal de Aberturas</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="graficoLinha"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card grafico-item">
+                        <h2 class="text-start">Distribuição por Status</h2>
+                        <div class="donut-chart-wrapper">
+                            <canvas id="graficoPizza"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-      <!-- Gráfico simples (donut) -->
-      <section class="grafico-area card">
-        <h2>Distribuição das Denúncias</h2>
-        <div class="donut" id="donutAdmin">
-          <div class="center" id="donutAdminCenter">--%</div>
-        </div>
-        <div class="legenda">
-          <span class="resolvido">Resolvidas</span>
-          <span class="andamento">Em andamento</span>
-          <span class="pendente">Pendentes</span>
-        </div>
-      </section>
+                <div class="graficos-linha">
+                    <div class="card grafico-item">
+                        <h2 class="text-start">Denúncias por Categoria</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="graficoBarra"></canvas>
+                        </div>
+                    </div>
 
-      <!-- Tabela -->
-      <section class="tabela-area card">
-        <h2>Últimas Denúncias</h2>
-        <table class="tabela-denuncias">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Título da denúncia</th>
-              <th>Status</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-corpo">
-            <!-- preenchido por JS -->
-          </tbody>
-        </table>
-      </section>
-    </main>
-  </div>
+                    <div class="card grafico-item">
+                        <h2 class="text-start">Denúncias por Região/Bairro</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="graficoHorizontal"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-  <footer class="rodape">
-    <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
-  </footer>
+                <div class="graficos-linha">
+                     <div class="card grafico-item full-width-chart">
+                        <h2 class="text-start">Evolução de Denúncias Resolvidas (Acumulativo)</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="graficoArea"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-  <script defer src="../js/main_admin.js"></script>
+            <section class="tabela-area card">
+                <div class="p-3">
+                    <h2>Últimas Denúncias Abertas</h2>
+                </div>
+
+                <div class="d-flex justify-content-between px-3 pb-2">
+                    <select id="filtroStatus" class="form-select form-select-sm" style="width: 150px;">
+                        <option value="all">Todos os Status</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Concluido">Concluído</option>
+                    </select>
+                    <div>
+                         <button id="btnAtualizar" class="btn btn-sm btn-outline-danger me-2"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
+                        <button class="btn btn-sm btn-danger"><i class="bi bi-download"></i> Baixar Relatório</button>
+                    </div>
+                </div>
+
+                <table class="tabela-denuncias table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">ID</th>
+                            <th class="text-nowrap">Título da denúncia</th>
+                            <th class="text-nowrap">Status</th>
+                            <th class="text-nowrap">Data</th>
+                            <th class="text-nowrap">Região</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        </tbody>
+                </table>
+                <p id="tabela-status-vazia" class="text-center text-muted p-3 d-none">Nenhuma denúncia encontrada.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="rodape">
+        <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    
+    <script src="../../assets/js/main_admin.js"></script>
 </body>
 </html>

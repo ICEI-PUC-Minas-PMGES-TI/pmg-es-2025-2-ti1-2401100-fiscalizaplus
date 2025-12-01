@@ -1,0 +1,84 @@
+// Theme Toggle Script
+(function() {
+    'use strict';
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeToggleMobile = document.getElementById('themeToggleMobile');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeIconMobile = document.getElementById('themeIconMobile');
+
+    // Função para obter o tema atual
+    function getCurrentTheme() {
+        return localStorage.getItem('theme') || 'light';
+    }
+
+    // Função para aplicar o tema
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        // Atualizar ícones
+        const isDark = theme === 'dark';
+        if (themeIcon) {
+            themeIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+        if (themeIconMobile) {
+            themeIconMobile.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+        
+        // Atualizar logo
+        const navbarLogo = document.getElementById('navbarLogo');
+        if (navbarLogo) {
+            // Detectar o caminho correto baseado na localização atual
+            const currentPath = window.location.pathname;
+            let logoPath = '';
+            
+            if (currentPath.includes('/modulos/painel-cidadao/')) {
+                // Páginas dentro de painel-cidadao
+                if (currentPath.includes('/comunidade/') || 
+                    currentPath.includes('/dashboard_cidadao/') || 
+                    currentPath.includes('/painel-de-usuario/') ||
+                    currentPath.includes('/reportar-ocorrências/')) {
+                    logoPath = '../../../assets/images/';
+                } else {
+                    // index.html na raiz de painel-cidadao
+                    logoPath = '../../assets/images/';
+                }
+            } else {
+                // Fallback para outros casos
+                logoPath = '../../assets/images/';
+            }
+            
+            if (isDark) {
+                navbarLogo.src = logoPath + 'logo_modo_escuro.png';
+            } else {
+                navbarLogo.src = logoPath + 'logo.png';
+            }
+        }
+    }
+
+    // Função para alternar o tema
+    function toggleTheme() {
+        const currentTheme = getCurrentTheme();
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        applyTheme(newTheme);
+    }
+
+    // Inicializar tema ao carregar a página
+    function initTheme() {
+        const savedTheme = getCurrentTheme();
+        applyTheme(savedTheme);
+    }
+
+    // Event listeners
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+    if (themeToggleMobile) {
+        themeToggleMobile.addEventListener('click', toggleTheme);
+    }
+
+    // Aplicar tema ao carregar
+    initTheme();
+})();
+
