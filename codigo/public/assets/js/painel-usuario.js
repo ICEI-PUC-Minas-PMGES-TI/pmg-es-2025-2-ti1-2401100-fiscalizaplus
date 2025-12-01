@@ -296,9 +296,10 @@
     const updatedAt = denuncia.dataUltimaAtualizacaoStatus || resolvedAt || createdAt;
 
     // Prioriza cidadaoId direto da denúncia, depois tenta pelo match de email
+    // Mantém IDs como string para evitar perda de informação em IDs alfanuméricos
     const cidadaoId = denuncia.cidadaoId 
-      ? parseInt(denuncia.cidadaoId) 
-      : (usuarioMatch ? usuarioMatch.id : null);
+      ? String(denuncia.cidadaoId) 
+      : (usuarioMatch ? String(usuarioMatch.id) : null);
 
     return {
       id: denuncia.id,
@@ -318,7 +319,7 @@
       bairroId: bairroMatch ? bairroMatch.id : null,
       cidadeNome: cidadeMatch ? cidadeMatch.nome : cidadeNome,
       bairroNome: bairroMatch ? bairroMatch.nome : bairroNome,
-      usuarioId: cidadaoId || (usuarioMatch ? usuarioMatch.id : null),
+      usuarioId: cidadaoId || (usuarioMatch ? String(usuarioMatch.id) : null),
       cidadaoId: cidadaoId, // Campo direto do cidadão que reportou
       usuarioNome: usuarioMatch ? (usuarioMatch.nome || usuarioMatch.nomeCompleto) : autorNome,
       usuarioEmail: autorEmail,
@@ -787,9 +788,10 @@
                 return false;
               }
               // Garante que a denúncia pertence ao usuário atual
-              const cidadaoId = o.cidadaoId ? parseInt(o.cidadaoId) : null;
-              const usuarioId = o.usuarioId ? parseInt(o.usuarioId) : null;
-              return (cidadaoId === parseInt(user.id)) || (usuarioId === parseInt(user.id));
+              const cidadaoId = o.cidadaoId != null ? String(o.cidadaoId) : null;
+              const usuarioId = o.usuarioId != null ? String(o.usuarioId) : null;
+              const userIdStr = String(user.id);
+              return (cidadaoId && cidadaoId === userIdStr) || (usuarioId && usuarioId === userIdStr);
             })
             .map(o => ({
               ...o,
@@ -894,7 +896,6 @@
       console.log('[Estatísticas] Total encontrado antes do filtro:', Array.isArray(todasDenuncias) ? todasDenuncias.length : 0);
       
       // Prepara IDs para comparação (aceita string ou número)
-      const usuarioIdNum = parseInt(usuarioId, 10);
       const usuarioIdStr = String(usuarioId);
       
       // Filtra apenas denúncias reais do usuário (exclui LEGACY/simuladas)
@@ -910,21 +911,15 @@
             const usuarioIdDenuncia = d.usuarioId;
             
             if (cidadaoId) {
-              const cidadaoIdNum = parseInt(cidadaoId, 10);
               const cidadaoIdStr = String(cidadaoId);
-              if ((!Number.isNaN(cidadaoIdNum) && cidadaoIdNum === usuarioIdNum) || 
-                  (cidadaoIdStr === usuarioIdStr) || 
-                  (String(cidadaoId) === String(usuarioId))) {
+              if (cidadaoIdStr === usuarioIdStr) {
                 return true;
               }
             }
-            
+
             if (usuarioIdDenuncia) {
-              const usuarioIdNumDenuncia = parseInt(usuarioIdDenuncia, 10);
               const usuarioIdStrDenuncia = String(usuarioIdDenuncia);
-              if ((!Number.isNaN(usuarioIdNumDenuncia) && usuarioIdNumDenuncia === usuarioIdNum) || 
-                  (usuarioIdStrDenuncia === usuarioIdStr) || 
-                  (String(usuarioIdDenuncia) === String(usuarioId))) {
+              if (usuarioIdStrDenuncia === usuarioIdStr) {
                 return true;
               }
             }
@@ -1153,7 +1148,6 @@
     console.log('[Últimas Denúncias] Total encontrado antes do filtro:', Array.isArray(todasDenuncias) ? todasDenuncias.length : 0);
     
     // Prepara IDs para comparação (aceita string ou número)
-    const usuarioIdNum = parseInt(usuario.id, 10);
     const usuarioIdStr = String(usuario.id);
     
     // Filtra apenas denúncias reais do usuário (exclui LEGACY e verifica cidadaoId)
@@ -1169,23 +1163,16 @@
             const usuarioId = d.usuarioId;
             
             if (cidadaoId) {
-              const cidadaoIdNum = parseInt(cidadaoId, 10);
               const cidadaoIdStr = String(cidadaoId);
-              // Compara de múltiplas formas para garantir match
-              if ((!Number.isNaN(cidadaoIdNum) && cidadaoIdNum === usuarioIdNum) || 
-                  (cidadaoIdStr === usuarioIdStr) || 
-                  (String(cidadaoId) === String(usuario.id))) {
+              if (cidadaoIdStr === usuarioIdStr) {
                 console.log('[Últimas Denúncias] Match por cidadaoId:', cidadaoId, 'com usuário:', usuario.id);
                 return true;
               }
             }
-            
+
             if (usuarioId) {
-              const usuarioIdNumDenuncia = parseInt(usuarioId, 10);
               const usuarioIdStrDenuncia = String(usuarioId);
-              if ((!Number.isNaN(usuarioIdNumDenuncia) && usuarioIdNumDenuncia === usuarioIdNum) || 
-                  (usuarioIdStrDenuncia === usuarioIdStr) || 
-                  (String(usuarioId) === String(usuario.id))) {
+              if (usuarioIdStrDenuncia === usuarioIdStr) {
                 console.log('[Últimas Denúncias] Match por usuarioId:', usuarioId, 'com usuário:', usuario.id);
                 return true;
               }
