@@ -8,6 +8,15 @@
       "cidade": "Belo Horizonte",
       "senhaHash": "i#t*a&l$o",
       "dataCadastro": "2025-11-28T13:33:44.969Z"
+    },
+    {
+      "id": "u123",
+      "nomeCompleto": "Lucas Azevedo",
+      "email": "lucas.azevedo@fiscaliza.plus",
+      "estado": "MG",
+      "cidade": "Belo Horizonte",
+      "senhaHash": "teste#2025",
+      "dataCadastro": "2025-12-01T12:00:00.000Z"
     }
   ],
   "servidores": [
@@ -389,14 +398,15 @@
       "urgenciaCidadao": "media",
       "impactoComunidade": "local",
       "dataRegistro": "2025-11-16T10:00:00Z",
-      "autorCidadao": "Maria Luiza",
+      "autorCidadao": "Lucas Azevedo",
+      "cidadaoId": "u123",
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-17T09:00:00Z",
       "prioridadeInterna": "média",
       "observacoesInternasServidor": "Equipe de pavimentação agendada.",
       "servidorResponsavelId": 101,
-      "contatoCidadao": "maria.luiza@email.com",
+      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
       "recebeNotificacoes": true,
       "id": "10"
     },
@@ -585,7 +595,8 @@
       "urgenciaCidadao": "baixa",
       "impactoComunidade": "local",
       "dataRegistro": "2025-11-22T11:00:00Z",
-      "autorCidadao": "Anônimo",
+      "autorCidadao": "Lucas Azevedo",
+      "cidadaoId": "u123",
       "isAnonimo": true,
       "statusAtual": "Pendente",
       "dataUltimaAtualizacaoStatus": "2025-11-22T11:00:00Z",
@@ -644,10 +655,11 @@
       "urgenciaCidadao": "media",
       "impactoComunidade": "local",
       "dataRegistro": "2025-11-23T02:00:00Z",
-      "autorCidadao": "Maria Luiza",
+      "autorCidadao": "Lucas Azevedo",
+      "cidadaoId": "u123",
       "isAnonimo": false,
-      "statusAtual": "Em Andamento",
-      "dataUltimaAtualizacaoStatus": "2025-11-24T09:00:00Z",
+      "statusAtual": "Concluido",
+      "dataUltimaAtualizacaoStatus": "2025-11-29T12:00:00Z",
       "id": "18"
     },
     {
@@ -725,7 +737,8 @@
       "urgenciaCidadao": "emergencia",
       "impactoComunidade": "regional",
       "dataRegistro": "2025-11-23T05:00:00Z",
-      "autorCidadao": "João Pedro",
+      "autorCidadao": "Lucas Azevedo",
+      "cidadaoId": "u123",
       "isAnonimo": false,
       "statusAtual": "Em Andamento",
       "dataUltimaAtualizacaoStatus": "2025-11-24T10:00:00Z",
@@ -3482,13 +3495,46 @@
       "dataRegistro": "2025-11-28T17:29:37.508Z",
       "autorCidadao": "Italo Eduardo Carneiro da Silva",
       "isAnonimo": false,
-      "statusAtual": "Em andamento",
+      "statusAtual": "Concluido",
       "dataUltimaAtualizacaoStatus": "2025-11-28T17:29:37.509Z",
       "prioridadeInterna": null,
       "observacoesInternasServidor": "",
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
+    },
+    {
+      "titulo": "Buraco no chão",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "buraco no chão, grande buraco",
+      "informacoesAdicionaisCidadao": "Cai no buraco",
+      "codigoOcorrencia": "OCOR-0124",
+      "cidadaoId": "u123",
+      "endereco": {
+        "rua": "Rua Martim de Carvalho",
+        "numero": "",
+        "bairro": "Santo Agostinho",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30170-041",
+        "latitude": -19.9294976,
+        "longitude": -43.9549952
+      },
+      "imagens": [],
+      "prioridadeCidadao": "critica",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-12-01T16:47:31.670Z",
+      "autorCidadao": "Lucas Azevedo",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-12-01T16:47:31.670Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
+      "recebeNotificacoes": true,
+      "id": "eooNYu9"
     }
   ],
   "admin": {
@@ -3518,7 +3564,7 @@
       "title": "Buraco perigoso na avenida",
       "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
       "category": "transito",
-      "votes": 31
+      "votes": 32
     },
     {
       "id": "2",
@@ -3527,7 +3573,7 @@
       "title": "Sugestão de faixa de pedestre",
       "excerpt": "Seria importante adicionar uma faixa perto da escola...",
       "category": "sugestoes",
-      "votes": 15
+      "votes": 16
     },
     {
       "id": "3",
@@ -3536,7 +3582,7 @@
       "title": "Alagamento recorrente na esquina",
       "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
       "category": "meioambiente",
-      "votes": 9
+      "votes": 10
     }
   ]
 }
