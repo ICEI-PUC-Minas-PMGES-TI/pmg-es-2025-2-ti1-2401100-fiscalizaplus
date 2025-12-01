@@ -471,3 +471,192 @@ table td {
 /* Fim da estilização da página de relatórios */
 
 /* Início da página de visualização de denúncia do servidor*/
+
+.pagina-denuncia {
+  background-color: #d9d9d9 !important;
+}
+
+.pagina-denuncia .layout {
+  display: flex;
+}
+
+.pagina-denuncia .sidebar {
+  width: 240px;
+  background-color: #4a4a4a;
+  color: #ffffff;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pagina-denuncia .main-content {
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #d9d9d9;
+}
+
+.pagina-denuncia .denuncia-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  margin: auto;
+}
+
+.pagina-denuncia .denuncia-container h1 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+.pagina-denuncia .denuncia-form {
+  margin-bottom: 20px;
+}
+
+.pagina-denuncia .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.pagina-denuncia .form-group label {
+  font-weight: bold;
+}
+
+.pagina-denuncia .form-group input,
+.pagina-denuncia .form-group textarea,
+.pagina-denuncia select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+}
+
+.pagina-denuncia .full-width {
+  grid-column: span 3;
+}
+
+.pagina-denuncia .map-section {
+  margin-top: 25px;
+}
+
+.pagina-denuncia .map-section h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.pagina-denuncia .map-container {
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #ccc;
+}
+
+.pagina-denuncia .imagens-problema h2 {
+  margin-top: 30px;
+  font-size: 22px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.pagina-denuncia .imagens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.pagina-denuncia .imagens-grid img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pagina-denuncia .feedback-section {
+  margin-top: 25px;
+}
+
+.pagina-denuncia .feedback-section textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  resize: vertical;
+}
+
+.pagina-denuncia .status-section {
+  margin-top: 20px;
+}
+
+.pagina-denuncia .status-section select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+/* Botões */
+.pagina-denuncia .acoes-denuncia {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.pagina-denuncia .btn-cancelar {
+  background-color: #b12a2a;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagina-denuncia .btn-salvar {
+  background-color: #1c5fa8;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagina-denuncia .btn-cancelar:hover {
+  background-color: #992424;
+}
+
+.pagina-denuncia .btn-salvar:hover {
+  background-color: #164c86;
+}
+
+@media (max-width: 900px) {
+  .pagina-denuncia .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pagina-denuncia .full-width {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .pagina-denuncia .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagina-denuncia .full-width {
+    grid-column: span 1;
+  }
+
+  .pagina-denuncia .acoes-denuncia {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
