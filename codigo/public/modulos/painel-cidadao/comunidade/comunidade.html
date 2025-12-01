@@ -5,18 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FiscalizaPlus</title>
-  <link rel="shortcut icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../../assets/css/cidadaos.css">
+  <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg" style="padding: 0.75rem 0; margin: 0;">
-    <div class="container-fluid" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
+        <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo">
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -37,31 +36,27 @@
             <a class="nav-link" href="../dashboard_cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../guia/guia-cidadao.html">Guia do Cidadão</a>
+            <a class="nav-link" href="#">Guia do Cidadão</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../painel-de-usuario/index.html">Painel do Usuário</a>
           </li>
         </ul>
 
-        <div class="navbar-actions d-flex align-items-center gap-3">
-          <!-- Botão de Toggle de Tema -->
-          <button class="theme-toggle-btn" id="themeToggle" aria-label="Alternar tema">
-            <i class="fa-solid fa-moon" id="themeIcon"></i>
-          </button>
-          
-          <div class="navbar-user d-flex align-items-center dropdown">
-            <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Joãozinho</span>
-            <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              <i class="fa-solid fa-circle-user user-icon"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-              <li><a class="dropdown-item" href="../painel-de-usuario/index.html">Minhas Denúncias</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Sair</a></li>
-            </ul>
-          </div>
+        <div class="navbar-user d-flex align-items-center dropdown">
+          <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Joãozinho</span>
+          <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="fa-solid fa-circle-user user-icon"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Minhas Denúncias</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+          </ul>
         </div>
       </div>
 
@@ -85,7 +80,7 @@
                 Ocorrências</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../guia/guia-cidadao.html">Guia do Cidadão</a>
+              <a class="nav-link" href="#">Guia do Cidadão</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../painel-de-usuario/index.html">Painel do
@@ -93,17 +88,13 @@
             </li>
           </ul>
 
-          <div class="navbar-user d-flex align-items-center justify-content-between mt-auto border-top pt-3">
-            <div class="d-flex align-items-center">
-              <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
-              <a href="#" class="user-icon-link">
-                <i class="fa-solid fa-circle-user user-icon"></i>
-              </a>
-            </div>
-            <button class="theme-toggle-btn" id="themeToggleMobile" aria-label="Alternar tema">
-              <i class="fa-solid fa-moon" id="themeIconMobile"></i>
-            </button>
+          <div class="navbar-user d-flex align-items-center mt-auto border-top pt-3">
+            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Joãozinho</span>
+            <a href="#" class="user-icon-link">
+              <i class="fa-solid fa-circle-user user-icon"></i>
+            </a>
           </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -112,58 +103,19 @@
     <div class="page__grid">
       <!-- ===== Sidebar ===== -->
       <aside class="sidebar">
-        <button class="btn btn--danger btn--lg"
-        id="btn-new"
-        data-bs-toggle="modal"
-        data-bs-target="#newPostModal">
-          Iniciar nova discussão</button>
-
-        <!-- Modal: Nova Discussão -->
-<div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <form class="modal-content" id="new-post-form">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newPostModalLabel">Nova discussão</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-
-      <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label">Título</label>
-          <input type="text" name="title" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Categoria</label>
-          <select name="category" class="form-select" required>
-            <option value="todas">Todas</option>
-            <option value="transito">Trânsitos</option>
-            <option value="meio_ambiente">Meio ambiente</option>
-            <option value="sugestoes">Sugestões</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Descrição</label>
-          <textarea name="body" rows="5" class="form-control" required></textarea>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Publicar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
+        <button
+          class="btn btn--danger btn--lg"
+          id="btn-new"
+          data-bs-toggle="modal"
+          data-bs-target="#newPostModal">
+          Iniciar nova discussão
+        </button>
 
         <div class="profile">
-          <div class="avatar" aria-hidden="true" id="user-avatar-initial">J</div>
+          <div class="avatar" aria-hidden="true">J</div>
           <div class="profile__info">
-            <strong id="user-name-profile">Joãozinho Silva</strong>
-            <small id="user-email-profile">email@gmail.com</small>
+            <strong>Joãozinho Silva</strong>
+            <small>email@gmail.com</small>
           </div>
         </div>
 
@@ -199,7 +151,7 @@
         </div>
 
         <div class="cards" id="cards">
-          <!-- Card 1 -->
+          <!-- Cards estáticos de exemplo (serão substituídos pelos do JSON Server se o JS estiver ativo) -->
           <article class="card" data-id="p1" data-category="transito">
             <header class="card__header">
               <div class="avatar" aria-hidden="true">J</div>
@@ -228,7 +180,6 @@
             </footer>
           </article>
 
-          <!-- Card 2 -->
           <article class="card" data-id="p2" data-category="sugestoes">
             <header class="card__header">
               <div class="avatar" aria-hidden="true">F</div>
@@ -240,8 +191,8 @@
 
             <h3 class="card__title">Poste de Luz Queimado na Praça Y. Há um Mês no Escuro!</h3>
             <p class="card__excerpt">
-              Boa tarde! Alguém mais está percebendo que o poste de luz da entrada da Praça Y não está funcionando
-              há quase um mês? O local está ficando perigoso para quem passa a noite ou de manhã cedo...
+              Boa tarde! Alguém mais está percebendo que o poste de luz da entrada da Praça Y não está
+              funcionando há quase um mês? O local está ficando perigoso para quem passa a noite ou de manhã cedo...
             </p>
 
             <div class="progress" aria-label="Apoio da comunidade">
@@ -257,12 +208,11 @@
             </footer>
           </article>
 
-          <!-- Card 3 -->
           <article class="card" data-id="p3" data-category="meio_ambiente">
             <header class="card__header">
               <div class="avatar" aria-hidden="true">C</div>
               <div class="card__author">
-                <strong class="author">Camila rocha</strong>
+                <strong class="author">Camila Rocha</strong>
                 <small class="timeago">8h atrás</small>
               </div>
             </header>
@@ -286,7 +236,6 @@
             </footer>
           </article>
 
-          <!-- Card 4 -->
           <article class="card" data-id="p4" data-category="sugestoes">
             <header class="card__header">
               <div class="avatar" aria-hidden="true">R</div>
@@ -319,13 +268,50 @@
     </div>
   </main>
 
-  <!-- Script do app (separado) -->
-  <script type="module" src="../../../assets/js/comunidade.js"></script>
+  <!-- Modal de Nova Discussão (fora da sidebar!) -->
+  <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content" id="new-post-form">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newPostModalLabel">Nova discussão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input type="text" name="title" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Categoria</label>
+            <select name="category" class="form-select" required>
+              <option value="todas">Todas</option>
+              <option value="transito">Trânsitos</option>
+              <option value="meio_ambiente">Meio ambiente</option>
+              <option value="sugestoes">Sugestões</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea name="body" rows="5" class="form-control" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Publicar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
-  <script src="../../../assets/js/tema.js"></script>
-  <script src="../../../assets/js/current-user.js"></script>
+  <script type="module" src="../../../assets/js/comunidade.js"></script>
 </body>
 
 </html>
