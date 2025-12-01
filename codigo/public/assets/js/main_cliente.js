@@ -1,195 +1,217 @@
-// main_cliente.js - Versão completa com sincronização
-class GerenciadorCliente {
-  constructor() {
-    this.chaveStorage = 'relatosUsuario';
-    this.eventoSincronizacao = 'fiscalizaplus_atualizacao';
-    this.ocorrencias = this.carregarOcorrencias();
-    
-    this.configurarSincronizacao();
-  }
+// main_cliente.js - Dashboard do Cidadão com gráficos
+const API_URL = "/denuncias";
 
-  configurarSincronizacao() {
-    // Escuta eventos de atualização do admin
-    window.addEventListener('storage', (e) => {
-      if (e.key === this.chaveStorage) {
-        console.log('🔄 Dados atualizados pelo admin, recarregando...');
-        this.ocorrencias = this.carregarOcorrencias();
-        this.atualizarDashboard();
-      }
-    });
+let chartStatus = null;
+let chartTipo = null;
+let chartTemporal = null;
 
-    window.addEventListener(this.eventoSincronizacao, () => {
-      console.log('🔄 Sincronização recebida do admin');
-      this.ocorrencias = this.carregarOcorrencias();
-      this.atualizarDashboard();
-    });
-  }
-
-  carregarOcorrencias() {
-    try {
-      const salvas = localStorage.getItem(this.chaveStorage);
-      if (salvas) {
-        const dados = JSON.parse(salvas);
-        console.log(`✅ ${dados.length} ocorrências carregadas (sincronizadas)`);
-        
-        // Converte do formato do formulário para o formato do sistema
-        return dados.map((relato, index) => this.converterRelatoParaOcorrencia(relato, index));
-      }
-      
-      // Fallback para dados estáticos
-      console.log('🔄 Usando dados estáticos iniciais');
-      return this.getDadosIniciais();
-      
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      return this.getDadosIniciais();
-    }
-  }
-
-  // ADICIONE o método de conversão:
-  converterRelatoParaOcorrencia(relato, index) {
-    return {
-      id: relato.id || index + 1,
-      usuarioId: 2,
-      titulo: relato.titulo || 'Sem título',
-      descricao: relato.descricao || relato.observacoes || '',
-      status: this.mapearStatus(relato.status) || 'aberto',
-      tipo: this.mapearTipo(relato.categoria) || 'outros',
-      lat: relato.localizacao?.lat || -19.9167,
-      lng: relato.localizacao?.lng || -43.9345,
-      localizacao: relato.localizacao?.endereco || 'Local não especificado',
-      createdAt: relato.data_envio || new Date().toISOString()
-    };
-  }
-
-  mapearStatus(statusFormulario) {
-    const mapeamento = {
-      'Pendente': 'aberto',
-      'Resolvido': 'resolvido',
-      'Em Andamento': 'em_andamento'
-    };
-    return mapeamento[statusFormulario] || 'aberto';
-  }
-
-  mapearTipo(categoria) {
-    const mapeamento = {
-      'buraco_via': 'buraco',
-      'iluminacao_publica': 'iluminacao', 
-      'sinalizacao': 'sinalizacao',
-      'calcada': 'calcada',
-      'lixo_entulho': 'lixo',
-      'arborizacao': 'outros',
-      'praca_parque': 'outros',
-      'outros': 'outros'
-    };
-    return mapeamento[categoria] || 'outros';
-  }
-
-  getDadosIniciais() {
-    return [
-      { "id": 1, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "buraco", "titulo": "Buraco na Rua X", "descricao": "Buraco grande na esquina.", "status": "em_andamento", "lat": -19.9362, "lng": -43.9329, "createdAt": "2025-10-18T10:00:00Z" },
-      { "id": 2, "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "sinalizacao", "titulo": "Sinalização apagada", "descricao": "Faixa apagada.", "status": "aberto", "lat": -19.9302, "lng": -43.9226, "createdAt": "2025-10-18T09:00:00Z" },
-      { "id": 3, "usuarioId": 3, "cidadeId": 1, "bairroId": 1, "tipo": "calcada", "titulo": "Calçada quebrada", "descricao": "Trinca extensa.", "status": "aberto", "lat": -19.9357, "lng": -43.9322, "createdAt": "2025-10-17T14:30:00Z" },
-      { "id": 4, "usuarioId": 1, "cidadeId": 1, "bairroId": 1, "tipo": "lixo", "titulo": "Lixo acumulado", "descricao": "Sacos na calçada.", "status": "resolvido", "lat": -19.9371, "lng": -43.9340, "createdAt": "2025-10-16T11:20:00Z", "resolvedAt": "2025-10-17T08:00:00Z" },
-      { "id": 5, "usuarioId": 2, "cidadeId": 1, "bairroId": 2, "tipo": "buraco", "titulo": "Asfalto afundando", "descricao": "Depressão no leito.", "status": "em_andamento", "lat": -19.9293, "lng": -43.9218, "createdAt": "2025-10-16T12:00:00Z" }
-    ];
-  }
-
-  atualizarDashboard() {
-    const total = this.ocorrencias.length;
-    const resolvidas = this.ocorrencias.filter(o => o.status === 'resolvido').length;
-    const andamento = this.ocorrencias.filter(o => o.status === 'em_andamento').length;
-    const abertas = this.ocorrencias.filter(o => o.status === 'aberto').length;
-
-    console.log('Estatísticas Cliente (sincronizadas):', { total, resolvidas, andamento, abertas });
-
-    // ATUALIZAR A INTERFACE
-    this.atualizarElemento('totalDenuncias', total);
-    this.atualizarElemento('resolvidas', resolvidas);
-    this.atualizarElemento('andamento', andamento);
-
-    // ATUALIZAR DONUT CHART
-    this.atualizarDonutChart(total, resolvidas, andamento, abertas);
-
-    // ATUALIZAR LISTA DE OCORRÊNCIAS (se houver)
-    this.atualizarListaOcorrencias();
-
-    console.log('✅ Dashboard Cliente atualizado (sincronizado)!');
-  }
-
-  atualizarElemento(id, valor) {
-    const elemento = document.getElementById(id);
-    if (elemento) {
-      elemento.textContent = valor;
-    }
-  }
-
-  atualizarDonutChart(total, resolvidas, andamento, abertas) {
-    const donut = document.getElementById('donutCliente');
-    const donutCenter = document.getElementById('donutCenter');
-
-    if (donut && donutCenter && total > 0) {
-      const degResolvidas = (resolvidas / total) * 360;
-      const degAndamento = (andamento / total) * 360;
-      
-      donut.style.background = `conic-gradient(
-        #4CAF50 0 ${degResolvidas}deg,
-        #FFB300 ${degResolvidas}deg ${degResolvidas + degAndamento}deg,
-        #E53935 ${degResolvidas + degAndamento}deg 360deg
-      )`;
-      
-      const pct = Math.round((resolvidas / total) * 100);
-      donutCenter.textContent = pct + '%';
-    }
-  }
-
-  atualizarListaOcorrencias() {
-    const listaElement = document.getElementById('listaOcorrencias');
-    if (!listaElement) return;
-
-    // Ordena por data (mais recentes primeiro)
-    const ocorrenciasOrdenadas = [...this.ocorrencias].sort((a, b) => 
-      new Date(b.createdAt) - new Date(a.createdAt)
-    );
-
-    listaElement.innerHTML = ocorrenciasOrdenadas.map(ocorrencia => {
-      const dataFormatada = new Date(ocorrencia.createdAt).toLocaleDateString('pt-BR');
-      const statusClass = ocorrencia.status === 'resolvido' ? 'resolvido' : 
-                         ocorrencia.status === 'em_andamento' ? 'andamento' : 'pendente';
-      
-      const statusText = ocorrencia.status === 'resolvido' ? 'Resolvido' :
-                        ocorrencia.status === 'em_andamento' ? 'Em Andamento' : 'Pendente';
-
-      return `
-        <div class="ocorrencia-item" data-id="${ocorrencia.id}">
-          <h4>${ocorrencia.titulo}</h4>
-          <p>${ocorrencia.descricao}</p>
-          <div class="ocorrencia-info">
-            <span class="status ${statusClass}">${statusText}</span>
-            <span class="tipo">${this.formatarTipo(ocorrencia.tipo)}</span>
-            <span class="data">${dataFormatada}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  formatarTipo(tipo) {
-    const tipos = {
-      'buraco': 'Buraco na Via',
-      'iluminacao': 'Iluminação',
-      'sinalizacao': 'Sinalização', 
-      'calcada': 'Calçada',
-      'lixo': 'Lixo/Acúmulo'
-    };
-    return tipos[tipo] || tipo;
+// Carregar denúncias da API
+async function carregarDenuncias() {
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) throw new Error("Erro ao carregar denúncias");
+    const denuncias = await response.json();
+    return denuncias;
+  } catch (error) {
+    console.error("Erro:", error);
+    return [];
   }
 }
 
-// Inicializa o gerenciador do cliente
-const clienteManager = new GerenciadorCliente();
+// Atualizar cards de estatísticas
+function atualizarCards(denuncias) {
+  const total = denuncias.length;
+  const resolvidas = denuncias.filter(d => d.statusAtual === "Concluido").length;
+  const emAndamento = denuncias.filter(d => d.statusAtual === "Em Andamento").length;
+  const pendentes = denuncias.filter(d => d.statusAtual === "Pendente").length;
 
-// Quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-  clienteManager.atualizarDashboard();
-});
+  document.getElementById("totalDenuncias").textContent = total;
+  document.getElementById("resolvidas").textContent = resolvidas;
+  document.getElementById("andamento").textContent = emAndamento;
+  document.getElementById("pendentes").textContent = pendentes;
+}
+
+// Criar gráfico de pizza para Status
+function criarGraficoStatus(denuncias) {
+  const ctx = document.getElementById("chartStatus");
+  if (!ctx) return;
+
+  const concluidas = denuncias.filter(d => d.statusAtual === "Concluido").length;
+  const emAndamento = denuncias.filter(d => d.statusAtual === "Em Andamento").length;
+  const pendentes = denuncias.filter(d => d.statusAtual === "Pendente").length;
+
+  if (chartStatus) chartStatus.destroy();
+
+  chartStatus = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Concluídas', 'Em Andamento', 'Pendentes'],
+      datasets: [{
+        data: [concluidas, emAndamento, pendentes],
+        backgroundColor: ['#28A745', '#FFC107', '#E53935'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 15,
+            font: { size: 12 }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.parsed || 0;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${label}: ${value} (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Criar gráfico de barras por Tipo
+function criarGraficoTipo(denuncias) {
+  const ctx = document.getElementById("chartTipo");
+  if (!ctx) return;
+
+  // Contar por tipo
+  const tiposCount = {};
+  denuncias.forEach(d => {
+    const tipo = d.tipoProblema || "Outros";
+    tiposCount[tipo] = (tiposCount[tipo] || 0) + 1;
+  });
+
+  const labels = Object.keys(tiposCount);
+  const data = Object.values(tiposCount);
+
+  if (chartTipo) chartTipo.destroy();
+
+  chartTipo = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Quantidade',
+        data: data,
+        backgroundColor: '#007BFF',
+        borderColor: '#0056b3',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `Quantidade: ${context.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
+}
+
+// Criar gráfico de linha temporal
+function criarGraficoTemporal(denuncias) {
+  const ctx = document.getElementById("chartTemporal");
+  if (!ctx) return;
+
+  // Agrupar por mês
+  const porMes = {};
+  denuncias.forEach(d => {
+    if (!d.dataRegistro) return;
+    const data = new Date(d.dataRegistro);
+    const mesAno = `${data.getMonth() + 1}/${data.getFullYear()}`;
+    porMes[mesAno] = (porMes[mesAno] || 0) + 1;
+  });
+
+  // Ordenar por data
+  const entries = Object.entries(porMes).sort((a, b) => {
+    const [mesA, anoA] = a[0].split('/').map(Number);
+    const [mesB, anoB] = b[0].split('/').map(Number);
+    return (anoA - anoB) || (mesA - mesB);
+  });
+
+  const labels = entries.map(e => e[0]);
+  const data = entries.map(e => e[1]);
+
+  if (chartTemporal) chartTemporal.destroy();
+
+  chartTemporal = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Denúncias por Mês',
+        data: data,
+        borderColor: '#d62828',
+        backgroundColor: 'rgba(214, 40, 40, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: '#d62828'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `Denúncias: ${context.parsed.y}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
+}
+
+// Preencher tabela de denúncias recentes - REMOVIDO
+
+// Inicializar dashboard
+async function inicializarDashboard() {
+  const denuncias = await carregarDenuncias();
+  
+  if (denuncias.length === 0) {
+    console.warn("Nenhuma denúncia carregada");
+    return;
+  }
+
+  atualizarCards(denuncias);
+  criarGraficoStatus(denuncias);
+  criarGraficoTipo(denuncias);
+  criarGraficoTemporal(denuncias);
+}
+
+// Executar quando a página carregar
+document.addEventListener('DOMContentLoaded', inicializarDashboard);
