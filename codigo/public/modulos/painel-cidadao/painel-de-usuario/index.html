@@ -16,8 +16,8 @@
 
 <body>
   <!-- Barra de navegação principal -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg" style="padding: 0.75rem 0; margin: 0;">
+    <div class="container-fluid" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
       <a class="navbar-brand d-flex align-items-center" href="#">
         <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
       </a>
@@ -158,136 +158,7 @@
 
       <!-- Lista de relatos -->
       <section class="reports" aria-label="Lista de relatos">
-        <!-- Relato 1 -->
-        <article class="report" data-id="r1" data-status="pendente">
-          <div class="report__avatar">🧑</div>
-
-          <div class="report__body">
-            <h3 class="report__title">Poste de Luz queimado - Praça Y</h3>
-            <span class="report__time">2h atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--pendente">
-                <i class="dot"></i><span class="status-text">Pendente</span>
-              </span>
-
-              <label class="sr-only" for="select-r1">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-
-          <div class="occurrence-map-canvas" data-lat="-19.9364" data-lng="-43.9344"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
-
-        <!-- Relato 2 -->
-        <article class="report" data-id="r2" data-status="pendente">
-          <div class="report__avatar">🧑</div>
-          <div class="report__body">
-            <h3 class="report__title">Buraco na rua A</h3>
-            <span class="report__time">12h atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--pendente">
-                <i class="dot"></i><span class="status-text">Pendente</span>
-              </span>
-              <label class="sr-only" for="select-r2">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-          <div class="occurrence-map-canvas" data-lat="-19.9292" data-lng="-43.9398"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
-
-        <!-- Relato 3 -->
-
-        <article class="report" data-id="r3" data-status="concluido">
-          <div class="report__avatar">🧑</div>
-          <div class="report__body">
-            <h3 class="report__title">Poste queimado na rua Z</h3>
-            <span class="report__time">14h atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--concluido">
-                <i class="dot"></i><span class="status-text">Concluído</span>
-              </span>
-              <label class="sr-only" for="select-r3">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-          <div class="occurrence-map-canvas" data-lat="-19.9371" data-lng="-43.9340"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
-
-        <!-- Relato 4 -->
-        <article class="report" data-id="r4" data-status="andamento">
-          <div class="report__avatar">🧑</div>
-          <div class="report__body">
-            <h3 class="report__title">Buraco na Rua X</h3>
-            <span class="report__time">2d atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--andamento">
-                <i class="dot"></i><span class="status-text">Em andamento</span>
-              </span>
-              <label class="sr-only" for="select-r4">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-          <div class="occurrence-map-canvas" data-lat="-19.9362" data-lng="-43.9329"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
-
-        <!-- Relato 5 -->
-        <article class="report" data-id="r3" data-status="concluido">
-          <div class="report__avatar">🧑</div>
-          <div class="report__body">
-            <h3 class="report__title">Lixeira quebrada</h3>
-            <span class="report__time">6d atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--concluido">
-                <i class="dot"></i><span class="status-text">Concluido</span>
-              </span>
-              <label class="sr-only" for="select-r4">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-          <div class="occurrence-map-canvas" data-lat="-19.9299" data-lng="-43.9214"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
-
-
-        <!-- Relato 6 -->
-        <article class="report" data-id="r4" data-status="andamento">
-          <div class="report__avatar">🧑</div>
-          <div class="report__body">
-            <h3 class="report__title">Placa de transito danificada</h3>
-            <span class="report__time">9d atrás</span>
-
-            <div class="report__status">
-              <span class="status-pill status--andamento">
-                <i class="dot"></i><span class="status-text">Em andamento</span>
-              </span>
-              <label class="sr-only" for="select-r4">Alterar status</label>
-
-
-              </select>
-            </div>
-          </div>
-          <div class="occurrence-map-canvas" data-lat="-19.9298" data-lng="-43.9220"
-            style="height:80px; width:100%; border-radius:8px; overflow:hidden;"></div>
-        </article>
+        <!-- Relatos serão carregados dinamicamente via JavaScript -->
       </section>
     </section>
   </main>
@@ -296,17 +167,39 @@
     <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
   </footer>
 
+  <!-- Modal de Detalhes da Denúncia -->
+  <div class="modal fade" id="report-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content impact-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="report-detail-title">Detalhes da Denúncia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2"><span class="badge rounded-pill" id="report-detail-status">Pendente</span></div>
+          <div class="small text-muted mb-2" id="report-detail-dates"></div>
+          <div class="mb-1 fw-semibold">Tipo</div>
+          <div class="mb-3" id="report-detail-type">-</div>
+          <div class="mb-1 fw-semibold">Descrição</div>
+          <div class="mb-3" id="report-detail-desc">-</div>
+          <div id="report-detail-extra"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
-  <script src="/codigo/public/assets/js/status-relatos.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="../../../assets/js/data.js"></script>
   <script src="../../../assets/js/occurrence-map.js"></script>
-  <script src="../../../assets/js/tema-toggle.js"></script>
+  <script src="../../../assets/js/tema.js"></script>
   <script src="../../../assets/js/current-user.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
+  <script src="../../../assets/js/painel-usuario-completo.js"></script>
 
 </body>
 

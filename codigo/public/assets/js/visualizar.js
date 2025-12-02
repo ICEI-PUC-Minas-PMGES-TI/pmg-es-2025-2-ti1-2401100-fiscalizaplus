@@ -48,10 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td>${d.id}</td>
         <td>${d.titulo}</td>
-        <td>${d.descricao}</td>
-        <td><span class="status ${d.status}">${capitalize(d.status)}</span></td>
-        <td>${capitalize(d.tipo)}</td>
-        <td>${new Date(d.data).toLocaleDateString("pt-BR")}</td>
+        <td>${d.descricaoCompleta || d.descricao || ''}</td>
+        <td><span class="status ${d.statusAtual || d.status}">${capitalize(d.statusAtual || d.status)}</span></td>
+        <td>${capitalize(d.tipoProblema || d.tipo)}</td>
+        <td>${new Date(d.dataRegistro || d.data).toLocaleDateString("pt-BR")}</td>
       `;
       tabela.appendChild(row);
     });
@@ -71,9 +71,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = dataFilter.value;
 
     denunciasFiltradas = denuncias.filter((d) => {
-      const matchStatus = (status === "all") || d.status === status;
-      const matchTipo = (tipo === "all") || d.tipo === tipo;
-      const matchData = !data || d.data === data;
+      const itemStatus = d.statusAtual || d.status;
+      const itemTipo = d.tipoProblema || d.tipo;
+      const itemData = d.dataRegistro || d.data;
+
+      const matchStatus = (status === "all") || itemStatus === status;
+      const matchTipo = (tipo === "all") || itemTipo === tipo;
+
+      let matchData = true;
+      if (data && itemData) {
+        const dataItem = new Date(itemData).toISOString().split('T')[0];
+        matchData = dataItem === data;
+      }
+
       return matchStatus && matchTipo && matchData;
     });
 
@@ -86,24 +96,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // =======================================================
   function atualizarDonut() {
     const total = denunciasFiltradas.length;
-    const resolvidas = denunciasFiltradas.filter(d => d.status === "resolvido").length;
-    const andamento = denunciasFiltradas.filter(d => d.status === "andamento").length;
-    const pendentes = denunciasFiltradas.filter(d => d.status === "pendente").length;
+    // Ajuste dos status conforme db.json (Pendente, Em Andamento, Concluido)
+    // Normalizando para lowercase para comparação se necessário, mas db.json usa CamelCase ou Capitalized
+    const resolvidos = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Concluido").length;
+    const andamento = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Em Andamento").length;
+    const pendentes = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Pendente").length;
 
     const donut = document.getElementById("donutCliente");
     const center = document.getElementById("donutCenter");
 
     if (donut && total > 0) {
-      const degResolvidas = (resolvidas / total) * 360;
+      const degResolvidos = (resolvidos / total) * 360;
       const degAndamento = (andamento / total) * 360;
 
       donut.style.background = `conic-gradient(
-        #4CAF50 0 ${degResolvidas}deg,
-        #FFB300 ${degResolvidas}deg ${degResolvidas + degAndamento}deg,
-        #E53935 ${degResolvidas + degAndamento}deg 360deg
+        #4CAF50 0 ${degResolvidos}deg,
+        #FFB300 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
+        #E53935 ${degResolvidos + degAndamento}deg 360deg
       )`;
 
-      center.textContent = Math.round((resolvidas / total) * 100) + "%";
+      center.textContent = Math.round((resolvidos / total) * 100) + "%";
+    } else if (donut) {
+      donut.style.background = '#e0e0e0';
+      center.textContent = "0%";
     }
   }
 
@@ -131,14 +146,29 @@ document.addEventListener("DOMContentLoaded", () => {
             <tr>
               <td>${d.id}</td>
               <td>${d.titulo}</td>
-              <td>${d.descricao}</td>
-              <td>${capitalize(d.status)}</td>
-              <td>${capitalize(d.tipo)}</td>
-              <td>${new Date(d.data).toLocaleDateString("pt-BR")}</td>
+              <td>${d.descricaoCompleta || d.descricao || ''}</td>
+              <td>${capitalize(d.statusAtual || d.status)}</td>
+              <td>${capitalize(d.tipoProblema || d.tipo)}</td>
+              <td>${new Date(d.dataRegistro || d.data).toLocaleDateString("pt-BR")}</td>
             </tr>`).join('')}
         </tbody>
       </table>
     `;
+
+    // Recalcular porcentagem para o relatório impresso
+    const total = denunciasFiltradas.length;
+    const resolvidos = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Concluido").length;
+    const andamento = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Em Andamento").length;
+
+    let degResolvidos = 0;
+    let degAndamento = 0;
+    let percResolvidos = 0;
+
+    if (total > 0) {
+      degResolvidos = (resolvidos / total) * 360;
+      degAndamento = (andamento / total) * 360;
+      percResolvidos = Math.round((resolvidos / total) * 100);
+    }
 
     const printWindow = window.open('', '', 'width=900,height=650');
     printWindow.document.write(`
@@ -147,14 +177,29 @@ document.addEventListener("DOMContentLoaded", () => {
         <title>Relatório</title>
         <style>
           body { font-family: Arial; padding: 20px; }
-          .donut { width: 160px; height: 160px; border-radius: 50%; margin: 0 auto; }
+          .donut { 
+            width: 160px; height: 160px; border-radius: 50%; margin: 0 auto; 
+            background: conic-gradient(
+                #4CAF50 0 ${degResolvidos}deg,
+                #FFB300 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
+                #E53935 ${degResolvidos + degAndamento}deg 360deg
+            );
+          }
           .center { width: 90px; height: 90px; border-radius: 50%; background: white;
-            display: grid; place-items: center; font-weight: bold; }
+            display: grid; place-items: center; font-weight: bold; position: relative; top: 35px; left: 35px;}
           table, th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
           th { background: #f5f5f5; }
         </style>
       </head>
-      <body>${areaRelatorio.innerHTML}</body>
+      <body>
+        <h2>📊 Relatório de Denúncias</h2>
+        <div style="margin: 20px auto; text-align:center;">
+            <div class="donut">
+                <div class="center">${percResolvidos}%</div>
+            </div>
+        </div>
+        ${areaRelatorio.querySelector('table').outerHTML}
+      </body>
       </html>
     `);
     printWindow.document.close();
@@ -173,4 +218,30 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   btnFiltrar.addEventListener("click", aplicarFiltros);
+
+  // =======================================================
+  // ✅ Botão Enviar para Equipe (Mock)
+  // =======================================================
+  const btnEnviar = document.getElementById("btnEnviar");
+  if (btnEnviar) {
+    btnEnviar.addEventListener("click", () => {
+      const originalText = btnEnviar.innerText;
+      btnEnviar.disabled = true;
+      btnEnviar.innerText = "Enviando... ⏳";
+
+      setTimeout(() => {
+        btnEnviar.innerText = "Enviado para a equipe ✅";
+        btnEnviar.classList.remove("btn-primary"); // Remove classe original se houver
+        btnEnviar.style.backgroundColor = "#28a745"; // Verde sucesso
+        btnEnviar.style.borderColor = "#28a745";
+
+        setTimeout(() => {
+          btnEnviar.innerText = originalText;
+          btnEnviar.disabled = false;
+          btnEnviar.style.backgroundColor = ""; // Volta ao original
+          btnEnviar.style.borderColor = "";
+        }, 3000);
+      }, 1500);
+    });
+  }
 });

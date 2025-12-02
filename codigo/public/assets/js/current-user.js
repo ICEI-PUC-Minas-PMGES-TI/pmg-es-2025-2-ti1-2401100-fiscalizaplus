@@ -237,22 +237,50 @@
         // Se há usuário logado, mostra menu normal
         const currentPath = window.location.pathname;
         let loginPath = '';
+        let painelUsuarioPath = '';
+        
         if (currentPath.includes('/painel-cidadao/')) {
           if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
             loginPath = '../../login/login.html';
+            painelUsuarioPath = '../painel-de-usuario/index.html';
           } else {
             loginPath = '../login/login.html';
+            painelUsuarioPath = 'painel-de-usuario/index.html';
           }
         } else {
           loginPath = '../modulos/login/login.html';
+          painelUsuarioPath = '../modulos/painel-cidadao/painel-de-usuario/index.html';
         }
         
         menu.innerHTML = `
           <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user me-2"></i>Meu Perfil</a></li>
-          <li><a class="dropdown-item" href="#"><i class="fa-solid fa-list me-2"></i>Minhas Denúncias</a></li>
+          <li><a class="dropdown-item" href="${painelUsuarioPath}" id="minhas-denuncias-link"><i class="fa-solid fa-list me-2"></i>Minhas Denúncias</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#" id="logout-link"><i class="fa-solid fa-sign-out-alt me-2"></i>Sair</a></li>
         `;
+        
+        const minhasDenunciasLink = menu.querySelector('#minhas-denuncias-link');
+        if (minhasDenunciasLink) {
+          const currentPath = window.location.pathname;
+          let correctPath = painelUsuarioPath;
+          
+          if (currentPath.includes('/painel-cidadao/index.html') || currentPath.endsWith('/painel-cidadao/')) {
+            correctPath = 'painel-de-usuario/index.html';
+          }
+          
+          minhasDenunciasLink.href = correctPath;
+          console.log('[Current User] Link Minhas Denúncias configurado para:', correctPath);
+        }
+        
+        const staticLink = document.getElementById('minhas-denuncias-link-static');
+        if (staticLink) {
+          const currentPath = window.location.pathname;
+          let correctPath = 'painel-de-usuario/index.html';
+          if (currentPath.includes('/painel-cidadao/index.html') || currentPath.endsWith('/painel-cidadao/')) {
+            correctPath = 'painel-de-usuario/index.html';
+          }
+          staticLink.href = correctPath;
+        }
         
         // Adiciona event listener para logout
         const logoutLink = menu.querySelector('#logout-link');

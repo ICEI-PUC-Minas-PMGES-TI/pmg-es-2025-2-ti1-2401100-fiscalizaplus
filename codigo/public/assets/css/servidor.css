@@ -426,23 +426,69 @@ body {
 
 .filter-row {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+}
+
+.filter-row label {
+  font-weight: 600;
+  color: #495057;
+  margin-right: -10px; /* Adjust spacing between label and input */
+}
+
+.filter-row select,
+.filter-row input[type="date"] {
+  padding: 10px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #495057;
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
+  min-width: 150px;
+}
+
+.filter-row select:focus,
+.filter-row input[type="date"]:focus {
+  border-color: var(--azul-principal);
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+.filter-row select:hover,
+.filter-row input[type="date"]:hover {
+  border-color: #adb5bd;
 }
 
 button {
-  background-color: #1976d2;
+  background-color: var(--azul-principal);
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
 }
 
 button:hover {
-  background-color: #125ca1;
+  background-color: #0b5ed7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 table {

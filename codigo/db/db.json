@@ -3502,109 +3502,6 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
-    },
-    {
-      "titulo": "Buraco no chão",
-      "tipoProblema": "infraestrutura",
-      "descricaoCompleta": "buraco no chão, grande buraco",
-      "informacoesAdicionaisCidadao": "Cai no buraco",
-      "codigoOcorrencia": "OCOR-0124",
-      "cidadaoId": "u123",
-      "endereco": {
-        "rua": "Rua Martim de Carvalho",
-        "numero": "",
-        "bairro": "Santo Agostinho",
-        "cidade": "Belo Horizonte",
-        "estado": "Minas Gerais",
-        "cep": "30170-041",
-        "latitude": -19.9294976,
-        "longitude": -43.9549952
-      },
-      "imagens": [],
-      "prioridadeCidadao": "critica",
-      "urgenciaCidadao": "media",
-      "impactoComunidade": "local",
-      "dataRegistro": "2025-12-01T16:47:31.670Z",
-      "autorCidadao": "Lucas Azevedo",
-      "isAnonimo": false,
-      "statusAtual": "Pendente",
-      "dataUltimaAtualizacaoStatus": "2025-12-01T16:47:31.670Z",
-      "prioridadeInterna": null,
-      "observacoesInternasServidor": "",
-      "servidorResponsavelId": null,
-      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
-      "recebeNotificacoes": true,
-      "id": "eooNYu9"
-    },
-    {
-      "titulo": "buraco",
-      "tipoProblema": "infraestrutura",
-      "descricaoCompleta": "buraco no chão , grande buraco\n",
-      "informacoesAdicionaisCidadao": "",
-      "codigoOcorrencia": "OCOR-0125",
-      "cidadaoId": "u123",
-      "endereco": {
-        "rua": "Rua André Cavalcanti",
-        "numero": "",
-        "bairro": "Gutierrez",
-        "cidade": "Belo Horizonte",
-        "estado": "Minas Gerais",
-        "cep": "30441-055",
-        "latitude": -19.93227328747254,
-        "longitude": -43.95953503810165
-      },
-      "imagens": [
-        "/uploads/1764611177346-pngtree-the-large-hole-in-the-ground-that-is-being-excavated-image_2925400.jpg"
-      ],
-      "prioridadeCidadao": "critica",
-      "urgenciaCidadao": "emergencia",
-      "impactoComunidade": "regional",
-      "dataRegistro": "2025-12-01T17:46:17.351Z",
-      "autorCidadao": "Lucas Azevedo",
-      "isAnonimo": false,
-      "statusAtual": "Concluido",
-      "dataUltimaAtualizacaoStatus": "2025-12-01T17:46:17.351Z",
-      "prioridadeInterna": null,
-      "observacoesInternasServidor": "",
-      "servidorResponsavelId": null,
-      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
-      "recebeNotificacoes": true,
-      "id": "RJYJApV"
-    },
-    {
-      "titulo": "Poste caido",
-      "tipoProblema": "iluminacao",
-      "descricaoCompleta": "Unico poste da minha rua esta caido",
-      "informacoesAdicionaisCidadao": "Poste caiu e não tem iluminação ",
-      "codigoOcorrencia": "OCOR-0126",
-      "cidadaoId": "u123",
-      "endereco": {
-        "rua": "Avenida Dom José Gaspar",
-        "numero": "",
-        "bairro": "Coração Eucarístico",
-        "cidade": "Belo Horizonte",
-        "estado": "Minas Gerais",
-        "cep": "30535-901",
-        "latitude": -19.9235079,
-        "longitude": -43.9932603
-      },
-      "imagens": [
-        "/uploads/1764633629704-download.jpg"
-      ],
-      "prioridadeCidadao": "critica",
-      "urgenciaCidadao": "emergencia",
-      "impactoComunidade": "local",
-      "dataRegistro": "2025-12-02T00:00:29.711Z",
-      "autorCidadao": "Lucas Azevedo",
-      "isAnonimo": false,
-      "statusAtual": "Pendente",
-      "dataUltimaAtualizacaoStatus": "2025-12-02T00:00:29.711Z",
-      "prioridadeInterna": null,
-      "observacoesInternasServidor": "",
-      "servidorResponsavelId": null,
-      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
-      "recebeNotificacoes": true,
-      "id": "6rodg16"
     }
   ],
   "admin": {
@@ -3651,8 +3548,8 @@
       "createdAt": "2025-11-12T09:15:00.000Z",
       "title": "Alagamento recorrente na esquina",
       "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
-      "category": "meioambiente",
-      "votes": 10
+      "category": "meio_ambiente",
+      "votes": 12
     }
   ]
 }
