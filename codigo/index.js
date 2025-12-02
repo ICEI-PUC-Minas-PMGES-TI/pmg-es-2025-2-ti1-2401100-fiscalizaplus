@@ -14,6 +14,10 @@
 // Data: 03/10/2023
 
 const jsonServer = require('json-server')
+const path = require('path')
+const fs = require('fs')
+const multer = require('multer')
+
 const server = jsonServer.create()
 const router = jsonServer.router('db/db.json')
   
@@ -21,6 +25,33 @@ const router = jsonServer.router('db/db.json')
 // colocando o atributo readOnly como false.
 const middlewares = jsonServer.defaults({ noCors: true })
 server.use(middlewares)
+
+// Configuração de upload local (sem validações avançadas)
+const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads')
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
+  filename: (_req, file, cb) => {
+    const ts = Date.now()
+    const safe = String(file.originalname || 'arquivo').replace(/[^\w.\-]/g, '_')
+    cb(null, `${ts}-${safe}`)
+  }
+})
+
+const upload = multer({ storage })
+
+// Rota para upload de múltiplas imagens (campo: "imagens")
+server.post('/upload', upload.array('imagens', 5), (req, res) => {
+  const files = req.files || []
+  if (!files.length) {
+    return res.status(400).json({ erro: 'Nenhum arquivo enviado' })
+  }
+  const urls = files.map(f => `/uploads/${f.filename}`)
+  return res.json({ urls })
+})
 server.use(router)
 
 server.listen(3000, () => {
