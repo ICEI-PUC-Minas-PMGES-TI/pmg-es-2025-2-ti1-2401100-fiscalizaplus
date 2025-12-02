@@ -3502,6 +3502,41 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
+    },
+    {
+      "titulo": "Poste caido",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Poste caiu",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0124",
+      "cidadaoId": "u123",
+      "endereco": {
+        "rua": "Rua 14 BIS",
+        "numero": "",
+        "bairro": "Padre Eustáquio",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30720-430",
+        "latitude": -19.916142,
+        "longitude": -43.9687778
+      },
+      "imagens": [
+        "/uploads/1764683625288-download.jpg"
+      ],
+      "prioridadeCidadao": "critica",
+      "urgenciaCidadao": "emergencia",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-12-02T13:53:45.295Z",
+      "autorCidadao": "Lucas Azevedo",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-12-02T13:53:45.295Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
+      "recebeNotificacoes": true,
+      "id": "rHxGF6n"
     }
   ],
   "admin": {
