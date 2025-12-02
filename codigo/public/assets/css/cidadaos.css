@@ -2508,7 +2508,7 @@ img{max-width:100%;display:block}
 }
 
 [data-theme="dark"] .page__title {
-  color: var(--text-primary);
+  color: #e5e5e5 !important;
 }
 
 /* Tabs */
@@ -3909,4 +3909,325 @@ button,input,select,textarea{ font:inherit }
   background-size:200% 100%; animation: fmShimmer 1.2s infinite linear;
 }
 @keyframes fmShimmer { to { background-position:-200% 0; } }
+
+/* ========== Estilos da Página Meu Perfil ========== */
+
+.profile-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .profile-card {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-dark);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c1121f 0%, #e53e3e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+[data-theme="dark"] .profile-avatar-large {
+  box-shadow: var(--shadow-dark);
+}
+
+.profile-photo-change-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c1121f 0%, #e53e3e 100%);
+  border: 2px solid var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-light);
+}
+
+.profile-photo-change-btn:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-dark);
+}
+
+.profile-photo-change-btn i {
+  font-size: 0.85rem;
+}
+
+[data-theme="dark"] .profile-photo-change-btn {
+  border-color: var(--card-bg);
+  box-shadow: var(--shadow-dark);
+}
+
+.profile-header-info h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.profile-header-info p {
+  margin: 0.25rem 0;
+  color: var(--text-secondary);
+}
+
+.profile-separator {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+  opacity: 0.5;
+}
+
+.form-section {
+  margin-bottom: 2.5rem;
+}
+
+.form-section:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.form-section-title {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.form-label {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-control,
+.form-select {
+  background: var(--card-bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: var(--card-bg-dark);
+  border-color: #c1121f;
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(193, 18, 31, 0.25);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-text {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper .form-control {
+  padding-right: 3rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: var(--text-primary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #c1121f 0%, #e53e3e 100%);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #a00e1a 0%, #c12e2e 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--card-bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--card-bg);
+  border-color: var(--text-secondary);
+}
+
+/* Modal de confirmação */
+.modal-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+  color: var(--text-primary);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsividade - Meu Perfil */
+@media (max-width: 767px) {
+  .profile-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .profile-avatar-large {
+    width: 70px;
+    height: 70px;
+    font-size: 1.75rem;
+  }
+  
+  .profile-photo-change-btn {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .profile-photo-change-btn i {
+    font-size: 0.75rem;
+  }
+  
+  .profile-header-info h2 {
+    font-size: 1.25rem;
+  }
+  
+  .form-section-title {
+    font-size: 1.1rem;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .page__title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #7b7b7b;
+  }
+  
+  [data-theme="dark"] .page__title {
+    color: #e5e5e5 !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .profile-card {
+    padding: 1.75rem;
+  }
+  
+  .profile-header {
+    gap: 1.25rem;
+  }
+}
 

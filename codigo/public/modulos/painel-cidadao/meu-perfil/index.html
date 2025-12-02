@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiscalizaPlus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="shortcut icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../../../assets/css/cidadaos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <!-- Barra de navegação principal -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="../../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMenuLg">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="../index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../comunidade/comunidade.html">Comunidade</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../dashboard_cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../guia/guia-cidadao.html">Guia do Cidadão</a>
+          </li>
+        </ul>
+
+        <div class="navbar-actions d-flex align-items-center gap-3">
+          <!-- Botão de Toggle de Tema -->
+          <button class="theme-toggle-btn" id="themeToggle" aria-label="Alternar tema">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+
+          <div class="navbar-user d-flex align-items-center dropdown">
+            <span class="name-user me-2" id="name-user-lg" style="white-space: nowrap;">Olá, Usuário</span>
+            <a class="user-icon-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="fa-solid fa-circle-user user-icon"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" id="user-dropdown-menu">
+              <!-- Links serão preenchidos dinamicamente pelo current-user.js -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+          <ul class="navbar-nav flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../comunidade/comunidade.html">Comunidade</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../dashboard_cidadao/dashboard_cliente.html">Dashboard de Ocorrências</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../guia/guia-cidadao.html">Guia do Cidadão</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Meu Perfil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../painel-de-usuario/index.html">Minhas Denúncias</a>
+            </li>
+          </ul>
+
+          <div class="navbar-user d-flex align-items-center justify-content-between mt-auto border-top pt-3">
+            <div class="d-flex align-items-center">
+              <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá, Usuário</span>
+              <a href="#" class="user-icon-link">
+                <i class="fa-solid fa-circle-user user-icon"></i>
+              </a>
+            </div>
+            <button class="theme-toggle-btn" id="themeToggleMobile" aria-label="Alternar tema">
+              <i class="fa-solid fa-moon" id="themeIconMobile"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container page">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+        <h1 class="page__title mb-4">
+          <i class="fa-solid fa-user me-2"></i>Meu Perfil
+        </h1>
+
+        <!-- Card de Perfil -->
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar-large" id="profile-avatar">
+                <span id="avatar-initial">U</span>
+                <img id="profile-avatar-img" src="" alt="Foto de perfil" style="display: none;">
+              </div>
+              <label for="profile-photo-input" class="profile-photo-change-btn" title="Alterar foto de perfil">
+                <i class="fa-solid fa-camera"></i>
+                <input type="file" id="profile-photo-input" accept="image/*" style="display: none;">
+              </label>
+            </div>
+            <div class="profile-header-info">
+              <h2 id="profile-name">Carregando...</h2>
+              <p id="profile-email" class="text-muted">Carregando...</p>
+              <p class="text-muted small mb-0">
+                <i class="fa-solid fa-calendar me-1"></i>
+                Membro desde <span id="profile-date">-</span>
+              </p>
+            </div>
+          </div>
+
+          <hr class="profile-separator">
+
+          <!-- Formulário de Edição -->
+          <form id="profileForm" class="profile-form">
+            <div class="form-section">
+              <h3 class="form-section-title">
+                <i class="fa-solid fa-user-edit me-2"></i>Informações Pessoais
+              </h3>
+
+              <div class="mb-3">
+                <label for="nomeCompleto" class="form-label">Nome Completo</label>
+                <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" required>
+                <div class="form-text">Seu nome completo como aparece no cadastro</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+                <div class="form-text">E-mail usado para login e notificações</div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="estado" class="form-label">Estado</label>
+                  <select class="form-select" id="estado" name="estado" required>
+                    <option value="">Selecione o estado</option>
+                    <option value="MG">Minas Gerais</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="cidade" class="form-label">Cidade</label>
+                  <select class="form-select" id="cidade" name="cidade" required disabled>
+                    <option value="">Selecione a cidade</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3 class="form-section-title">
+                <i class="fa-solid fa-lock me-2"></i>Alterar Senha
+              </h3>
+              <p class="text-muted small mb-3">Deixe em branco se não deseja alterar a senha</p>
+
+              <div class="mb-3">
+                <label for="senhaAtual" class="form-label">Senha Atual</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" placeholder="Digite sua senha atual">
+                  <button type="button" class="password-toggle" data-target="senhaAtual">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="novaSenha" class="form-label">Nova Senha</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-control" id="novaSenha" name="novaSenha" placeholder="Digite a nova senha">
+                  <button type="button" class="password-toggle" data-target="novaSenha">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+                <div class="form-text">Mínimo de 6 caracteres</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="confirmarSenha" class="form-label">Confirmar Nova Senha</label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme a nova senha">
+                  <button type="button" class="password-toggle" data-target="confirmarSenha">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="btn-salvar">
+                <i class="fa-solid fa-floppy-disk me-2"></i>Salvar Alterações
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="rodape">
+    <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Modal de Confirmação -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmar Alterações</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza que deseja salvar as alterações no seu perfil?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="confirm-save">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="../../../assets/js/data.js"></script>
+  <script src="../../../assets/js/tema.js"></script>
+  <script src="../../../assets/js/current-user.js"></script>
+  <script src="../../../assets/js/meu-perfil.js"></script>
+</body>
+
+</html>
+

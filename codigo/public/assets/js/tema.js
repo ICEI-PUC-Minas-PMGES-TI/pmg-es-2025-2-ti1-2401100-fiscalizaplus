@@ -34,19 +34,36 @@
             let logoPath = '';
             
             if (currentPath.includes('/modulos/painel-cidadao/')) {
-                // Páginas dentro de painel-cidadao
+                // Páginas dentro de painel-cidadao (subpastas)
                 if (currentPath.includes('/comunidade/') || 
                     currentPath.includes('/dashboard_cidadao/') || 
                     currentPath.includes('/painel-de-usuario/') ||
+                    currentPath.includes('/meu-perfil/') ||
                     currentPath.includes('/reportar-ocorrências/')) {
                     logoPath = '../../../assets/images/';
                 } else {
                     // index.html na raiz de painel-cidadao
                     logoPath = '../../assets/images/';
                 }
+            } else if (currentPath.includes('/painel-cidadao/')) {
+                // Caso o caminho não tenha /modulos/ (pode acontecer em alguns servidores)
+                if (currentPath.includes('/comunidade/') || 
+                    currentPath.includes('/dashboard_cidadao/') || 
+                    currentPath.includes('/painel-de-usuario/') ||
+                    currentPath.includes('/meu-perfil/') ||
+                    currentPath.includes('/reportar-ocorrências/')) {
+                    logoPath = '../../../assets/images/';
+                } else {
+                    logoPath = '../../assets/images/';
+                }
             } else {
                 // Fallback para outros casos
                 logoPath = '../../assets/images/';
+            }
+            
+            // Garantir que o caminho termina com /
+            if (!logoPath.endsWith('/')) {
+                logoPath += '/';
             }
             
             if (isDark) {
