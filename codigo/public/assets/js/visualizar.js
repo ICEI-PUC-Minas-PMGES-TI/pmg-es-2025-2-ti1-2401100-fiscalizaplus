@@ -218,4 +218,30 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   btnFiltrar.addEventListener("click", aplicarFiltros);
+
+  // =======================================================
+  // ✅ Botão Enviar para Equipe (Mock)
+  // =======================================================
+  const btnEnviar = document.getElementById("btnEnviar");
+  if (btnEnviar) {
+    btnEnviar.addEventListener("click", () => {
+      const originalText = btnEnviar.innerText;
+      btnEnviar.disabled = true;
+      btnEnviar.innerText = "Enviando... ⏳";
+
+      setTimeout(() => {
+        btnEnviar.innerText = "Enviado para a equipe ✅";
+        btnEnviar.classList.remove("btn-primary"); // Remove classe original se houver
+        btnEnviar.style.backgroundColor = "#28a745"; // Verde sucesso
+        btnEnviar.style.borderColor = "#28a745";
+
+        setTimeout(() => {
+          btnEnviar.innerText = originalText;
+          btnEnviar.disabled = false;
+          btnEnviar.style.backgroundColor = ""; // Volta ao original
+          btnEnviar.style.borderColor = "";
+        }, 3000);
+      }, 1500);
+    });
+  }
 });
