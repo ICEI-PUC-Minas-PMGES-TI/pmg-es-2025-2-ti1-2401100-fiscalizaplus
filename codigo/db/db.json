@@ -6,7 +6,7 @@
       "email": "contatoitalocnr@gmail.com",
       "estado": "MG",
       "cidade": "Belo Horizonte",
-      "senhaHash": "i#t*a&l$o",
+      "senhaHash": "dudu0908#c",
       "dataCadastro": "2025-11-28T13:33:44.969Z"
     },
     {
@@ -3583,8 +3583,26 @@
       "createdAt": "2025-11-12T09:15:00.000Z",
       "title": "Alagamento recorrente na esquina",
       "excerpt": "Sempre que chove forte, essa esquina alaga e os carros não conseguem passar...",
-      "category": "meioambiente",
-      "votes": 10
+      "category": "meio_ambiente",
+      "votes": 12
+    },
+    {
+      "id": "5e21",
+      "title": "Buracos, Rachaduras e Alagamentos: A Urgência da Manutenção em Nossas Ruas",
+      "category": "transito",
+      "excerpt": "Gostaria de chamar a atenção de todos para o estado precário das nossas vias públicas. Os buracos, o asfalto irregular, as rachaduras e, em muitos pontos, a falta de drenagem adequada (resultando em alagamentos perigosos) estão causando transtornos significativos e colocando em risco a segurança de motoristas, ciclistas e pedestres.",
+      "author": "Joãozinho Silva",
+      "createdAt": "2025-12-02T01:03:24.454Z",
+      "votes": 1
+    },
+    {
+      "id": "029d",
+      "title": "Ruas extraviadas próximo a cidade administrativa",
+      "category": "transito",
+      "excerpt": "Olá pessoal, gostaria de relatar que ultimamente esta tendo muitos extravios nas ruas próximas a cidade administrativa, oque está gerando grande desconforto para a comunidade local. Se puderem votar para alavancar a causa, agradeço!",
+      "author": "Italo Eduardo Carneiro da Silva",
+      "createdAt": "2025-12-02T01:16:49.207Z",
+      "votes": 42
     }
   ]
 }

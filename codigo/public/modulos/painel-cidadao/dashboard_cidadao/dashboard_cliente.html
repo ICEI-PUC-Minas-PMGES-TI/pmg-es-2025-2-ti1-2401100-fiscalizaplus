@@ -17,11 +17,17 @@
     }
     
     body {
-      background: var(--bg-primary) !important;
-      background-size: 200% 200% !important;
-      animation: gradientShift 20s ease infinite !important;
+      background: var(--bg-primary);
+      background-size: 200% 200%;
+      animation: gradientShift 20s ease infinite;
       min-height: 100vh;
       position: relative;
+    }
+
+    [data-theme="dark"] body {
+      background: #2d2d2d !important;
+      background-size: auto !important;
+      animation: none !important;
     }
     
     body::before {
@@ -34,6 +40,10 @@
       background: var(--bg-overlay);
       pointer-events: none;
       z-index: 0;
+    }
+
+    [data-theme="dark"] body::before {
+      display: none !important;
     }
     
     main, nav {
@@ -67,17 +77,43 @@
       color: #fff !important;
     }
 
-    /* Manter títulos e textos dos cards sempre pretos */
-    .card h2,
-    .card h3,
-    .card .valor,
-    .card small,
-    .card .text-muted {
+    /* Estilos para tema claro */
+    :root .card h2,
+    :root .card h3,
+    :root .card .valor,
+    :root .card small,
+    :root .card .text-muted {
       color: #1a1a1a !important;
+    }
+
+    /* Estilos para tema escuro */
+    [data-theme="dark"] .card h2,
+    [data-theme="dark"] .card h3 {
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .card .valor {
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .card small,
+    [data-theme="dark"] .card .text-muted {
+      color: var(--text-secondary) !important;
     }
 
     .titulo-dashboard {
       color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .card {
+      background: var(--card-bg) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .card.estatistica {
+      background: var(--card-bg) !important;
+      border-color: var(--border-color) !important;
     }
   </style>
 
@@ -235,10 +271,6 @@
       </div>
     </div>
   </main>
-
-  <footer class="rodape">
-    <p>Copyright © 2025 Fiscaliza+ - Todos os direitos reservados</p>
-  </footer>
 
   <script src="../../../assets/js/main_cliente.js"></script>
   <script src="../../../assets/js/tema.js"></script>

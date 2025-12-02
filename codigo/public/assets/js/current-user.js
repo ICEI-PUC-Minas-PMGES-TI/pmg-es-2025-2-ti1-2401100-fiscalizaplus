@@ -64,8 +64,16 @@
       { id: 'welcome-name', text: primeiroNome },
       { id: 'user-name-profile', text: nomeCompleto },
       { id: 'user-email-profile', text: email },
-      { id: 'user-avatar-initial', text: inicial }
+      { id: 'user-avatar-initial', text: inicial },
+      { id: 'sidebar-name', text: nomeCompleto },
+      { id: 'sidebar-email', text: email }
     ];
+    
+    // Atualiza o avatar do sidebar se existir
+    const sidebarAvatar = document.getElementById('sidebar-avatar');
+    if (sidebarAvatar) {
+      sidebarAvatar.textContent = inicial;
+    }
 
     elementsToUpdate.forEach(({ id, text }) => {
       const element = document.getElementById(id);
@@ -113,6 +121,15 @@
           nome: 'usuário', 
           email: '' 
         });
+        
+        // Atualiza sidebar especificamente para usuário não logado
+        const sidebarAvatar = document.getElementById('sidebar-avatar');
+        const sidebarName = document.getElementById('sidebar-name');
+        const sidebarEmail = document.getElementById('sidebar-email');
+        if (sidebarAvatar) sidebarAvatar.textContent = 'U';
+        if (sidebarName) sidebarName.textContent = 'Usuário';
+        if (sidebarEmail) sidebarEmail.textContent = 'Faça login para participar';
+        
         // Retorna mas não bloqueia o carregamento da página
         return;
       }
@@ -224,7 +241,8 @@
         
         // Adiciona event listener para logout quando for visitante
         const logoutLinkGuest = menu.querySelector('#logout-link-guest');
-        if (logoutLinkGuest) {
+        if (logoutLinkGuest && !logoutLinkGuest.dataset.logoutListenerAdded) {
+          logoutLinkGuest.dataset.logoutListenerAdded = 'true';
           logoutLinkGuest.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -316,7 +334,8 @@
         
         // Adiciona event listener para logout
         const logoutLink = menu.querySelector('#logout-link');
-        if (logoutLink) {
+        if (logoutLink && !logoutLink.dataset.logoutListenerAdded) {
+          logoutLink.dataset.logoutListenerAdded = 'true';
           logoutLink.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -331,15 +350,20 @@
 
   /**
    * Inicializa os event listeners para os botões de logout
+   * NOTA: Esta função não é mais necessária pois os listeners são adicionados
+   * diretamente em updateUserDropdown() para evitar duplicação.
+   * Mantida apenas para compatibilidade, mas não adiciona listeners duplicados.
    */
   function initLogoutButtons() {
-    // Encontra todos os links/botões de "Sair" no dropdown
+    // Encontra todos os links/botões de "Sair" no dropdown que ainda não têm listener
     const dropdownItems = document.querySelectorAll('.dropdown-menu a.dropdown-item, .dropdown-menu button.dropdown-item');
     
     dropdownItems.forEach(element => {
       const text = element.textContent.trim().toLowerCase();
-      // Verifica se o texto contém "sair" ou "logout"
-      if (text.includes('sair') || text.includes('logout')) {
+      // Verifica se o texto contém "sair" ou "logout" e se ainda não tem listener
+      if ((text.includes('sair') || text.includes('logout')) && !element.dataset.logoutListenerAdded) {
+        element.dataset.logoutListenerAdded = 'true';
+        
         // Adiciona event listener com preventDefault para evitar navegação
         element.addEventListener('click', function(e) {
           e.preventDefault();
@@ -399,7 +423,11 @@
     cleanInvalidSessionData();
     loadUserData();
     updateUserDropdown();
-    initLogoutButtons();
+    // initLogoutButtons() é chamado como fallback para elementos que não têm IDs específicos
+    // mas agora verifica se já tem listener para evitar duplicação
+    setTimeout(() => {
+      initLogoutButtons();
+    }, 100); // Pequeno delay para garantir que updateUserDropdown() já executou
   }
 
   if (document.readyState === 'loading') {

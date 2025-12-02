@@ -1,29 +1,19 @@
-// comunidade.js - versão integrada com JSON Server (rota /comunidade)
-// - Carrega os posts do json-server
-// - Permite votar (com toggle) e atualizar no servidor
-// - Cadastra novas discussões via modal Bootstrap
+// codigo/public/assets/js/comunidade.js
+const API_URL = "http://localhost:3000/comunidade";
 
-const API_BASE = window.FP_API_BASE || "http://localhost:3000";
-const COMUNIDADE_ENDPOINT = `${API_BASE}/comunidade`;
-const MAX_FOR_PROGRESS = 50;
-
+let posts = [];
 let currentCategory = "todas";
-let POSTS = [];         // sempre virá do servidor
-const votedInSession = new Set(); // controla votos só na sessão
 
-const els = {
-  cards: document.getElementById("cards"),
-  cats: document.getElementById("cat-list"),
-  cardTpl: document.getElementById("post-card-tpl"), // <template> do card
-};
+const cardsEl = document.getElementById("cards");
+const catListEl = document.getElementById("cat-list");
+const newPostForm = document.getElementById("new-post-form");
 
-// Função para verificar se há usuário logado
+// ===================== FUNÇÃO PARA OBTER USUÁRIO CORRENTE =====================
 function getUsuarioCorrente() {
   try {
-    // Verifica se é visitante (entrou sem login)
     const isGuest = sessionStorage.getItem('isGuest') === 'true';
     if (isGuest) {
-      return null; // Retorna null para visitante
+      return null;
     }
     
     const keys = ['usuarioCorrente', 'fp_user', 'user'];
@@ -31,7 +21,6 @@ function getUsuarioCorrente() {
       const raw = sessionStorage.getItem(key);
       if (raw) {
         const parsed = JSON.parse(raw);
-        // Verifica se tem ID válido (não aceita dados sem ID ou admin)
         if (parsed && parsed.id && (parsed.id !== 'admin' && parsed.id !== 'administrador')) {
           return parsed;
         }
@@ -43,308 +32,310 @@ function getUsuarioCorrente() {
   }
 }
 
-// ========== Init ==========
-init();
-
-async function init() {
-  wireCategoryClicks();
+// ===================== ATUALIZAR PERFIL NA SIDEBAR =====================
+function updateSidebarProfile() {
+  const user = getUsuarioCorrente();
+  const sidebarAvatar = document.getElementById('sidebar-avatar');
+  const sidebarName = document.getElementById('sidebar-name');
+  const sidebarEmail = document.getElementById('sidebar-email');
   
-  // Bloqueia criação de mensagens se não houver login
-  const btnNew = document.getElementById('btn-new');
-  const newPostForm = document.getElementById('new-post-form');
-  
-  if (btnNew) {
-    btnNew.addEventListener('click', function(e) {
-      const user = getUsuarioCorrente();
-      if (!user || !user.id) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Só mostra mensagem, não redireciona
-        alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
-        return false;
-      }
-    });
-  }
-  
-  if (newPostForm) {
-    newPostForm.addEventListener('submit', function(e) {
-      const user = getUsuarioCorrente();
-      if (!user || !user.id) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Só mostra mensagem, não redireciona
-        alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
-        // Fecha o modal
-        const modalEl = document.getElementById('newPostModal');
-        if (modalEl) {
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          if (modal) modal.hide();
-        }
-        return false;
-      }
-    });
-  }
-
-  if (els.cardTpl && els.cards) {
-    // Comunidade dinâmica vinda do servidor
-    await loadPostsFromServer();
+  if (user && user.id) {
+    const nomeCompleto = user.nomeCompleto || user.nome || 'Usuário';
+    const email = user.email || '';
+    const inicial = nomeCompleto.charAt(0).toUpperCase();
+    
+    if (sidebarAvatar) sidebarAvatar.textContent = inicial;
+    if (sidebarName) sidebarName.textContent = nomeCompleto;
+    if (sidebarEmail) sidebarEmail.textContent = email;
   } else {
-    // Fallback: cards já prontos no HTML
-    filterStaticCards();
-    bindVotesOnStaticCards();
+    if (sidebarAvatar) sidebarAvatar.textContent = 'U';
+    if (sidebarName) sidebarName.textContent = 'Usuário';
+    if (sidebarEmail) sidebarEmail.textContent = 'Faça login para participar';
   }
 }
 
-// ========== Carregar posts do JSON Server ==========
-async function loadPostsFromServer() {
+// ===================== CARREGAR POSTS =====================
+async function loadPosts() {
   try {
-    const res = await fetch(`${COMUNIDADE_ENDPOINT}?_sort=createdAt&_order=desc`, {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    POSTS = await res.json();
+    const res = await fetch(API_URL);
+    if (!res.ok) {
+      throw new Error("Erro ao buscar comunidade: " + res.status);
+    }
+    posts = await res.json();
+    renderPosts();
   } catch (err) {
-    console.error("[Comunidade] Falha ao buscar posts do json-server:", err);
-    POSTS = []; // vazio, sem mock local
+    console.error(err);
+    cardsEl.innerHTML = `
+      <p class="mt-3 text-danger">
+        Erro ao carregar discussões. Verifique se o <code>json-server</code>
+        está rodando em <code>http://localhost:3000</code>.
+      </p>
+    `;
+    alert("Não consegui falar com o servidor. Verifique se o json-server está rodando.");
   }
-
-  renderCards();
 }
 
-// ========== Renderização dos cards ==========
-function renderCards() {
-  if (!els.cards || !els.cardTpl) return;
-
-  els.cards.innerHTML = "";
-
+// ===================== RENDERIZAR POSTS =====================
+function renderPosts() {
   const list =
     currentCategory === "todas"
-      ? POSTS
-      : POSTS.filter((p) => p.category === currentCategory);
+      ? posts
+      : posts.filter((p) => p.category === currentCategory);
 
-  const frag = document.createDocumentFragment();
+  if (!list.length) {
+    cardsEl.innerHTML = `
+      <p class="mt-3 text-muted">
+        Nenhuma discussão encontrada para esta categoria.
+      </p>
+    `;
+    return;
+  }
 
-  list.forEach((p) => {
-    const node = els.cardTpl.content.cloneNode(true);
-    const article = node.querySelector(".card");
-    article.dataset.id = p.id;
-    article.dataset.category = p.category || "todas";
+  // ordena por data (mais recente primeiro)
+  const sorted = [...list].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
-    node.querySelector(".avatar").textContent = initial(p.author);
-    node.querySelector(".author").textContent = p.author || "Cidadão";
-    node.querySelector(".timeago").textContent = timeago(p.createdAt);
-    node.querySelector(".card__title").textContent = p.title || "";
-    node.querySelector(".card__excerpt").textContent =
-      p.excerpt || p.body || "";
-
-    const btn = node.querySelector(".vote-btn");
-    const votesEl = node.querySelector(".votes__count");
-    const bar = node.querySelector(".progress__bar");
-
-    const startVotes = parseInt(p.votes ?? 0, 10) || 0;
-    votesEl.textContent = startVotes;
-    updateBar(bar, startVotes);
-    setBtnState(btn, hasVoted(p.id));
-
-    btn.addEventListener("click", () =>
-      handleVoteClick(article, btn, votesEl, bar)
-    );
-
-    frag.appendChild(node);
-  });
-
-  els.cards.appendChild(frag);
+  cardsEl.innerHTML = sorted.map(postToCardHtml).join("");
 }
 
-// ========== Votos (cards dinâmicos) ==========
-async function handleVoteClick(article, btn, votesEl, bar) {
-  const id = article.dataset.id;
-  const voted = hasVoted(id);
-  let next = parseInt(votesEl.textContent || "0", 10) + (voted ? -1 : +1);
-  next = Math.max(0, next);
+function postToCardHtml(p) {
+  const created = p.createdAt ? new Date(p.createdAt) : new Date();
+  const timeStr =
+    created.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    }) +
+    " " +
+    created.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-  // atualiza UI imediatamente
-  votesEl.textContent = String(next);
-  updateBar(bar, next);
-  voted ? unsetVoted(id) : setVoted(id);
-  setBtnState(btn, !voted);
+  const author = p.author || "Anônimo";
+  const firstLetter = author.charAt(0).toUpperCase();
+  const votes = p.votes || 0;
+  const progressWidth = Math.min(votes * 3, 100); // só pra dar uma barra bonitinha
 
-  // tenta refletir no servidor (PATCH /comunidade/:id)
+  return `
+    <article class="card" data-id="${p.id}" data-category="${p.category}">
+      <header class="card__header">
+        <div class="avatar" aria-hidden="true">${firstLetter}</div>
+        <div class="card__author">
+          <strong class="author">${author}</strong>
+          <small class="timeago">${timeStr}</small>
+        </div>
+      </header>
+
+      <h3 class="card__title">${p.title}</h3>
+      <p class="card__excerpt">
+        ${p.excerpt}
+      </p>
+
+      <div class="progress" aria-label="Apoio da comunidade">
+        <div class="progress__bar" style="width:${progressWidth}%"></div>
+      </div>
+
+      <footer class="card__footer">
+        <button class="btn btn--outline vote-btn" data-id="${p.id}">
+          Computar voto
+        </button>
+        <div class="votes">
+          <span class="dot" aria-hidden="true">●</span>
+          <span class="votes__count">${votes}</span>
+          <span class="votes__label">Votos</span>
+        </div>
+      </footer>
+    </article>
+  `;
+}
+
+// ===================== FILTRO POR CATEGORIA =====================
+catListEl?.addEventListener("click", (event) => {
+  const li = event.target.closest(".cat-item");
+  if (!li) return;
+
+  catListEl
+    .querySelectorAll(".cat-item")
+    .forEach((item) => item.classList.remove("is-active"));
+
+  li.classList.add("is-active");
+  currentCategory = li.dataset.cat || "todas";
+  renderPosts();
+});
+
+// ===================== NOVA DISCUSSÃO =====================
+newPostForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(newPostForm);
+
+  const title = formData.get("title").trim();
+  const category = formData.get("category");
+  const body = formData.get("body").trim();
+
+  if (!title || !body) {
+    alert("Preencha título e descrição.");
+    return;
+  }
+
+  // Obtém dados do usuário logado para usar como autor
+  const user = getUsuarioCorrente();
+  const authorName = user && user.nomeCompleto 
+    ? user.nomeCompleto 
+    : (user && user.nome ? user.nome : "Anônimo");
+
+  const newPost = {
+    title,
+    category,
+    excerpt: body,
+    author: authorName,
+    createdAt: new Date().toISOString(),
+    votes: 0,
+  };
+
   try {
-    await fetch(`${COMUNIDADE_ENDPOINT}/${id}`, {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPost),
+    });
+
+    if (!res.ok) {
+      throw new Error("Erro ao salvar discussão: " + res.status);
+    }
+
+    const saved = await res.json();
+    posts.push(saved);
+
+    newPostForm.reset();
+
+    // volta para "Todas"
+    currentCategory = "todas";
+    document
+      .querySelectorAll(".cat-item")
+      .forEach((li) => li.classList.toggle("is-active", li.dataset.cat === "todas"));
+
+    renderPosts();
+
+    // fecha o modal
+    const modalEl = document.getElementById("newPostModal");
+    if (modalEl && window.bootstrap) {
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      modalInstance?.hide();
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Não foi possível salvar a discussão. Verifique o json-server.");
+  }
+});
+
+// ===================== VOTAR =====================
+document.addEventListener("click", async (event) => {
+  const btn = event.target.closest(".vote-btn");
+  if (!btn) return;
+
+  const id = btn.dataset.id;
+  const post = posts.find((p) => String(p.id) === String(id));
+  if (!post) return;
+
+  const newVotes = (post.votes || 0) + 1;
+
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ votes: next }),
+      body: JSON.stringify({ votes: newVotes }),
     });
-  } catch (err) {
-    console.warn("[Comunidade] Não foi possível atualizar votos no servidor:", err);
-  }
-}
 
-// ========== Votos para cards ESTÁTICOS no HTML ==========
-function bindVotesOnStaticCards() {
-  const cards = els.cards?.querySelectorAll(".card") || [];
-  cards.forEach((card) => {
-    const id = card.dataset.id || Math.random().toString(36).slice(2, 9);
-    const btn = card.querySelector(".vote-btn");
-    const votesEl = card.querySelector(".votes__count");
-    const bar = card.querySelector(".progress__bar");
-
-    const start = parseInt(votesEl?.textContent || "0", 10);
-    updateBar(bar, start);
-    setBtnState(btn, hasVoted(id));
-
-    btn?.addEventListener("click", () => {
-      const voted = hasVoted(id);
-      const current = parseInt(votesEl.textContent || "0", 10);
-      const next = voted ? Math.max(0, current - 1) : current + 1;
-
-      votesEl.textContent = String(next);
-      updateBar(bar, next);
-
-      voted ? unsetVoted(id) : setVoted(id);
-      setBtnState(btn, !voted);
-    });
-  });
-}
-
-// ========== Filtro por categoria (cards estáticos) ==========
-function filterStaticCards() {
-  els.cards
-    ?.querySelectorAll(".card")
-    .forEach((card) => {
-      const show =
-        currentCategory === "todas" ||
-        card.dataset.category === currentCategory;
-      card.style.display = show ? "" : "none";
-    });
-}
-
-// ========== UI helpers ==========
-function updateBar(el, votes) {
-  if (!el) return;
-  const pct = Math.max(0, Math.min(100, (votes / MAX_FOR_PROGRESS) * 100));
-  el.style.width = `${pct}%`;
-}
-
-function setBtnState(btn, voted) {
-  if (!btn) return;
-  btn.textContent = voted ? "Voltar voto" : "Computar voto";
-  btn.classList.toggle("is-voted", voted);
-}
-
-// ========== Votos em memória (sem localStorage) ==========
-function hasVoted(id) {
-  return votedInSession.has(String(id));
-}
-function setVoted(id) {
-  votedInSession.add(String(id));
-}
-function unsetVoted(id) {
-  votedInSession.delete(String(id));
-}
-
-// ========== Categorias ==========
-function wireCategoryClicks() {
-  if (!els.cats) return;
-
-  els.cats.addEventListener("click", (ev) => {
-    const li = ev.target.closest("[data-cat]");
-    if (!li) return;
-
-    currentCategory = li.dataset.cat || "todas";
-
-    if (els.cardTpl) {
-      renderCards();
-    } else {
-      filterStaticCards();
+    if (!res.ok) {
+      throw new Error("Erro ao computar voto: " + res.status);
     }
 
-    els.cats.querySelectorAll("[data-cat]").forEach((el) => {
-      el.classList.toggle("is-active", el === li);
-    });
-  });
-}
-
-// ========== Utilitários ==========
-function timeago(iso) {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const diff = (Date.now() - d.getTime()) / 1000;
-  const h = Math.floor(diff / 3600);
-  if (h < 1) {
-    const m = Math.max(1, Math.floor(diff / 60));
-    return `${m} min atrás`;
+    post.votes = newVotes;
+    renderPosts();
+  } catch (err) {
+    console.error(err);
+    alert("Não foi possível computar o voto. Verifique o json-server.");
   }
-  return `${h}h atrás`;
-}
+});
 
-function initial(name = "") {
-  return name.trim().charAt(0).toUpperCase() || "?";
-}
+// ===================== VALIDAÇÃO DE LOGIN PARA NOVA DISCUSSÃO =====================
+const btnNew = document.getElementById("btn-new");
+const newPostModal = document.getElementById("newPostModal");
+let alertShown = false; // Flag para evitar alert duplicado
 
-// ========== NOVA DISCUSSÃO (Bootstrap + JSON Server) ==========
-(() => {
-  const form = document.getElementById("new-post-form");
-  const modalEl = document.getElementById("newPostModal");
-  if (!form || !modalEl) return;
-
-  form.addEventListener("submit", async (ev) => {
-    ev.preventDefault();
+if (btnNew) {
+  // Intercepta o clique antes do Bootstrap processar
+  btnNew.addEventListener("click", (event) => {
+    const user = getUsuarioCorrente();
     
-    // Verifica se há usuário logado
+    // Se o usuário não estiver logado, mostra alerta e impede a abertura do modal
+    if (!user || !user.id) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      
+      // Impede que o Bootstrap abra o modal removendo temporariamente os atributos
+      const originalToggle = btnNew.getAttribute("data-bs-toggle");
+      const originalTarget = btnNew.getAttribute("data-bs-target");
+      
+      btnNew.removeAttribute("data-bs-toggle");
+      btnNew.removeAttribute("data-bs-target");
+      
+      // Fecha o modal se estiver aberto
+      if (newPostModal && window.bootstrap) {
+        const modalInstance = bootstrap.Modal.getInstance(newPostModal);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+      }
+      
+      // Mostra alerta apenas se ainda não foi mostrado
+      if (!alertShown) {
+        alertShown = true;
+        alert("Você precisa estar logado para iniciar uma nova discussão. Por favor, faça login primeiro.");
+        setTimeout(() => {
+          alertShown = false;
+        }, 1000);
+      }
+      
+      // Restaura os atributos após um pequeno delay
+      setTimeout(() => {
+        if (originalToggle) btnNew.setAttribute("data-bs-toggle", originalToggle);
+        if (originalTarget) btnNew.setAttribute("data-bs-target", originalTarget);
+      }, 200);
+      
+      return false;
+    }
+  }, true); // Usa capture phase para interceptar antes do Bootstrap
+}
+
+// Previne abertura do modal via evento do Bootstrap se o usuário não estiver logado
+// Este listener só será acionado se o primeiro não conseguir prevenir completamente
+if (newPostModal) {
+  newPostModal.addEventListener("show.bs.modal", (event) => {
     const user = getUsuarioCorrente();
     if (!user || !user.id) {
-      // Só mostra mensagem, não redireciona
-      alert('Você precisa estar registrado para criar uma nova discussão. Por favor, registre-se primeiro.');
-      // Fecha o modal
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      if (modal) modal.hide();
-      return;
-    }
-
-    const fd = new FormData(form);
-    const title = (fd.get("title") || "").toString().trim();
-    const category = (fd.get("category") || "todas").toString();
-    const body = (fd.get("body") || "").toString().trim();
-
-    if (!title || !body) return;
-
-    // aqui você pode depois trocar pelo usuário logado
-    const author = "Cidadão Anônimo";
-    const createdAt = new Date().toISOString();
-
-    const newPost = {
-      author,
-      createdAt,
-      title,
-      excerpt: body,
-      category,
-      votes: 0,
-    };
-
-    try {
-      const res = await fetch(COMUNIDADE_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      });
-      if (!res.ok) throw new Error("Falha ao criar post");
-
-      const created = await res.json();
-
-      // adiciona ao array em memória e re-renderiza
-      POSTS.unshift(created);
-      renderCards();
-
-      bootstrap.Modal.getOrCreateInstance(modalEl).hide();
-      form.reset();
-
-      // garante que o usuário veja o post
-      currentCategory = category || "todas";
-    } catch (err) {
-      console.error("[Comunidade] Erro ao criar post:", err);
-      alert("Não consegui falar com o servidor. Verifique se o json-server está rodando.");
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      
+      // Só mostra alerta se o primeiro não foi mostrado
+      if (!alertShown) {
+        alertShown = true;
+        alert("Você precisa estar logado para iniciar uma nova discussão. Por favor, faça login primeiro.");
+        setTimeout(() => {
+          alertShown = false;
+        }, 1000);
+      }
+      
+      return false;
     }
   });
-})();
+}
+
+// ===================== INICIALIZAÇÃO =====================
+loadPosts();
+updateSidebarProfile();
