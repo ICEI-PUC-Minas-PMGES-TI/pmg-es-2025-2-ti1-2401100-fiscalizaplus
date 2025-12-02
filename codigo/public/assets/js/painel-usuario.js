@@ -313,6 +313,7 @@
       createdAt,
       updatedAt,
       resolvedAt,
+      imagens: Array.isArray(denuncia.imagens) ? denuncia.imagens : [],
       lat: Number.isFinite(latValue) ? latValue : null,
       lng: Number.isFinite(lngValue) ? lngValue : null,
       cidadeId: cidadeMatch ? cidadeMatch.id : null,
@@ -692,7 +693,7 @@
     }
 
     if (title) title.textContent = oc.titulo || 'Ocorrência';
-    const normalizedStatus = normalizeStatus(oc.status || oc.statusOriginal);
+    const normalizedStatus = normalizeStatus(oc.status || oc.statusOriginal || oc.statusAtual);
     const color = (() => {
       if (normalizedStatus === 'resolvido') return 'bg-success';
       if (normalizedStatus === 'em_andamento') return 'bg-info';
@@ -701,12 +702,15 @@
     })();
     if (status) {
       status.className = `badge rounded-pill ${color}`;
-      status.textContent = getStatusLabel(oc.status || oc.statusOriginal);
+      status.textContent = getStatusLabel(oc.status || oc.statusOriginal || oc.statusAtual);
     }
     if (dates) {
-      const aberto = toDisplayDate(oc.createdAt);
-      const resolvido = toDisplayDate(oc.resolvedAt);
-      const atualizado = toDisplayDate(oc.updatedAt);
+      const createdAtVal = oc.createdAt || oc.dataRegistro || null;
+      const updatedAtVal = oc.updatedAt || oc.dataUltimaAtualizacaoStatus || null;
+      const resolvedAtVal = oc.resolvedAt || ((normalizeStatus(oc.status || oc.statusOriginal || oc.statusAtual) === 'resolvido') ? (oc.dataUltimaAtualizacaoStatus || oc.dataConclusao || null) : null);
+      const aberto = toDisplayDate(createdAtVal);
+      const resolvido = toDisplayDate(resolvedAtVal);
+      const atualizado = toDisplayDate(updatedAtVal);
       dates.innerHTML = `
         <span class="me-2"><i class="fa-regular fa-clock"></i> Criado: <strong>${aberto||'n/d'}</strong></span>
         <span class="me-2"><i class="fa-solid fa-arrow-rotate-right"></i> Atualizado: <strong>${atualizado||'-'}</strong></span>
@@ -715,6 +719,24 @@
     }
     if (type) type.textContent = oc.tipo || oc.tipoProblema || '—';
     if (desc) desc.textContent = oc.descricao || oc.descricaoCompleta || '-';
+    // Imagem (primeira) caso exista
+    let imageEl = document.getElementById('impact-detail-image');
+    if (!imageEl) {
+      const body = document.querySelector('#impact-detail-modal .modal-body');
+      if (body) {
+        imageEl = document.createElement('div');
+        imageEl.id = 'impact-detail-image';
+        body.insertBefore(imageEl, body.firstChild);
+      }
+    }
+    if (imageEl) {
+      let firstUrl = null;
+      if (Array.isArray(oc.imagens) && oc.imagens.length > 0) {
+        const first = oc.imagens[0];
+        firstUrl = typeof first === 'string' ? first : (first && first.url ? first.url : null);
+      }
+      imageEl.innerHTML = firstUrl ? `<img src="${firstUrl}" alt="Imagem da ocorrência" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;">` : '';
+    }
     if (extraContainer) {
       // Resolve friendly names
       Promise.all([
@@ -725,8 +747,14 @@
         const bairroNome = bairroObj ? bairroObj.nome : (oc.bairroNome || (oc.endereco ? oc.endereco.bairro : ''));
         const cidadeNome = cidadeObj ? cidadeObj.nome : (oc.cidadeNome || (oc.endereco ? oc.endereco.cidade : ''));
         const usuarioNome = usuarioObj ? usuarioObj.nome : (oc.usuarioNome || '');
-        const latValue = typeof oc.lat === 'string' ? parseFloat(oc.lat) : oc.lat;
-        const lngValue = typeof oc.lng === 'string' ? parseFloat(oc.lng) : oc.lng;
+        let latValue = typeof oc.lat === 'string' ? parseFloat(oc.lat) : oc.lat;
+        let lngValue = typeof oc.lng === 'string' ? parseFloat(oc.lng) : oc.lng;
+        if (!Number.isFinite(latValue) && oc.endereco && oc.endereco.latitude != null) {
+          latValue = typeof oc.endereco.latitude === 'string' ? parseFloat(oc.endereco.latitude) : oc.endereco.latitude;
+        }
+        if (!Number.isFinite(lngValue) && oc.endereco && oc.endereco.longitude != null) {
+          lngValue = typeof oc.endereco.longitude === 'string' ? parseFloat(oc.endereco.longitude) : oc.endereco.longitude;
+        }
         const hasCoords = Number.isFinite(latValue) && Number.isFinite(lngValue);
         extraContainer.innerHTML = `
           <div class="small text-muted mb-2">Localização e autor</div>
@@ -819,28 +847,25 @@
         </div>`;
 
       const ultimos = resolvidasDoUsuario.slice(0, 6);
-      const itens = ultimos.map(o => {
+      const itens = ultimos.map((o, index) => {
         const when = toDisplayDate(o.resolvedAt || o.updatedAt || o.createdAt);
         const safeTitle = escapeHtml(o.titulo || 'Ocorrência resolvida');
         const safeTipo = escapeHtml(o.tipo || o.tipoProblema || 'Tipo');
-        const badge = `<span class="badge bg-success rounded-pill ms-auto">${when}</span>`;
+        const safeBairro = escapeHtml(o.bairroNome || (o.endereco && o.endereco.bairro) || 'Bairro não informado');
+        const safeStatus = 'Resolvido';
+        const badgeDate = when;
         return `
-          <button type="button" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 impact-item" data-oc='${JSON.stringify(o).replace(/'/g, "&#39;")}'>
-            <span class="impact-icon d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-25 text-success" style="width:34px;height:34px;"><i class="fa-solid fa-check"></i></span>
-            <div class="flex-grow-1 text-start">
-              <div class="fw-semibold mb-1">${safeTitle}</div>
-              <div class="text-muted small d-flex flex-wrap gap-2 align-items-center">
-                <span><i class="fa-solid fa-layer-group"></i> ${safeTipo}</span>
-                <span><i class="fa-solid fa-calendar-check"></i> Resolvido: ${when}</span>
+          <div class="denuncia-item status-resolvido impact-item" data-oc='${JSON.stringify(o).replace(/'/g, "&#39;")}' tabindex="0">
+            <div class="denuncia-content">
+              <div class="denuncia-titulo">${index + 1}. ${safeTitle}</div>
+              <div class="denuncia-meta">
+                ${safeStatus} • ${safeTipo} • ${safeBairro} • ${badgeDate}
               </div>
             </div>
-            ${badge}
-          </button>`;
+          </div>`;
       }).join('');
 
-      container.innerHTML = header + `
-        <div class="impact-scroll impact-list list-group list-group-flush border-0">${itens}</div>
-      `;
+      container.innerHTML = header + `<div class="impact-list">${itens}</div>`;
 
       // Eventos de clique para abrir modal
       container.querySelectorAll('.impact-item').forEach(btn => {
@@ -1215,6 +1240,25 @@
               ${safeStatus} • ${safeTipo} • ${safeBairro} • ${safeData}
             </div>
           `;
+          // Anexa dados para abrir modal com resumo e imagem
+          denunciaDiv.setAttribute('data-oc', JSON.stringify({
+            id: denuncia.id,
+            titulo: denuncia.titulo,
+            tipoProblema: denuncia.tipoProblema,
+            descricaoCompleta: denuncia.descricaoCompleta,
+            statusAtual: statusValue,
+            dataRegistro: denuncia.dataRegistro,
+            dataUltimaAtualizacaoStatus: denuncia.dataUltimaAtualizacaoStatus,
+            imagens: Array.isArray(denuncia.imagens) ? denuncia.imagens : [],
+            endereco: denuncia.endereco || null
+          }).replace(/'/g, "&#39;"));
+          denunciaDiv.style.cursor = 'pointer';
+          denunciaDiv.addEventListener('click', () => {
+            try {
+              const oc = JSON.parse(denunciaDiv.getAttribute('data-oc').replace(/&#39;/g, "'"));
+              openImpactModal(oc);
+            } catch (_) {}
+          });
           ultimasDenunciasContainer.appendChild(denunciaDiv);
         });
       }

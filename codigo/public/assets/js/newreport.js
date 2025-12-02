@@ -492,13 +492,25 @@ async function handleSubmit(event) {
     const recebeNotificacoes = document.getElementById('notificacoes')?.checked || false;
 
 
-    const uploadedImageUrls = selectedFilesList.map((file, index) => {
-        // Gera uma URL de imagem de placeholder para o json-server
-        // Em um sistema real, você faria upload para um serviço de armazenamento de arquivos (e.g., Cloudinary, S3)
-        // e obteria as URLs reais aqui.
-        const fileName = file.name.split('.').pop(); 
-        return `https://picsum.photos/seed/${Math.random().toString(36).substring(7)}/400/300.${fileName}`; 
-    });
+    // Faz upload real das imagens selecionadas para o backend e obtém URLs públicas
+    let uploadedImageUrls = [];
+    if (selectedFilesList && selectedFilesList.length > 0) {
+        const fd = new FormData();
+        selectedFilesList.forEach(file => fd.append('imagens', file));
+        try {
+            const upResp = await fetch(`${API_BASE_URL}/upload`, { method: 'POST', body: fd });
+            if (upResp.ok) {
+                const upData = await upResp.json();
+                if (upData && Array.isArray(upData.urls)) {
+                    uploadedImageUrls = upData.urls; // array de strings (ex.: "/uploads/xxx.jpg")
+                }
+            } else {
+                console.warn('Falha no upload de imagens:', upResp.status, upResp.statusText);
+            }
+        } catch (e) {
+            console.warn('Erro no upload de imagens:', e);
+        }
+    }
 
     const reportData = {
         titulo: document.getElementById('titulo').value,

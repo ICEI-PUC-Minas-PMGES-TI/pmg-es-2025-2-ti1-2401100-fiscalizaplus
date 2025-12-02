@@ -6,7 +6,7 @@
       "email": "contatoitalocnr@gmail.com",
       "estado": "MG",
       "cidade": "Belo Horizonte",
-      "senhaHash": "dudu0908#c",
+      "senhaHash": "dudu0908#b",
       "dataCadastro": "2025-11-28T13:33:44.969Z"
     },
     {
@@ -3504,6 +3504,41 @@
       "recebeNotificacoes": true
     },
     {
+      "titulo": "Poste caido",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Poste caiu",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0124",
+      "cidadaoId": "u123",
+      "endereco": {
+        "rua": "Rua 14 BIS",
+        "numero": "",
+        "bairro": "Padre Eustáquio",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30720-430",
+        "latitude": -19.916142,
+        "longitude": -43.9687778
+      },
+      "imagens": [
+        "/uploads/1764683625288-download.jpg"
+      ],
+      "prioridadeCidadao": "critica",
+      "urgenciaCidadao": "emergencia",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-12-02T13:53:45.295Z",
+      "autorCidadao": "Lucas Azevedo",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-12-02T13:53:45.295Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "lucas.azevedo@fiscaliza.plus",
+      "recebeNotificacoes": true,
+      "id": "rHxGF6n"
+    },
+    {
       "id": "5b7b",
       "titulo": "Buraco encontrado na rua Dom José Gaspar",
       "tipoProblema": "infraestrutura",
@@ -3537,6 +3572,74 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
+    },
+    {
+      "id": "16e0",
+      "titulo": "Poste sem Luz próximo a Praça da Liberdade",
+      "tipoProblema": "iluminacao",
+      "descricaoCompleta": "Tem um poste queimado próximo a praça da liberdade que está prejudicando a boa visualização dos motoristas",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0125",
+      "cidadaoId": "6cf7",
+      "endereco": {
+        "rua": "Avenida Brasil",
+        "numero": "",
+        "bairro": "Funcionários",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30130-012",
+        "latitude": -19.93041868786204,
+        "longitude": -43.93293038368297
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-12-02T17:23:19.021Z",
+      "autorCidadao": "Italo Eduardo Carneiro da Silva",
+      "isAnonimo": false,
+      "statusAtual": "Concluido",
+      "dataUltimaAtualizacaoStatus": "2025-12-02T17:23:19.021Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "contatoitalocnr@gmail.com",
+      "recebeNotificacoes": true
+    },
+    {
+      "titulo": "rua com vazamento e",
+      "tipoProblema": "limpeza",
+      "descricaoCompleta": "A rua Celio de Castro está constantemente apresentando vazamentos",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0126",
+      "cidadaoId": "6cf7",
+      "endereco": {
+        "rua": "Rua Célio de Castro",
+        "numero": "",
+        "bairro": "Colégio Batista",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "31110-060",
+        "latitude": -19.91236325678202,
+        "longitude": -43.93649365998116
+      },
+      "imagens": [
+        "/uploads/1764697507680-vazamento-de-agua-na-rua-1024x683.jpg"
+      ],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "local",
+      "dataRegistro": "2025-12-02T17:45:07.691Z",
+      "autorCidadao": "Italo Eduardo Carneiro da Silva",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-12-02T17:45:07.691Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "contatoitalocnr@gmail.com",
+      "recebeNotificacoes": true,
+      "id": "JJMpJle"
     }
   ],
   "admin": {
@@ -3566,7 +3669,7 @@
       "title": "Buraco perigoso na avenida",
       "excerpt": "Abriu um buraco enorme perto do ponto de ônibus...",
       "category": "transito",
-      "votes": 32
+      "votes": 33
     },
     {
       "id": "2",
