@@ -1,4 +1,4 @@
-# Nome do projeto
+# FiscalizaPlus
 
 O FiscalizaPlus é uma plataforma de gestão cívica que facilita a interação entre cidadãos e administração pública na resolução de problemas urbanos. Ele elimina a burocracia das denúncias ao permitir que qualquer pessoa reporte buracos, iluminação precária, falta de sinalização e outros problemas com geolocalização precisa e fotos anexadas.
 
