@@ -18,33 +18,57 @@
     padding: 0;
 }
 
+/* Garantir que o grid funcione corretamente em todos os dispositivos */
+.cards-grid,
+.cards-grid * {
+    box-sizing: border-box;
+}
+
+.card,
+.card * {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Poppins', sans-serif; 
     background: linear-gradient(145deg, var(--color-bg-light) 0%, #e2e4e6 100%);
     display: flex;
     justify-content: center;
     min-height: 100vh;
-    padding-top: 10px;
+    padding: 10px 0;
     color: var(--color-text-dark);
+    overflow-x: hidden;
 }
 
 .page-container {
     max-width: 1080px; 
-    width: 90%;
+    width: 100%;
     text-align: center;
-    padding-bottom: 50px;
+    padding: 20px 15px 50px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Garantir que o container não cause overflow */
+@media (max-width: 767px) {
+    .page-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
 }
 
 /* 1. Header (Cabeçalho) */
 .header {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    padding: 0 10px;
 }
 
 .logo {
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 800;
-    letter-spacing: -2px;
-    margin-bottom: 5px;
+    letter-spacing: -1.5px;
+    margin-bottom: 8px;
+    line-height: 1.2;
 }
 
 .logo-plus {
@@ -52,17 +76,20 @@ body {
 }
 
 .subtitle {
-    font-size: 1.1em;
+    font-size: 1em;
     color: #7f8c8d;
     font-weight: 400;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    line-height: 1.4;
 }
 
 .headline {
-    font-size: 2em;
+    font-size: 1.6em;
     font-weight: 500;
     color: var(--color-text-dark);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    padding: 0 10px;
 }
 
 .description {
@@ -77,20 +104,27 @@ body {
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
-    gap: 10px; /* Mais espaço entre cards */
-    margin-bottom: 10px;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .card {
     background-color: var(--color-bg-dark);
     color: var(--color-text-light);
-    padding: 30px 20px;
+    padding: 25px 20px;
     border-radius: 15px; 
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     transition: all var(--transition-slow);
     position: relative;
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 
@@ -116,13 +150,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70px; 
-    height: 70px;
-    margin: 0 auto 20px;
+    width: 60px; 
+    height: 60px;
+    margin: 0 auto 18px;
     background: var(--color-primary-base); 
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: all var(--transition-slow);
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .card:hover .card-icon-wrapper {
@@ -131,7 +167,7 @@ body {
 }
 
 .card-icon {
-    font-size: 2.2em;
+    font-size: 1.8em;
     color: var(--color-text-light);
     transition: color var(--transition-fast);
 }
@@ -141,16 +177,26 @@ body {
 }
 
 .card-title {
-    font-size: 1.25em;
+    font-size: 1.15em;
     font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .card-text {
-    font-size: 0.95em;
+    font-size: 0.9em;
     font-weight: 300;
-    opacity: 0.8;
+    opacity: 0.85;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* 3. Botão de Chamada para Ação (CTA Button) */
@@ -162,14 +208,19 @@ body {
     background: linear-gradient(45deg, var(--color-primary-base), var(--color-primary-dark));
     color: var(--color-text-light);
     text-decoration: none;
-    padding: 18px 40px;
+    padding: 16px 32px;
     border-radius: 50px; /* Pill shape */
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     box-shadow: 0 8px 15px rgba(231, 76, 60, 0.4);
     transition: all var(--transition-fast);
     border: none;
+    min-height: 50px;
+    margin: 20px 10px;
+    box-sizing: border-box;
+    width: calc(100% - 20px);
+    max-width: 400px;
 }
 
 
@@ -206,28 +257,385 @@ body {
 }
 
 /* =========================
-/* 5. Responsividade
-=========================
-*/
-@media (max-width: 992px) {
+   5. RESPONSIVIDADE COMPLETA
+========================= */
+
+/* ========== TABLETS (768px - 991px) ========== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .page-container {
+        padding: 25px 20px 50px;
+    }
+    
+    .header {
+        margin-bottom: 25px;
+        padding: 0 15px;
+    }
+    
+    .logo {
+        font-size: 2.8em;
+    }
+    
+    .subtitle {
+        font-size: 1.05em;
+    }
+    
+    .headline {
+        font-size: 1.75em;
+    }
+    
     .cards-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 colunas em tablets */
-        gap: 25px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        padding: 0;
+        margin-bottom: 25px;
+    }
+    
+    .card {
+        padding: 28px 22px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .card-icon-wrapper {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .card-icon {
+        font-size: 2em;
+    }
+    
+    .card-title {
+        font-size: 1.2em;
+    }
+    
+    .card-text {
+        font-size: 0.95em;
+    }
+    
+    .cta-button {
+        font-size: 1.15em;
+        padding: 18px 36px;
+        width: auto;
+        max-width: 450px;
     }
 }
 
-@media (max-width: 600px) {
-    .cards-grid {
-        grid-template-columns: 1fr; /* 1 coluna em celulares */
-        gap: 20px;
+/* ========== MOBILE (até 767px) ========== */
+@media (max-width: 767px) {
+    body {
+        padding: 5px 0;
     }
+    
+    .page-container {
+        padding: 15px 12px 40px;
+        width: 100%;
+    }
+    
+    .header {
+        margin-bottom: 25px;
+        padding: 0 5px;
+    }
+    
     .logo {
-        font-size: 3.5em;
+        font-size: 2em;
+        letter-spacing: -1px;
+        margin-bottom: 10px;
     }
+    
+    .subtitle {
+        font-size: 0.9em;
+        margin-bottom: 12px;
+        padding: 0 10px;
+    }
+    
     .headline {
-        font-size: 1.8em;
+        font-size: 1.4em;
+        margin-bottom: 15px;
+        padding: 0 5px;
+        line-height: 1.3;
     }
+    
+    .cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-bottom: 25px;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
     .card {
-        padding: 25px 15px;
+        padding: 22px 18px;
+        border-radius: 12px;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    .card-icon-wrapper {
+        width: 55px;
+        height: 55px;
+        margin-bottom: 15px;
+    }
+    
+    .card-icon {
+        font-size: 1.6em;
+    }
+    
+    .card-title {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+    
+    .card-text {
+        font-size: 0.85em;
+        line-height: 1.5;
+    }
+    
+    .cta-button {
+        font-size: 1em;
+        padding: 14px 28px;
+        width: calc(100% - 20px);
+        max-width: 100%;
+        margin: 15px 10px;
+        min-height: 48px;
+    }
+    
+    .cta-button .fas {
+        margin-right: 8px;
+        font-size: 1em;
+    }
+    
+    .footer-separator {
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+    
+    .footer {
+        font-size: 0.85em;
+        padding: 0 10px;
+    }
+}
+
+/* ========== MOBILE PEQUENO (até 576px) ========== */
+@media (max-width: 576px) {
+    .page-container {
+        padding: 12px 10px 35px;
+    }
+    
+    .header {
+        margin-bottom: 20px;
+    }
+    
+    .logo {
+        font-size: 1.8em;
+        letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+        font-size: 0.85em;
+    }
+    
+    .headline {
+        font-size: 1.25em;
+        line-height: 1.3;
+    }
+    
+    .cards-grid {
+        gap: 14px;
+        margin-bottom: 20px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .card {
+        padding: 20px 16px;
+        border-radius: 12px;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    .card-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 12px;
+    }
+    
+    .card-icon {
+        font-size: 1.5em;
+    }
+    
+    .card-title {
+        font-size: 1.05em;
+        margin-bottom: 8px;
+    }
+    
+    .card-text {
+        font-size: 0.8em;
+    }
+    
+    .cta-button {
+        font-size: 0.95em;
+        padding: 12px 24px;
+        min-height: 46px;
+        letter-spacing: 0.3px;
+    }
+    
+    .footer {
+        font-size: 0.8em;
+    }
+}
+
+/* ========== MOBILE MUITO PEQUENO (até 400px) ========== */
+@media (max-width: 400px) {
+    .logo {
+        font-size: 1.6em;
+    }
+    
+    .headline {
+        font-size: 1.15em;
+    }
+    
+    .cards-grid {
+        gap: 12px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .card {
+        padding: 18px 14px;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    .card-icon-wrapper {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .card-icon {
+        font-size: 1.4em;
+    }
+    
+    .cta-button {
+        font-size: 0.9em;
+        padding: 12px 20px;
+    }
+}
+
+/* ========== MELHORIAS DE TOQUE E ACESSIBILIDADE ========== */
+@media (max-width: 767px) {
+    .card,
+    .cta-button {
+        -webkit-tap-highlight-color: rgba(231, 76, 60, 0.2);
+        touch-action: manipulation;
+    }
+    
+    /* Reduzir animações em mobile para melhor performance */
+    .card:hover {
+        transform: translateY(-3px) scale(1.01);
+    }
+    
+    .card:active {
+        transform: translateY(-1px) scale(0.99);
+    }
+    
+    /* Garantir que cards não saiam da tela */
+    .card::before {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* ========== PREVENIR OVERFLOW HORIZONTAL ========== */
+@media (max-width: 767px) {
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    * {
+        max-width: 100%;
+    }
+    
+    .page-container {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .cards-grid {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Garantir que textos longos quebrem corretamente */
+    .logo,
+    .headline,
+    .card-title,
+    .card-text {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    /* Forçar cards a não ultrapassar limites */
+    .card {
+        min-width: 0;
+        overflow-wrap: break-word;
+        display: block;
+    }
+    
+    .card-title,
+    .card-text {
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+    }
+    
+    /* Garantir que o grid não cause overflow */
+    main.cards-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* ========== DESKTOP GRANDE (1200px+) ========== */
+@media (min-width: 1200px) {
+    .page-container {
+        max-width: 1200px;
+        padding: 30px 40px 60px;
+    }
+    
+    .logo {
+        font-size: 3.2em;
+    }
+    
+    .headline {
+        font-size: 2.2em;
+    }
+    
+    .cards-grid {
+        gap: 25px;
+    }
+    
+    .card {
+        padding: 32px 24px;
     }
 }

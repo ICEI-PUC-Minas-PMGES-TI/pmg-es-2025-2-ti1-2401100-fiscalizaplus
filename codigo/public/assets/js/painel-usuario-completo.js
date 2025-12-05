@@ -817,7 +817,94 @@
           t.classList.toggle('is-active', isActive);
           t.setAttribute('aria-selected', isActive);
         });
+        
+        // Atualiza dropdown mobile se existir
+        updateMobileDropdown(filtro);
       });
+    });
+    
+    // Inicializa dropdown mobile
+    initMobileDropdown();
+  }
+  
+  // Função para inicializar dropdown mobile
+  function initMobileDropdown() {
+    const dropdownBtn = document.getElementById('filterDropdownBtn');
+    const dropdownMenu = document.getElementById('filterDropdownMenu');
+    const dropdownItems = document.querySelectorAll('.filter-dropdown-item');
+    
+    if (!dropdownBtn || !dropdownMenu) return;
+    
+    // Toggle dropdown
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
+      dropdownBtn.setAttribute('aria-expanded', !isExpanded);
+      dropdownMenu.classList.toggle('show', !isExpanded);
+    });
+    
+    // Fecha dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+        dropdownMenu.classList.remove('show');
+      }
+    });
+    
+    // Handler para itens do dropdown
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const filtro = item.getAttribute('data-filter');
+        
+        // Dispara o mesmo evento que as tabs normais
+        const tab = document.querySelector(`.tab[data-filter="${filtro}"]`);
+        if (tab) {
+          tab.click();
+        }
+        
+        // Atualiza texto do botão
+        const filterLabels = {
+          'todos': 'Todos',
+          'pendente': 'Pendentes',
+          'andamento': 'Em Análise',
+          'concluido': 'Resolvidos'
+        };
+        
+        const selectedText = document.querySelector('.filter-selected-text');
+        if (selectedText) {
+          selectedText.textContent = filterLabels[filtro] || 'Todos';
+        }
+        
+        // Atualiza estado visual
+        dropdownItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Fecha dropdown
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+        dropdownMenu.classList.remove('show');
+      });
+    });
+  }
+  
+  // Função para atualizar dropdown mobile quando filtro muda
+  function updateMobileDropdown(filtro) {
+    const dropdownItems = document.querySelectorAll('.filter-dropdown-item');
+    const selectedText = document.querySelector('.filter-selected-text');
+    
+    const filterLabels = {
+      'todos': 'Todos',
+      'pendente': 'Pendentes',
+      'andamento': 'Em Análise',
+      'concluido': 'Resolvidos'
+    };
+    
+    if (selectedText) {
+      selectedText.textContent = filterLabels[filtro] || 'Todos';
+    }
+    
+    dropdownItems.forEach(item => {
+      const itemFilter = item.getAttribute('data-filter');
+      item.classList.toggle('active', itemFilter === filtro);
     });
   }
   

@@ -256,40 +256,49 @@
         const currentPath = window.location.pathname;
         let loginPath = '';
         let painelUsuarioPath = '';
+        let meuPerfilPath = '';
         
+        // Calcula caminhos baseado na localização atual
         if (currentPath.includes('/painel-cidadao/')) {
-          if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
-            // Está em uma subpasta de painel-cidadao (ex: meu-perfil/, painel-de-usuario/, etc)
+          // Está dentro de /modulos/painel-cidadao/
+          if (currentPath.includes('/meu-perfil/')) {
+            // Está em meu-perfil
             loginPath = '../../login/login.html';
-            // Para subpastas, o caminho relativo é ../painel-de-usuario/index.html
             painelUsuarioPath = '../painel-de-usuario/index.html';
+            meuPerfilPath = 'index.html';
+          } else if (currentPath.includes('/painel-de-usuario/')) {
+            // Está em painel-de-usuario
+            loginPath = '../../login/login.html';
+            painelUsuarioPath = 'index.html';
+            meuPerfilPath = '../meu-perfil/index.html';
+          } else if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
+            // Está em outra subpasta de painel-cidadao (comunidade, dashboard, etc)
+            loginPath = '../../login/login.html';
+            painelUsuarioPath = '../painel-de-usuario/index.html';
+            meuPerfilPath = '../meu-perfil/index.html';
           } else {
             // Está na raiz de painel-cidadao (index.html)
             loginPath = '../login/login.html';
             painelUsuarioPath = 'painel-de-usuario/index.html';
-          }
-        } else {
-          loginPath = '../modulos/login/login.html';
-          painelUsuarioPath = '../modulos/painel-cidadao/painel-de-usuario/index.html';
-        }
-        
-        console.log('[Current User] Caminho inicial calculado para Minhas Denúncias:', painelUsuarioPath, 'de', currentPath);
-        
-        // Calcula caminho para Meu Perfil
-        let meuPerfilPath = '#';
-        if (currentPath.includes('/painel-cidadao/')) {
-          if (currentPath.includes('/meu-perfil/')) {
-            meuPerfilPath = 'index.html';
-          } else if (currentPath.includes('/painel-de-usuario/')) {
-            meuPerfilPath = '../meu-perfil/index.html';
-          } else {
             meuPerfilPath = 'meu-perfil/index.html';
           }
         } else if (currentPath.includes('/modulos/')) {
+          // Está em outra pasta dentro de /modulos/ (ex: guia, login, etc)
+          loginPath = '../login/login.html';
+          painelUsuarioPath = '../painel-cidadao/painel-de-usuario/index.html';
           meuPerfilPath = '../painel-cidadao/meu-perfil/index.html';
         } else {
+          // Está na raiz do projeto
+          loginPath = 'modulos/login/login.html';
+          painelUsuarioPath = 'modulos/painel-cidadao/painel-de-usuario/index.html';
           meuPerfilPath = 'modulos/painel-cidadao/meu-perfil/index.html';
         }
+        
+        console.log('[Current User] Caminhos calculados:', {
+          currentPath,
+          painelUsuarioPath,
+          meuPerfilPath
+        });
         
         menu.innerHTML = `
           <li><a class="dropdown-item" href="${meuPerfilPath}" id="meu-perfil-link"><i class="fa-solid fa-user me-2"></i>Meu Perfil</a></li>
@@ -298,28 +307,18 @@
           <li><a class="dropdown-item" href="#" id="logout-link"><i class="fa-solid fa-sign-out-alt me-2"></i>Sair</a></li>
         `;
         
+        // Ajusta os links finais para garantir que estão corretos
         const minhasDenunciasLink = menu.querySelector('#minhas-denuncias-link');
+        const meuPerfilLink = menu.querySelector('#meu-perfil-link');
+        
         if (minhasDenunciasLink) {
-          const currentPath = window.location.pathname;
-          let correctPath = painelUsuarioPath;
-          
-          // Ajusta o caminho baseado na localização atual
-          if (currentPath.includes('/meu-perfil/')) {
-            // Se está em meu-perfil, o caminho relativo é ../painel-de-usuario/index.html
-            correctPath = '../painel-de-usuario/index.html';
-          } else if (currentPath.includes('/painel-de-usuario/')) {
-            // Se já está em painel-de-usuario, mantém o mesmo
-            correctPath = 'index.html';
-          } else if (currentPath.includes('/painel-cidadao/index.html') || currentPath.endsWith('/painel-cidadao/')) {
-            // Se está na raiz de painel-cidadao
-            correctPath = 'painel-de-usuario/index.html';
-          } else if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
-            // Se está em outra subpasta de painel-cidadao
-            correctPath = '../painel-de-usuario/index.html';
-          }
-          
-          minhasDenunciasLink.href = correctPath;
-          console.log('[Current User] Link Minhas Denúncias configurado para:', correctPath, 'de', currentPath);
+          minhasDenunciasLink.href = painelUsuarioPath;
+          console.log('[Current User] Link Minhas Denúncias configurado para:', painelUsuarioPath, 'de', currentPath);
+        }
+        
+        if (meuPerfilLink) {
+          meuPerfilLink.href = meuPerfilPath;
+          console.log('[Current User] Link Meu Perfil configurado para:', meuPerfilPath, 'de', currentPath);
         }
         
         const staticLink = document.getElementById('minhas-denuncias-link-static');

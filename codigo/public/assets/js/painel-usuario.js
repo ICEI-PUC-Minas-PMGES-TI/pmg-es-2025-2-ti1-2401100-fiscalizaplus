@@ -393,6 +393,59 @@
 
 
 
+  // Função para mostrar detalhes da denúncia recente em mobile
+  function showRecentReportDetails(denunciaData) {
+    // Obtém o modal (deve existir no HTML)
+    const modal = document.getElementById('recent-report-detail-modal');
+    if (!modal) {
+      console.error('Modal de detalhes não encontrado');
+      return;
+    }
+    
+    // Preenche os dados
+    const endereco = denunciaData.endereco || {};
+    const enderecoCompleto = [
+      endereco.logradouro,
+      endereco.numero,
+      endereco.bairro,
+      endereco.cidade
+    ].filter(Boolean).join(', ') || 'Endereço não informado';
+    
+    const tipo = denunciaData.tipoProblema || 'Tipo não informado';
+    const dataRegistro = denunciaData.dataRegistro || '';
+    const dataFormatada = formatDate(dataRegistro) || 'Data não informada';
+    
+    // Atualiza o conteúdo do modal
+    const titleEl = document.getElementById('recent-report-detail-title');
+    const enderecoEl = document.getElementById('recent-report-detail-endereco');
+    const tipoEl = document.getElementById('recent-report-detail-tipo');
+    const dataEl = document.getElementById('recent-report-detail-data');
+    const descricaoEl = document.getElementById('recent-report-detail-descricao');
+    
+    if (titleEl) titleEl.textContent = denunciaData.titulo || 'Detalhes da Denúncia';
+    if (enderecoEl) enderecoEl.textContent = enderecoCompleto;
+    if (tipoEl) tipoEl.textContent = tipo;
+    if (dataEl) dataEl.textContent = dataFormatada;
+    // Remove a descrição do modal
+    if (descricaoEl) {
+      const descricaoContainer = descricaoEl.closest('.mb-3');
+      if (descricaoContainer) {
+        descricaoContainer.style.display = 'none';
+      }
+    }
+    
+    // Abre o modal usando Bootstrap
+    if (window.bootstrap && window.bootstrap.Modal) {
+      const modalInstance = new bootstrap.Modal(modal);
+      modalInstance.show();
+    } else {
+      // Fallback se Bootstrap não estiver disponível
+      modal.style.display = 'block';
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+    }
+  }
+
   function formatDate(dateString) {
     if (!dateString) return 'Data não informada';
     try {
@@ -510,8 +563,12 @@
         })));
       }
 
-      // Limita a 10 denúncias APÓS ordenar (ou o máximo que couber no card)
-      recentes = recentes.slice(0, 10);
+      // Detecta se é mobile para limitar quantidade
+      const isMobile = window.innerWidth <= 767;
+      const maxItems = isMobile ? 4 : 10;
+      
+      // Limita a quantidade de denúncias APÓS ordenar
+      recentes = recentes.slice(0, maxItems);
       
       const ul = document.getElementById('recent-reports-list');
       if (ul) {
@@ -525,6 +582,16 @@
           const li = document.createElement('li');
           li.setAttribute('tabindex', '0');
           li.className = 'recent-item';
+          li.setAttribute('data-denuncia-id', d.id || index);
+          
+          // Armazena dados completos no elemento para uso no modal
+          li.dataset.denunciaData = JSON.stringify({
+            titulo: d.titulo || 'Sem título',
+            endereco: d.endereco || {},
+            tipoProblema: d.tipoProblema || d.tipo || 'Tipo não informado',
+            dataRegistro: d.dataRegistro || d.createdAt || '',
+            descricao: d.descricao || d.detalhes || 'Sem descrição'
+          });
 
           // Garante que os dados estão disponíveis
           const dataRegistro = d.dataRegistro || d.createdAt || '';
@@ -547,17 +614,44 @@
           li.innerHTML = `
             <div class="recent-content">
               <h3 class="recent-title">${escapeHtml(d.titulo || 'Sem título')}</h3>
-              <div class="recent-meta">
-                <span class="meta-piece"><i class="fa-solid fa-map-pin"></i>${escapeHtml(bairroNome)}</span>
-                <span class="meta-piece"><i class="fa-solid fa-circle-exclamation"></i>${escapeHtml(tipoDenuncia)}</span>
-                <span class="time" title="${escapeHtml(dataFormatada)}">${escapeHtml(timeText)}</span>
-              </div>
             </div>
           `;
+
+          // Adiciona evento de clique para mobile e desktop
+          li.style.cursor = 'pointer';
+          const denunciaDataCopy = JSON.parse(JSON.stringify({
+            titulo: d.titulo || 'Sem título',
+            endereco: d.endereco || {},
+            tipoProblema: d.tipoProblema || d.tipo || 'Tipo não informado',
+            dataRegistro: d.dataRegistro || d.createdAt || '',
+            descricao: d.descricao || d.detalhes || 'Sem descrição'
+          }));
+          
+          li.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showRecentReportDetails(denunciaDataCopy);
+          });
+          
+          // Adiciona indicador visual de que é clicável (setinha)
+          li.classList.add('recent-item-clickable');
 
           ul.appendChild(li);
         });
       }
+      
+      // Adiciona listener para redimensionamento da janela
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          // Recarrega os relatos se mudou de mobile para desktop ou vice-versa
+          const wasMobile = window.innerWidth <= 767;
+          if (wasMobile !== isMobile) {
+            populateRecentReports();
+          }
+        }, 300);
+      });
     } catch (error) {
       console.error('Erro ao carregar relatórios recentes:', error);
       const ul = document.getElementById('recent-reports-list');

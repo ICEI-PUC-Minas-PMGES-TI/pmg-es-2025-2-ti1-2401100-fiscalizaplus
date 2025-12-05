@@ -3,6 +3,9 @@ const API_URL = "http://localhost:3000/comunidade";
 
 let posts = [];
 let currentCategory = "todas";
+let currentPage = 1;
+const itemsPerPage = 4; // 4 discussões por página
+let allPosts = []; // Todas as discussões filtradas
 
 const cardsEl = document.getElementById("cards");
 const catListEl = document.getElementById("cat-list");
@@ -62,7 +65,16 @@ async function loadPosts() {
       throw new Error("Erro ao buscar comunidade: " + res.status);
     }
     posts = await res.json();
+    loadVotedPosts(); // Carrega votos salvos após carregar posts
     renderPosts();
+    
+    // Verifica se há um parâmetro de post na URL após carregar os posts
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('post');
+    if (postId) {
+      const category = urlParams.get('category');
+      handlePostNavigation(postId, category);
+    }
   } catch (err) {
     console.error(err);
     cardsEl.innerHTML = `
@@ -88,6 +100,11 @@ function renderPosts() {
         Nenhuma discussão encontrada para esta categoria.
       </p>
     `;
+    // Remove paginação se não houver posts
+    const existingPagination = document.querySelector('.pagination-container');
+    if (existingPagination) {
+      existingPagination.remove();
+    }
     return;
   }
 
@@ -96,7 +113,64 @@ function renderPosts() {
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
-  cardsEl.innerHTML = sorted.map(postToCardHtml).join("");
+  // Salva todas as discussões filtradas
+  allPosts = sorted;
+  currentPage = 1;
+
+  // Remove paginação existente
+  const existingPagination = document.querySelector('.pagination-container');
+  if (existingPagination) {
+    existingPagination.remove();
+  }
+
+  // Renderiza a página atual
+  renderPage(currentPage);
+
+  // Cria paginação se houver mais de 4 discussões
+  if (sorted.length > itemsPerPage) {
+    createPagination(sorted.length);
+  }
+}
+
+// ===================== RENDERIZAR PÁGINA =====================
+function renderPage(page) {
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const postsToShow = allPosts.slice(startIndex, endIndex);
+
+  cardsEl.innerHTML = postsToShow.map(postToCardHtml).join("");
+
+  // Atualiza estado da paginação
+  updatePaginationState();
+}
+
+// ===================== GERENCIAMENTO DE VOTOS =====================
+const votedPosts = new Set(); // Armazena IDs dos posts que o usuário votou
+
+function hasVoted(postId) {
+  const key = `voted_${postId}`;
+  return localStorage.getItem(key) === 'true' || votedPosts.has(String(postId));
+}
+
+function setVoted(postId) {
+  const key = `voted_${postId}`;
+  localStorage.setItem(key, 'true');
+  votedPosts.add(String(postId));
+}
+
+function unsetVoted(postId) {
+  const key = `voted_${postId}`;
+  localStorage.removeItem(key);
+  votedPosts.delete(String(postId));
+}
+
+// Carrega votos salvos ao iniciar
+function loadVotedPosts() {
+  posts.forEach(post => {
+    if (hasVoted(post.id)) {
+      votedPosts.add(String(post.id));
+    }
+  });
 }
 
 function postToCardHtml(p) {
@@ -115,7 +189,8 @@ function postToCardHtml(p) {
   const author = p.author || "Anônimo";
   const firstLetter = author.charAt(0).toUpperCase();
   const votes = p.votes || 0;
-  const progressWidth = Math.min(votes * 3, 100); // só pra dar uma barra bonitinha
+  const progressWidth = Math.min((votes / 50) * 100, 100); // Progresso baseado em 50 votos máximo
+  const hasUserVoted = hasVoted(p.id);
 
   return `
     <article class="card" data-id="${p.id}" data-category="${p.category}">
@@ -137,8 +212,8 @@ function postToCardHtml(p) {
       </div>
 
       <footer class="card__footer">
-        <button class="btn btn--outline vote-btn" data-id="${p.id}">
-          Computar voto
+        <button class="btn btn--outline vote-btn ${hasUserVoted ? 'is-voted' : ''}" data-id="${p.id}">
+          ${hasUserVoted ? 'Voltar voto' : 'Computar voto'}
         </button>
         <div class="votes">
           <span class="dot" aria-hidden="true">●</span>
@@ -161,6 +236,7 @@ catListEl?.addEventListener("click", (event) => {
 
   li.classList.add("is-active");
   currentCategory = li.dataset.cat || "todas";
+  currentPage = 1; // Reset para primeira página ao mudar categoria
   renderPosts();
 });
 
@@ -218,6 +294,8 @@ newPostForm?.addEventListener("submit", async (event) => {
       .querySelectorAll(".cat-item")
       .forEach((li) => li.classList.toggle("is-active", li.dataset.cat === "todas"));
 
+    // Reset para primeira página ao criar novo post
+    currentPage = 1;
     renderPosts();
 
     // fecha o modal
@@ -235,13 +313,19 @@ newPostForm?.addEventListener("submit", async (event) => {
 // ===================== VOTAR =====================
 document.addEventListener("click", async (event) => {
   const btn = event.target.closest(".vote-btn");
-  if (!btn) return;
+  if (!btn || btn.classList.contains("is-disabled")) return;
 
   const id = btn.dataset.id;
   const post = posts.find((p) => String(p.id) === String(id));
   if (!post) return;
 
-  const newVotes = (post.votes || 0) + 1;
+  const hasVotedPost = hasVoted(id);
+  const currentVotes = post.votes || 0;
+  const newVotes = hasVotedPost ? Math.max(0, currentVotes - 1) : currentVotes + 1;
+
+  // Desabilita o botão durante a requisição
+  btn.disabled = true;
+  btn.classList.add("is-disabled");
 
   try {
     const res = await fetch(`${API_URL}/${id}`, {
@@ -254,11 +338,34 @@ document.addEventListener("click", async (event) => {
       throw new Error("Erro ao computar voto: " + res.status);
     }
 
+    // Atualiza o voto no post
     post.votes = newVotes;
-    renderPosts();
+
+    // Atualiza o estado do voto
+    if (hasVotedPost) {
+      unsetVoted(id);
+    } else {
+      setVoted(id);
+    }
+
+    // Atualiza allPosts com os posts filtrados e ordenados atuais
+    const list =
+      currentCategory === "todas"
+        ? posts
+        : posts.filter((p) => p.category === currentCategory);
+    const sorted = [...list].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    allPosts = sorted;
+
+    // Re-renderiza apenas a página atual (mantém paginação)
+    renderPage(currentPage);
   } catch (err) {
     console.error(err);
     alert("Não foi possível computar o voto. Verifique o json-server.");
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove("is-disabled");
   }
 });
 
@@ -334,6 +441,210 @@ if (newPostModal) {
       return false;
     }
   });
+}
+
+// ===================== PAGINAÇÃO =====================
+function createPagination(totalItems) {
+  // Remove paginação existente
+  const existingPagination = document.querySelector('.pagination-container');
+  if (existingPagination) {
+    existingPagination.remove();
+  }
+  
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages <= 1) return; // Não mostra paginação se houver apenas 1 página
+  
+  // Cria container de paginação
+  const paginationContainer = document.createElement('div');
+  paginationContainer.className = 'pagination-container';
+  paginationContainer.style.cssText = 'display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap;';
+  
+  // Botão anterior
+  const prevButton = document.createElement('button');
+  prevButton.className = 'pagination-btn';
+  prevButton.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+  prevButton.disabled = currentPage === 1;
+  prevButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderPage(currentPage);
+      updatePaginationState();
+    }
+  });
+  paginationContainer.appendChild(prevButton);
+  
+  // Botões de página
+  const pagesContainer = document.createElement('div');
+  pagesContainer.className = 'pagination-pages';
+  pagesContainer.style.cssText = 'display: flex; gap: 0.5rem; flex-wrap: wrap;';
+  
+  // Calcula quais páginas mostrar (máximo 5 botões visíveis)
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, currentPage + 2);
+  
+  // Ajusta para sempre mostrar 5 botões quando possível
+  if (endPage - startPage < 4) {
+    if (startPage === 1) {
+      endPage = Math.min(totalPages, startPage + 4);
+    } else if (endPage === totalPages) {
+      startPage = Math.max(1, endPage - 4);
+    }
+  }
+  
+  // Botão primeira página
+  if (startPage > 1) {
+    const firstBtn = createPageButton(1, totalPages);
+    pagesContainer.appendChild(firstBtn);
+    if (startPage > 2) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.style.cssText = 'padding: 0.5rem; color: var(--text-secondary);';
+      pagesContainer.appendChild(ellipsis);
+    }
+  }
+  
+  // Botões de páginas
+  for (let i = startPage; i <= endPage; i++) {
+    const pageBtn = createPageButton(i, totalPages);
+    pagesContainer.appendChild(pageBtn);
+  }
+  
+  // Botão última página
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.style.cssText = 'padding: 0.5rem; color: var(--text-secondary);';
+      pagesContainer.appendChild(ellipsis);
+    }
+    const lastBtn = createPageButton(totalPages, totalPages);
+    pagesContainer.appendChild(lastBtn);
+  }
+  
+  paginationContainer.appendChild(pagesContainer);
+  
+  // Botão próximo
+  const nextButton = document.createElement('button');
+  nextButton.className = 'pagination-btn';
+  nextButton.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderPage(currentPage);
+      updatePaginationState();
+    }
+  });
+  paginationContainer.appendChild(nextButton);
+  
+  // Insere após o container de cards
+  if (cardsEl && cardsEl.parentNode) {
+    cardsEl.parentNode.insertBefore(paginationContainer, cardsEl.nextSibling);
+  }
+  
+  // Salva referências para atualização
+  window.paginationElements = {
+    prevButton,
+    nextButton,
+    pagesContainer,
+    container: paginationContainer,
+    totalPages
+  };
+}
+
+// Função para criar botão de página
+function createPageButton(pageNum, totalPages) {
+  const button = document.createElement('button');
+  button.className = 'pagination-page-btn';
+  button.textContent = pageNum;
+  button.dataset.page = pageNum;
+  
+  if (pageNum === currentPage) {
+    button.classList.add('active');
+  }
+  
+  button.addEventListener('click', () => {
+    if (pageNum !== currentPage) {
+      currentPage = pageNum;
+      renderPage(currentPage);
+      updatePaginationState();
+    }
+  });
+  
+  return button;
+}
+
+// Atualiza estado da paginação
+function updatePaginationState() {
+  if (!window.paginationElements) return;
+  
+  const { prevButton, nextButton, pagesContainer, totalPages } = window.paginationElements;
+  
+  // Atualiza botões anterior/próximo
+  if (prevButton) prevButton.disabled = currentPage === 1;
+  if (nextButton) nextButton.disabled = currentPage === totalPages;
+  
+  // Atualiza botões de página
+  const pageButtons = pagesContainer.querySelectorAll('.pagination-page-btn');
+  pageButtons.forEach(btn => {
+    const pageNum = parseInt(btn.dataset.page);
+    if (pageNum === currentPage) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// ===================== NAVEGAÇÃO PARA POST ESPECÍFICO =====================
+function handlePostNavigation(postId, category) {
+  // Se houver uma categoria especificada e não estiver nela, muda para ela
+  if (category && category !== "todas" && currentCategory !== category) {
+    const categoryItem = document.querySelector(`.cat-item[data-cat="${category}"]`);
+    if (categoryItem) {
+      categoryItem.click();
+      // Aguarda renderização e faz scroll
+      setTimeout(() => scrollToPost(postId), 500);
+      return;
+    }
+  }
+  
+  // Faz scroll até o post
+  scrollToPost(postId);
+}
+
+function scrollToPost(postId) {
+  // Aguarda os posts serem renderizados
+  setTimeout(() => {
+    const postCard = document.querySelector(`.card[data-id="${postId}"]`);
+    if (postCard) {
+      // Se o post não estiver na página atual, navega para a página correta
+      const postIndex = allPosts.findIndex(p => String(p.id) === String(postId));
+      if (postIndex >= 0) {
+        const targetPage = Math.floor(postIndex / itemsPerPage) + 1;
+        if (targetPage !== currentPage) {
+          currentPage = targetPage;
+          renderPage(currentPage);
+          // Aguarda renderização e tenta novamente
+          setTimeout(() => scrollToPost(postId), 300);
+          return;
+        }
+      }
+      
+      // Faz scroll até o card
+      postCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Adiciona um destaque visual temporário
+      postCard.style.transition = 'all 0.3s ease';
+      postCard.style.boxShadow = '0 0 0 4px rgba(193, 18, 31, 0.3)';
+      postCard.style.transform = 'scale(1.02)';
+      
+      setTimeout(() => {
+        postCard.style.boxShadow = '';
+        postCard.style.transform = '';
+      }, 2000);
+    }
+  }, 300);
 }
 
 // ===================== INICIALIZAÇÃO =====================

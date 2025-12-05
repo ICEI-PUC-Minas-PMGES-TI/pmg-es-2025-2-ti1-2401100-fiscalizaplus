@@ -33,10 +33,30 @@
 
     const { base, path } = found;
     try {
-      const res = await fetch(`${base}${path}?_sort=createdAt&_order=desc&_limit=5`, { cache: "no-store" });
+      // Busca todos os posts (sem limite para filtrar por semana)
+      const res = await fetch(`${base}${path}`, { cache: "no-store" });
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-      const posts = await res.json();
-      render(posts, base, path);
+      const allPosts = await res.json();
+      
+      // Filtra posts da última semana (7 dias)
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      const postsFromWeek = allPosts.filter(post => {
+        const postDate = new Date(post.createdAt || post.created_at || 0);
+        return postDate >= oneWeekAgo;
+      });
+      
+      // Ordena por votos (mais votado primeiro) e limita a 5
+      const topPosts = postsFromWeek
+        .sort((a, b) => {
+          const votesA = Number(a.votes || 0);
+          const votesB = Number(b.votes || 0);
+          return votesB - votesA; // Ordem decrescente
+        })
+        .slice(0, 5);
+      
+      render(topPosts, base, path);
     } catch (err) {
       root.innerHTML = `
         <div class="text-muted small">Erro ao buscar tópicos: ${String(err)}</div>
@@ -60,29 +80,63 @@
   function render(list, base, path) {
     root.setAttribute("aria-busy", "false");
     if (!Array.isArray(list) || list.length === 0) {
+      // Determina o caminho relativo correto baseado na localização atual
+      const communityPath = window.location.pathname.includes('modulos/painel-cidadao') 
+        ? 'comunidade/comunidade.html' 
+        : 'modulos/painel-cidadao/comunidade/comunidade.html';
+      
       root.innerHTML = `
         <div class="text-muted small">Nenhum tópico encontrado.</div>
         <div class="forum-mini__footer">
-          <a href="/codigo/public/pages/comunidade/comunidade.html">Abrir Comunidade →</a>
+          <a href="${communityPath}">Abrir Comunidade →</a>
         </div>
       `;
       return;
     }
+
+    // Determina o caminho relativo correto baseado na localização atual
+    const communityPath = window.location.pathname.includes('modulos/painel-cidadao') 
+      ? 'comunidade/comunidade.html' 
+      : 'modulos/painel-cidadao/comunidade/comunidade.html';
 
     root.innerHTML = `
       <ul class="forum-mini__list">
         ${list.map(liHTML).join("")}
       </ul>
       <div class="forum-mini__footer">
-        <a href="/codigo/public/pages/comunidade/comunidade.html">Abrir Comunidade →</a>
+        <a href="${communityPath}">Abrir Comunidade →</a>
       </div>
     `;
 
-    // votes
+    // votes - carrega estado dos votos do localStorage
     root.querySelectorAll(".forum-mini__vote").forEach((btn) => {
-      btn.addEventListener("click", (ev) => onVoteClick(ev, base, path));
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation(); // Previne que o clique no botão dispare o clique no item
+        onVoteClick(ev, base, path);
+      });
       const id = btn.closest(".forum-mini__item").dataset.id;
-      setBtnState(btn, hasVoted(id));
+      // Verifica se o usuário já votou (usando localStorage)
+      const hasVotedPost = hasVoted(id);
+      setBtnState(btn, hasVotedPost);
+    });
+
+    // Adiciona evento de clique nos itens para navegar para a discussão
+    root.querySelectorAll(".forum-mini__item").forEach((item) => {
+      item.style.cursor = "pointer";
+      item.addEventListener("click", (ev) => {
+        // Não navega se o clique foi no botão de voto
+        if (ev.target.closest(".forum-mini__vote")) {
+          return;
+        }
+        const id = item.dataset.id;
+        const category = item.dataset.category || "todas";
+        // Determina o caminho relativo correto
+        const communityPath = window.location.pathname.includes('modulos/painel-cidadao') 
+          ? 'comunidade/comunidade.html' 
+          : 'modulos/painel-cidadao/comunidade/comunidade.html';
+        // Redireciona para a página de comunidade com o ID do post
+        window.location.href = `${communityPath}?post=${id}&category=${category}`;
+      });
     });
   }
 
@@ -132,7 +186,12 @@
       }
       countEl.textContent = String(next);
       bar.style.width = `${Math.max(0, Math.min(100, (next/50)*100))}%`;
-      already ? unsetVoted(id) : setVoted(id);
+      // Salva no localStorage para persistir entre páginas
+      if (already) {
+        unsetVoted(id);
+      } else {
+        setVoted(id);
+      }
       setBtnState(btn, !already);
     } catch (e) {
       console.error("[Forum] toggle vote falhou:", e);
@@ -148,11 +207,21 @@
   }
 
     // ----- helpers -----
-  const votedInSession = new Set(); // controla votos só enquanto a aba estiver aberta
-
-  function hasVoted(id){ return votedInSession.has(String(id)); }
-  function setVoted(id){ votedInSession.add(String(id)); }
-  function unsetVoted(id){ votedInSession.delete(String(id)); }
+  // Usa localStorage para persistir votos entre páginas (compartilhado com comunidade.js)
+  function hasVoted(id) {
+    const key = `voted_${id}`;
+    return localStorage.getItem(key) === 'true';
+  }
+  
+  function setVoted(id) {
+    const key = `voted_${id}`;
+    localStorage.setItem(key, 'true');
+  }
+  
+  function unsetVoted(id) {
+    const key = `voted_${id}`;
+    localStorage.removeItem(key);
+  }
 
   function initial(n=""){ return n.trim().charAt(0).toUpperCase() || "?"; }
   function esc(s=""){ return String(s).replace(/[&<>"']/g, c => (

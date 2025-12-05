@@ -56,13 +56,8 @@
               aria-expanded="false">
               <i class="fa-solid fa-circle-user user-icon"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-              <li><a class="dropdown-item" href="index.html">Minhas Denúncias</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Sair</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" id="user-dropdown-menu">
+              <!-- Links serão preenchidos dinamicamente pelo current-user.js -->
             </ul>
           </div>
         </div>
@@ -114,53 +109,88 @@
   <main class="container page">
     <h1 class="page__title">Seus Relatos</h1>
 
-    <!-- Abas de filtro -->
-    <div class="tabs" role="tablist" aria-label="Filtros de status">
-      <button class="tab is-active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
-      <button class="tab" data-filter="pendente" role="tab" aria-selected="false">Pendentes</button>
-      <button class="tab" data-filter="andamento" role="tab" aria-selected="false">Em Análise</button>
-      <button class="tab" data-filter="concluido" role="tab" aria-selected="false">Resolvidos</button>
-    </div>
-
-    <section class="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar" aria-label="Painel do usuário">
-        <div class="profile">
-          <div class="profile__avatar">🧑</div>
-          <div class="profile__info">
-            <strong>Joãozinho Silva</strong>
-            <span>email@joaozinho.com</span>
-          </div>
-        </div>
-
-        <hr class="sep" />
-
-        <div class="updates">
-          <h2 class="updates__title">Atualizações das minhas denúncias</h2>
-
-          <div class="update">
-            <div class="update__avatar">🧑</div>
-            <div class="update__text">
-              <strong>Ocor.: OCOR-002021</strong>
-              <span>atualizada para <em>em andamento</em></span>
+    <div class="page-content-wrapper">
+      <!-- Abas de filtro para desktop (fora do layout) -->
+      <div class="tabs" role="tablist" aria-label="Filtros de status">
+        <button class="tab is-active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+        <button class="tab" data-filter="pendente" role="tab" aria-selected="false">Pendentes</button>
+        <button class="tab" data-filter="andamento" role="tab" aria-selected="false">Em Análise</button>
+        <button class="tab" data-filter="concluido" role="tab" aria-selected="false">Resolvidos</button>
+      </div>
+      
+      <section class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Painel do usuário">
+          <div class="profile">
+            <div class="profile__avatar">🧑</div>
+            <div class="profile__info">
+              <strong>Joãozinho Silva</strong>
+              <span>email@joaozinho.com</span>
             </div>
           </div>
 
-          <div class="update">
-            <div class="update__avatar">🧑</div>
-            <div class="update__text">
-              <strong>Ocor.: OCOR-002024</strong>
-              <span>atualizada para <em>concluída</em></span>
+          <hr class="sep" />
+
+          <div class="updates">
+            <h2 class="updates__title">Atualizações das minhas denúncias</h2>
+
+            <div class="update">
+              <div class="update__avatar">🧑</div>
+              <div class="update__text">
+                <strong>Ocor.: OCOR-002021</strong>
+                <span>atualizada para <em>em andamento</em></span>
+              </div>
+            </div>
+
+            <div class="update">
+              <div class="update__avatar">🧑</div>
+              <div class="update__text">
+                <strong>Ocor.: OCOR-002024</strong>
+                <span>atualizada para <em>concluída</em></span>
+              </div>
             </div>
           </div>
-        </div>
-      </aside>
+        </aside>
 
-      <!-- Lista de relatos -->
-      <section class="reports" aria-label="Lista de relatos">
-        <!-- Relatos serão carregados dinamicamente via JavaScript -->
+        <!-- Abas de filtro -->
+        <div class="tabs" role="tablist" aria-label="Filtros de status">
+          <button class="tab is-active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+          <button class="tab" data-filter="pendente" role="tab" aria-selected="false">Pendentes</button>
+          <button class="tab" data-filter="andamento" role="tab" aria-selected="false">Em Análise</button>
+          <button class="tab" data-filter="concluido" role="tab" aria-selected="false">Resolvidos</button>
+        </div>
+        
+        <!-- Dropdown de filtro para mobile -->
+        <div class="filter-dropdown-mobile">
+          <button class="filter-dropdown-btn" id="filterDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span class="filter-dropdown-text">
+              <i class="fa-solid fa-filter"></i>
+              <span class="filter-selected-text">Todos</span>
+            </span>
+            <i class="fa-solid fa-chevron-down filter-dropdown-arrow"></i>
+          </button>
+          <div class="filter-dropdown-menu" id="filterDropdownMenu">
+            <button class="filter-dropdown-item active" data-filter="todos">
+              <i class="fa-solid fa-list"></i> Todos
+            </button>
+            <button class="filter-dropdown-item" data-filter="pendente">
+              <i class="fa-solid fa-clock"></i> Pendentes
+            </button>
+            <button class="filter-dropdown-item" data-filter="andamento">
+              <i class="fa-solid fa-spinner"></i> Em Análise
+            </button>
+            <button class="filter-dropdown-item" data-filter="concluido">
+              <i class="fa-solid fa-check-circle"></i> Resolvidos
+            </button>
+          </div>
+        </div>
+
+        <!-- Lista de relatos -->
+        <section class="reports" aria-label="Lista de relatos">
+          <!-- Relatos serão carregados dinamicamente via JavaScript -->
+        </section>
       </section>
-    </section>
+    </div>
   </main>
 
   <!-- Modal de Detalhes da Denúncia -->

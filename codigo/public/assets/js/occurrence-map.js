@@ -19,12 +19,22 @@
       }
 
       todasDenuncias = await response.json();
-      console.log("Denúncias carregadas com sucesso:", todasDenuncias.length, "denúncias");
+      
+      // Filtrar apenas ocorrências da última semana
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      const denunciasSemanais = todasDenuncias.filter(denuncia => {
+        const dataRegistro = new Date(denuncia.dataRegistro || denuncia.createdAt || 0);
+        return dataRegistro >= oneWeekAgo;
+      });
+      
+      console.log("Denúncias semanais carregadas:", denunciasSemanais.length, "de", todasDenuncias.length, "total");
 
       // Renderizar marcadores no mapa
       if (map) {
-        renderizarMarcadores(todasDenuncias);
-        console.log("Marcadores renderizados no mapa");
+        renderizarMarcadores(denunciasSemanais);
+        console.log("Marcadores semanais renderizados no mapa");
       } else {
         console.error("Mapa não está inicializado");
       }

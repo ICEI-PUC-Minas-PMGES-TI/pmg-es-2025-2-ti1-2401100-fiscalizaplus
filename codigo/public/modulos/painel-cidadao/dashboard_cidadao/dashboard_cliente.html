@@ -115,6 +115,72 @@
       background: var(--card-bg) !important;
       border-color: var(--border-color) !important;
     }
+    
+    /* Containers de gráficos responsivos */
+    .chart-card {
+      height: 450px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: calc(100% - 50px);
+      min-height: 350px;
+    }
+    
+    .chart-container-temporal {
+      position: relative;
+      height: 250px;
+      min-height: 200px;
+    }
+    
+    @media (max-width: 991px) {
+      .chart-card {
+        height: auto;
+        min-height: 350px;
+      }
+      
+      .chart-container {
+        height: 300px;
+        min-height: 300px;
+      }
+      
+      .chart-container-temporal {
+        height: 250px;
+        min-height: 200px;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .chart-card {
+        min-height: 300px;
+      }
+      
+      .chart-container {
+        height: 250px;
+        min-height: 250px;
+      }
+      
+      .chart-container-temporal {
+        height: 200px;
+        min-height: 180px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .chart-card {
+        min-height: 280px;
+      }
+      
+      .chart-container {
+        height: 220px;
+        min-height: 220px;
+      }
+      
+      .chart-container-temporal {
+        height: 180px;
+        min-height: 160px;
+      }
+    }
   </style>
 
 </head>
@@ -160,13 +226,8 @@
               aria-expanded="false">
               <i class="fa-solid fa-circle-user user-icon"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-              <li><a class="dropdown-item" href="../painel-de-usuario/index.html">Minhas Denúncias</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Sair</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" id="user-dropdown-menu">
+              <!-- Links serão preenchidos dinamicamente pelo current-user.js -->
             </ul>
           </div>
         </div>
@@ -211,7 +272,7 @@
     </div>
   </nav>
 
-  <main class="dashboard-container" style="max-width: 1400px; padding: 40px 20px;">
+  <main class="dashboard-container">
     <h1 class="titulo-dashboard">Dashboard de Ocorrências</h1>
 
     <!-- Cards de Estatísticas -->
@@ -239,22 +300,22 @@
     </section>
 
     <!-- Seção de Gráficos -->
-    <div class="row mt-4">
+    <div class="row mt-4 g-3">
       <!-- Gráfico de Status -->
-      <div class="col-lg-6 mb-4">
-        <div class="card p-4" style="height: 450px;">
+      <div class="col-12 col-md-6 col-lg-6 mb-4">
+        <div class="card p-3 p-md-4 chart-card">
           <h3 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Status das Denúncias</h3>
-          <div style="position: relative; height: calc(100% - 50px);">
+          <div class="chart-container">
             <canvas id="chartStatus"></canvas>
           </div>
         </div>
       </div>
 
       <!-- Gráfico por Tipo -->
-      <div class="col-lg-6 mb-4">
-        <div class="card p-4" style="height: 450px;">
+      <div class="col-12 col-md-6 col-lg-6 mb-4">
+        <div class="card p-3 p-md-4 chart-card">
           <h3 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Denúncias por Tipo</h3>
-          <div style="position: relative; height: calc(100% - 50px);">
+          <div class="chart-container">
             <canvas id="chartTipo"></canvas>
           </div>
         </div>
@@ -264,9 +325,11 @@
     <!-- Gráfico de Evolução Temporal -->
     <div class="row">
       <div class="col-12 mb-4">
-        <div class="card p-4">
+        <div class="card p-3 p-md-4">
           <h3 class="mb-3"><i class="fas fa-chart-line me-2"></i>Evolução das Denúncias</h3>
-          <canvas id="chartTemporal" style="max-height: 250px;"></canvas>
+          <div class="chart-container-temporal">
+            <canvas id="chartTemporal"></canvas>
+          </div>
         </div>
       </div>
     </div>
