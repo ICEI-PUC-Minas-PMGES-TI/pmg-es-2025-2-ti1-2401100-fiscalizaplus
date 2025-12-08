@@ -49,13 +49,13 @@
             <nav class="flex-grow-1">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a href="dashboard_admin.html" class="nav-link active"><i class="bi bi-house-door me-2"></i>Home</a>
+                        <a href="dashboard_admin.html" class="nav-link text-white"><i class="bi bi-house-door me-2"></i>Home</a>
                     </li>
                     <li class="nav-item mb-2">
                         <a href="report_manager.html" class="nav-link text-white"><i class="bi bi-gear me-2"></i>Gerenciar denúncias</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="mapa_ocorrencias.html" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
+                        <a href="mapa_ocorrencias.html" class="nav-link active"><i class="bi bi-geo-alt me-2"></i>Mapas de denúncia</a>
                     </li>
                     <li class="nav-item mb-4">
                         <a href="../painel-servidor/visualizar_denuncias.html" class="nav-link text-white"><i
@@ -69,40 +69,24 @@
             <h1 class="mb-4">Mapa de Denúncias</h1>
 
             <div class="container-fluid">
-                <div class="row" id="dashboard-stats">
-                    <div class="col-md-3">
-                        <div class="card text-white bg-secondary mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Total de Denúncias</h5>
-                                <p class="card-text fs-4" id="stat-total">0</p>
-                            </div>
-                        </div>
+                <section class="dashboard-area">
+                    <div class="card estatistica">
+                        <h2>Total de Denúncias</h2>
+                        <p class="valor" id="stat-total">0</p>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-white bg-danger mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Pendentes</h5>
-                                <p class="card-text fs-4" id="stat-pendente">0</p>
-                            </div>
-                        </div>
+                    <div class="card estatistica destaque-alerta">
+                        <h2>Denúncias Pendentes</h2>
+                        <p class="valor" id="stat-pendente">0</p>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-white bg-warning mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Em Andamento</h5>
-                                <p class="card-text fs-4" id="stat-em-andamento">0</p>
-                            </div>
-                        </div>
+                    <div class="card estatistica destaque-aviso">
+                        <h2>Denúncias Em Andamento</h2>
+                        <p class="valor" id="stat-em-andamento">0</p>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card text-white bg-success mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Concluídas</h5>
-                                <p class="card-text fs-4" id="stat-concluido">0</p>
-                            </div>
-                        </div>
+                    <div class="card estatistica destaque-sucesso">
+                        <h2>Denúncias Concluídas</h2>
+                        <p class="valor" id="stat-concluido">0</p>
                     </div>
-                </div>
+                </section>
 
             <div class="row mt-3 mb-3 align-items-end">
                 <div class="col-md-6 d-flex gap-3">

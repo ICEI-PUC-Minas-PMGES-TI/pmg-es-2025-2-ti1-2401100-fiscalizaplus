@@ -1,247 +1,374 @@
-// visualizar.js - Controle da página de visualização e relatórios
-document.addEventListener("DOMContentLoaded", () => {
-  const tabela = document.getElementById("tabelaDenuncias");
-  const statusFilter = document.getElementById("statusFilter");
-  const tipoFilter = document.getElementById("tipoFilter");
-  const dataFilter = document.getElementById("dataFilter");
-  const btnFiltrar = document.getElementById("btnFiltrar");
-  const btnRelatorio = document.getElementById("btnRelatorio");
+const URL_BASE = "http://localhost:3000/denuncias";
 
-  // =======================================================
-  // ✅ Carregar denúncias do JSON Server
-  // =======================================================
-  async function carregarDenuncias() {
-    try {
-      const response = await fetch("http://localhost:3000/denuncias");
+document.addEventListener('DOMContentLoaded', () => {
 
-      if (!response.ok) {
-        throw new Error("Erro ao acessar JSON Server");
-      }
+    const tableBody = document.getElementById('tabelaDenuncias');
+    const cardElement = document.querySelector('.card');
+    const filterStatus = document.getElementById('filterStatus');
+    const filterTipo = document.getElementById('filterTipo');
+    const filterData = document.getElementById('filterData');
+    const searchId = document.getElementById('searchId');
+    const btnAplicarFiltros = document.getElementById('btnAplicarFiltros');
+    const btnLimparFiltros = document.getElementById('btnLimparFiltros');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+    const totalDenuncias = document.getElementById('total-denuncias');
+    const noResults = document.getElementById('no-results');
+    const btnRelatorio = document.getElementById('btnRelatorio');
+    const btnEnviar = document.getElementById('btnEnviar');
 
-      const dados = await response.json();
-      return dados;
+    // --- Estado da Aplicação ---
+    let allDenuncias = [];      
+    let filteredDenuncias = [];
+    let currentPage = 1;        
+    const itemsPerPage = 10;  // 10 denúncias por página
 
-    } catch (erro) {
-      console.error("Erro ao buscar denúncias:", erro);
-      return [];
+    // --- Função Principal: Busca os dados e inicializa a tabela ---
+    async function init() {
+        try {
+            const response = await fetch(URL_BASE);
+            if (!response.ok) {
+                throw new Error('Falha ao carregar denúncias');
+            }
+            allDenuncias = await response.json();
+            filteredDenuncias = [...allDenuncias];
+            
+            atualizarContador();
+            renderTable();
+            setupPagination();
+            setupEventListeners();
+            setupFilters();
+
+        } catch (error) {
+            console.error('Erro ao inicializar:', error);
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>Erro ao carregar os dados. Verifique se o servidor está rodando.
+            </td></tr>`;
+        }
     }
-  }
 
-  let denuncias = [];
-  let denunciasFiltradas = [];
+    // --- Configurar Event Listeners dos Filtros ---
+    function setupFilters() {
+        btnAplicarFiltros.addEventListener('click', aplicarFiltros);
+        btnLimparFiltros.addEventListener('click', limparFiltros);
+        btnClearSearch.addEventListener('click', () => {
+            searchId.value = '';
+            aplicarFiltros();
+        });
 
-  // =======================================================
-  // ✅ Renderizar tabela
-  // =======================================================
-  function renderTabela(lista) {
-    if (!tabela) return;
-    tabela.innerHTML = "";
-
-    if (lista.length === 0) {
-      tabela.innerHTML =
-        `<tr><td colspan="6" style="text-align:center;">Nenhuma denúncia encontrada.</td></tr>`;
-      return;
+        // Aplicar filtros ao pressionar Enter no campo de pesquisa
+        searchId.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                aplicarFiltros();
+            }
+        });
     }
 
-    lista.forEach((d) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${d.id}</td>
-        <td>${d.titulo}</td>
-        <td>${d.descricaoCompleta || d.descricao || ''}</td>
-        <td><span class="status ${d.statusAtual || d.status}">${capitalize(d.statusAtual || d.status)}</span></td>
-        <td>${capitalize(d.tipoProblema || d.tipo)}</td>
-        <td>${new Date(d.dataRegistro || d.data).toLocaleDateString("pt-BR")}</td>
-      `;
-      tabela.appendChild(row);
+    // --- Aplicar Filtros ---
+    function aplicarFiltros() {
+        const status = filterStatus.value;
+        const tipo = filterTipo.value;
+        const data = filterData.value;
+        const idSearch = searchId.value.trim().toUpperCase();
+
+        filteredDenuncias = allDenuncias.filter(item => {
+            // Filtro por Status
+            const matchStatus = status === 'all' || item.statusAtual === status;
+            
+            // Filtro por Tipo
+            const matchTipo = tipo === 'all' || 
+                (item.tipoProblema && item.tipoProblema.toLowerCase() === tipo.toLowerCase());
+            
+            // Filtro por Data
+            let matchData = true;
+            if (data && item.dataRegistro) {
+                const itemDate = new Date(item.dataRegistro).toISOString().split('T')[0];
+                matchData = itemDate === data;
+            }
+            
+            // Filtro por ID/Código
+            let matchId = true;
+            if (idSearch) {
+                const codigo = item.codigoOcorrencia || '';
+                const id = item.id ? String(item.id) : '';
+                matchId = codigo.toUpperCase().includes(idSearch) || 
+                         id.toUpperCase().includes(idSearch);
+            }
+
+            return matchStatus && matchTipo && matchData && matchId;
+        });
+
+        currentPage = 1; // Reset para primeira página
+        atualizarContador();
+        renderTable();
+        setupPagination();
+    }
+
+    // --- Limpar Filtros ---
+    function limparFiltros() {
+        filterStatus.value = 'all';
+        filterTipo.value = 'all';
+        filterData.value = '';
+        searchId.value = '';
+        filteredDenuncias = [...allDenuncias];
+        currentPage = 1;
+        atualizarContador();
+        renderTable();
+        setupPagination();
+    }
+
+    // --- Atualizar Contador ---
+    function atualizarContador() {
+        if (totalDenuncias) {
+            totalDenuncias.textContent = `${filteredDenuncias.length} denúncia${filteredDenuncias.length !== 1 ? 's' : ''}`;
+        }
+    }
+
+    // --- Renderiza a tabela com os itens da página atual ---
+    function renderTable() {
+        tableBody.innerHTML = '';
+
+        if (filteredDenuncias.length === 0) {
+            if (noResults) {
+                noResults.classList.remove('d-none');
+            }
+            return;
+        }
+
+        if (noResults) {
+            noResults.classList.add('d-none');
+        }
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedItems = filteredDenuncias.slice(startIndex, endIndex);
+
+        paginatedItems.forEach(item => {
+            const tr = document.createElement('tr');
+            
+            const dataFormatada = item.dataRegistro 
+                ? new Date(item.dataRegistro).toLocaleDateString('pt-BR', {
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric'
+                })
+                : 'N/A';
+
+            // Truncar descrição se muito longa
+            const descricao = item.descricaoCompleta || item.descricao || 'Sem descrição';
+            const descricaoTruncada = descricao.length > 100 
+                ? descricao.substring(0, 100) + '...' 
+                : descricao;
+
+            tr.innerHTML = `
+                <td><strong>${item.codigoOcorrencia || 'N/A'}</strong></td>
+                <td>${item.titulo || 'Sem título'}</td>
+                <td title="${descricao}">${descricaoTruncada}</td>
+                <td>
+                    <span class="badge ${getStatusClass(item.statusAtual)}">${item.statusAtual || 'N/A'}</span>
+                </td>
+                <td>${capitalizeFirst(item.tipoProblema) || 'N/A'}</td>
+                <td>${dataFormatada}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    // --- Cria e renderiza os controles de paginação ---
+    function setupPagination() {
+        const totalPages = Math.ceil(filteredDenuncias.length / itemsPerPage);
+        
+        const oldPagination = document.getElementById('pagination-container');
+        if (oldPagination) {
+            oldPagination.remove();
+        }
+
+        if (totalPages <= 1) return;
+
+        const paginationContainer = document.createElement('div');
+        paginationContainer.id = 'pagination-container';
+        paginationContainer.classList.add('d-flex', 'justify-content-center', 'mt-4');
+
+        let paginationHTML = '<nav><ul class="pagination mb-0">';
+
+        // Botão Anterior
+        paginationHTML += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+        `;
+
+        // Páginas
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                paginationHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+
+        // Botão Próximo
+        paginationHTML += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        `;
+
+        paginationHTML += '</ul></nav>';
+        paginationContainer.innerHTML = paginationHTML;
+        
+        cardElement.appendChild(paginationContainer);
+    }
+
+    // --- Adiciona os "ouvintes" de eventos ---
+    function setupEventListeners() {
+        // Paginação
+        cardElement.addEventListener('click', (e) => {
+            if (e.target.classList.contains('page-link') || e.target.closest('.page-link')) {
+                e.preventDefault();
+                const pageLink = e.target.closest('.page-link') || e.target;
+                const page = parseInt(pageLink.dataset.page, 10);
+                
+                if (page && page !== currentPage && page >= 1) {
+                    currentPage = page;
+                    renderTable();
+                    setupPagination();
+                    // Scroll para o topo da tabela
+                    tableBody.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    }
+
+    // --- Helper: Retorna uma classe de cor do Bootstrap com base no status ---
+    function getStatusClass(status) {
+        if (!status) return 'bg-secondary';
+        
+        const statusLower = status.toLowerCase();
+        switch (statusLower) {
+            case 'pendente':
+                return 'bg-danger';
+            case 'em andamento':
+                return 'bg-warning text-dark';
+            case 'concluido':
+            case 'concluído':
+                return 'bg-success';
+            default:
+                return 'bg-secondary';
+        }
+    }
+
+    // --- Helper: Capitaliza primeira letra ---
+    function capitalizeFirst(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+
+    // --- Gerar Relatório PDF ---
+    btnRelatorio.addEventListener('click', () => {
+        const total = filteredDenuncias.length;
+        const resolvidos = filteredDenuncias.filter(d => d.statusAtual === "Concluido").length;
+        const andamento = filteredDenuncias.filter(d => d.statusAtual === "Em Andamento").length;
+        const pendentes = filteredDenuncias.filter(d => d.statusAtual === "Pendente").length;
+
+        let degResolvidos = 0;
+        let degAndamento = 0;
+        let percResolvidos = 0;
+
+        if (total > 0) {
+            degResolvidos = (resolvidos / total) * 360;
+            degAndamento = (andamento / total) * 360;
+            percResolvidos = Math.round((resolvidos / total) * 100);
+        }
+
+        const printWindow = window.open('', '', 'width=900,height=650');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Relatório de Denúncias</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h2 { color: #d62828; }
+                    .donut { 
+                        width: 160px; height: 160px; border-radius: 50%; margin: 20px auto; 
+                        background: conic-gradient(
+                            #28A745 0 ${degResolvidos}deg,
+                            #FFC107 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
+                            #E53935 ${degResolvidos + degAndamento}deg 360deg
+                        );
+                    }
+                    .center { 
+                        width: 90px; height: 90px; border-radius: 50%; background: white;
+                        display: grid; place-items: center; font-weight: bold; 
+                        position: relative; top: 35px; left: 35px; font-size: 1.2rem;
+                    }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                    th { background-color: #d62828; color: white; }
+                    tr:nth-child(even) { background-color: #f8f9fa; }
+                </style>
+            </head>
+            <body>
+                <h2>📊 Relatório de Denúncias</h2>
+                <p><strong>Total de Denúncias:</strong> ${total}</p>
+                <p><strong>Pendentes:</strong> ${pendentes} | <strong>Em Andamento:</strong> ${andamento} | <strong>Concluídas:</strong> ${resolvidos}</p>
+                <div class="donut">
+                    <div class="center">${percResolvidos}%</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th><th>Título</th><th>Descrição</th><th>Status</th><th>Tipo</th><th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredDenuncias.map(d => `
+                            <tr>
+                                <td>${d.codigoOcorrencia || d.id}</td>
+                                <td>${d.titulo || 'Sem título'}</td>
+                                <td>${(d.descricaoCompleta || d.descricao || '').substring(0, 50)}...</td>
+                                <td>${d.statusAtual || 'N/A'}</td>
+                                <td>${capitalizeFirst(d.tipoProblema) || 'N/A'}</td>
+                                <td>${new Date(d.dataRegistro || d.data).toLocaleDateString("pt-BR")}</td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
     });
-  }
 
-  function capitalize(str) {
-    if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+    // --- Botão Enviar para Equipe ---
+    if (btnEnviar) {
+        btnEnviar.addEventListener('click', () => {
+            const originalText = btnEnviar.innerHTML;
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Enviando...';
 
-  // =======================================================
-  // ✅ Filtros
-  // =======================================================
-  function aplicarFiltros() {
-    const status = statusFilter.value;
-    const tipo = tipoFilter.value;
-    const data = dataFilter.value;
+            setTimeout(() => {
+                btnEnviar.innerHTML = '<i class="bi bi-check-circle me-1"></i>Enviado para a equipe';
+                btnEnviar.classList.remove('btn-success');
+                btnEnviar.classList.add('btn-secondary');
 
-    denunciasFiltradas = denuncias.filter((d) => {
-      const itemStatus = d.statusAtual || d.status;
-      const itemTipo = d.tipoProblema || d.tipo;
-      const itemData = d.dataRegistro || d.data;
-
-      const matchStatus = (status === "all") || itemStatus === status;
-      const matchTipo = (tipo === "all") || itemTipo === tipo;
-
-      let matchData = true;
-      if (data && itemData) {
-        const dataItem = new Date(itemData).toISOString().split('T')[0];
-        matchData = dataItem === data;
-      }
-
-      return matchStatus && matchTipo && matchData;
-    });
-
-    renderTabela(denunciasFiltradas);
-    atualizarDonut();
-  }
-
-  // =======================================================
-  // ✅ Gráfico donut
-  // =======================================================
-  function atualizarDonut() {
-    const total = denunciasFiltradas.length;
-    // Ajuste dos status conforme db.json (Pendente, Em Andamento, Concluido)
-    // Normalizando para lowercase para comparação se necessário, mas db.json usa CamelCase ou Capitalized
-    const resolvidos = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Concluido").length;
-    const andamento = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Em Andamento").length;
-    const pendentes = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Pendente").length;
-
-    const donut = document.getElementById("donutCliente");
-    const center = document.getElementById("donutCenter");
-
-    if (donut && total > 0) {
-      const degResolvidos = (resolvidos / total) * 360;
-      const degAndamento = (andamento / total) * 360;
-
-      donut.style.background = `conic-gradient(
-        #4CAF50 0 ${degResolvidos}deg,
-        #FFB300 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
-        #E53935 ${degResolvidos + degAndamento}deg 360deg
-      )`;
-
-      center.textContent = Math.round((resolvidos / total) * 100) + "%";
-    } else if (donut) {
-      donut.style.background = '#e0e0e0';
-      center.textContent = "0%";
-    }
-  }
-
-  // =======================================================
-  // ✅ Gerar relatório PDF
-  // =======================================================
-  btnRelatorio.addEventListener("click", () => {
-    const areaRelatorio = document.createElement("div");
-    areaRelatorio.innerHTML = `
-      <h2>📊 Relatório de Denúncias</h2>
-      <div style="margin: 20px auto; text-align:center;">
-        <div id="donutCliente" class="donut">
-          <div class="center" id="donutCenter">0%</div>
-        </div>
-      </div>
-
-      <table style="width:100%; border-collapse: collapse;" border="1">
-        <thead>
-          <tr style="background:#f5f5f5;">
-            <th>ID</th><th>Título</th><th>Descrição</th><th>Status</th><th>Tipo</th><th>Data</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${denunciasFiltradas.map(d => `
-            <tr>
-              <td>${d.id}</td>
-              <td>${d.titulo}</td>
-              <td>${d.descricaoCompleta || d.descricao || ''}</td>
-              <td>${capitalize(d.statusAtual || d.status)}</td>
-              <td>${capitalize(d.tipoProblema || d.tipo)}</td>
-              <td>${new Date(d.dataRegistro || d.data).toLocaleDateString("pt-BR")}</td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    `;
-
-    // Recalcular porcentagem para o relatório impresso
-    const total = denunciasFiltradas.length;
-    const resolvidos = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Concluido").length;
-    const andamento = denunciasFiltradas.filter(d => (d.statusAtual || d.status) === "Em Andamento").length;
-
-    let degResolvidos = 0;
-    let degAndamento = 0;
-    let percResolvidos = 0;
-
-    if (total > 0) {
-      degResolvidos = (resolvidos / total) * 360;
-      degAndamento = (andamento / total) * 360;
-      percResolvidos = Math.round((resolvidos / total) * 100);
+                setTimeout(() => {
+                    btnEnviar.innerHTML = originalText;
+                    btnEnviar.disabled = false;
+                    btnEnviar.classList.remove('btn-secondary');
+                    btnEnviar.classList.add('btn-success');
+                }, 3000);
+            }, 1500);
+        });
     }
 
-    const printWindow = window.open('', '', 'width=900,height=650');
-    printWindow.document.write(`
-      <html>
-      <head>
-        <title>Relatório</title>
-        <style>
-          body { font-family: Arial; padding: 20px; }
-          .donut { 
-            width: 160px; height: 160px; border-radius: 50%; margin: 0 auto; 
-            background: conic-gradient(
-                #4CAF50 0 ${degResolvidos}deg,
-                #FFB300 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
-                #E53935 ${degResolvidos + degAndamento}deg 360deg
-            );
-          }
-          .center { width: 90px; height: 90px; border-radius: 50%; background: white;
-            display: grid; place-items: center; font-weight: bold; position: relative; top: 35px; left: 35px;}
-          table, th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background: #f5f5f5; }
-        </style>
-      </head>
-      <body>
-        <h2>📊 Relatório de Denúncias</h2>
-        <div style="margin: 20px auto; text-align:center;">
-            <div class="donut">
-                <div class="center">${percResolvidos}%</div>
-            </div>
-        </div>
-        ${areaRelatorio.querySelector('table').outerHTML}
-      </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
-  });
-
-  // =======================================================
-  // ✅ Inicialização
-  // =======================================================
-  (async () => {
-    denuncias = await carregarDenuncias();
-    denunciasFiltradas = [...denuncias];
-
-    renderTabela(denuncias);
-    atualizarDonut();
-  })();
-
-  btnFiltrar.addEventListener("click", aplicarFiltros);
-
-  // =======================================================
-  // ✅ Botão Enviar para Equipe (Mock)
-  // =======================================================
-  const btnEnviar = document.getElementById("btnEnviar");
-  if (btnEnviar) {
-    btnEnviar.addEventListener("click", () => {
-      const originalText = btnEnviar.innerText;
-      btnEnviar.disabled = true;
-      btnEnviar.innerText = "Enviando... ⏳";
-
-      setTimeout(() => {
-        btnEnviar.innerText = "Enviado para a equipe ✅";
-        btnEnviar.classList.remove("btn-primary"); // Remove classe original se houver
-        btnEnviar.style.backgroundColor = "#28a745"; // Verde sucesso
-        btnEnviar.style.borderColor = "#28a745";
-
-        setTimeout(() => {
-          btnEnviar.innerText = originalText;
-          btnEnviar.disabled = false;
-          btnEnviar.style.backgroundColor = ""; // Volta ao original
-          btnEnviar.style.borderColor = "";
-        }, 3000);
-      }, 1500);
-    });
-  }
+    // Inicia a aplicação
+    init();
 });

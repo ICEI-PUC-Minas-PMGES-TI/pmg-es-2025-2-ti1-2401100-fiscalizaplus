@@ -48,13 +48,45 @@ body {
 }
 .sidebar .nav-link {
   color: rgba(255, 255, 255, 0.7);
-  transition: color 0.3s;
+  transition: all 0.3s ease;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  position: relative;
 }
-.sidebar .nav-link:hover,
-.sidebar .active {
+.sidebar .nav-link:hover {
   color: white !important;
   background-color: #495057;
-  border-radius: 5px;
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.sidebar .nav-link.active,
+.sidebar .nav-link.active.text-white {
+  color: white !important;
+  background: linear-gradient(135deg, #d62828 0%, #b71c1c 100%);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.4);
+  transform: translateX(5px);
+  position: relative;
+}
+.sidebar .nav-link.active::before,
+.sidebar .nav-link.active.text-white::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background-color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+.sidebar .nav-link.active:hover,
+.sidebar .nav-link.active.text-white:hover {
+  background: linear-gradient(135deg, #b71c1c 0%, #8b1515 100%);
+  box-shadow: 0 6px 16px rgba(214, 40, 40, 0.5);
+  transform: translateX(8px);
+  color: white !important;
 }
 .user-img {
   width: 60px;
@@ -62,6 +94,19 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid white;
+  transition: all 0.3s ease;
+}
+.user-info:hover .user-img {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+}
+.sidebar .dropdown-item {
+  transition: all 0.2s ease;
+}
+.sidebar .dropdown-item:hover {
+  background-color: #495057;
+  transform: translateX(5px);
+  padding-left: 20px;
 }
 
 .rodape {
@@ -100,47 +145,82 @@ body {
 
 .card.estatistica {
   flex: 1 1 200px;
-  padding: 20px;
+  min-width: 180px;
+  padding: 25px 20px;
   text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
   background-color: white;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-top: 3px solid transparent;
 }
 
 .card.estatistica:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card.estatistica h2 {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #6c757d;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .card.estatistica .valor {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: #212529;
 }
 
-/* Destaques de Cor nos KPIs */
+/* Card padrão (sem destaque) - Total de Denúncias */
+.card.estatistica:not(.destaque-alerta):not(.destaque-aviso):not(.destaque-sucesso):not(.destaque-informacao) {
+  border-top-color: #6c757d;
+  border-left: 5px solid #6c757d;
+}
+.card.estatistica:not(.destaque-alerta):not(.destaque-aviso):not(.destaque-sucesso):not(.destaque-informacao) .valor {
+  color: #495057;
+}
+
+/* Destaques de Cor nos KPIs - Padronizado */
 .card.destaque-alerta {
+  border-top-color: #E53935;
   border-left: 5px solid #E53935;
+}
+.card.destaque-alerta .valor {
+  color: #E53935;
 }
 
 /* Pendente */
 .card.destaque-sucesso {
+  border-top-color: #28A745;
   border-left: 5px solid #28A745;
+}
+.card.destaque-sucesso .valor {
+  color: #28A745;
 }
 
 /* Resolução */
 .card.destaque-aviso {
+  border-top-color: #FFC107;
   border-left: 5px solid #FFC107;
+}
+.card.destaque-aviso .valor {
+  color: #F57C00;
 }
 
 /* Andamento */
 .card.destaque-informacao {
+  border-top-color: #007BFF;
   border-left: 5px solid #007BFF;
+}
+.card.destaque-informacao .valor {
+  color: #007BFF;
 }
 
 /* Gráficos */
@@ -237,11 +317,22 @@ body {
   background-color: var(--cinza-fundo);
   overflow-x: hidden;
 }
-/* Estilização dos Cards de Contadores (Dashboard Stats) */
+/* Estilização dos Cards de Contadores (Dashboard Stats) - Padronizado */
+#dashboard-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
 #dashboard-stats .card {
   border: none;
   border-radius: 8px;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+#dashboard-stats .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 /* --- Estilização do Mapa de Ocorrências --- */
 #map {
@@ -257,18 +348,26 @@ body {
   color: #555;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
 }
 .filter-btn:hover {
   background-color: #e0e0e0;
   border-color: #bbb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .filter-btn.active {
-  background-color: var(--cor-principal);
+  background: linear-gradient(135deg, var(--cor-principal) 0%, #b71c1c 100%);
   color: white;
   border-color: var(--cor-principal);
-  box-shadow: 0 2px 5px rgba(214, 40, 40, 0.2);
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.4);
+  font-weight: 600;
+  transform: translateY(-2px);
+}
+.filter-btn.active:hover {
+  background: linear-gradient(135deg, #b71c1c 0%, #8b1515 100%);
+  box-shadow: 0 6px 16px rgba(214, 40, 40, 0.5);
 }
 /* Ajustes nos Selects e Input de Busca */
 #filters-container .form-select,
@@ -300,11 +399,18 @@ body {
 
 #detail-imagens img {
   border: 1px solid #ddd;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
   object-fit: cover;
   height: 80px;
   width: 100%;
   cursor: zoom-in;
+  border-radius: 4px;
+}
+#detail-imagens img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  position: relative;
 }
 
 /* --- Marcadores Leaflet Customizados --- */
@@ -410,110 +516,262 @@ body {
 }
 /* Fim da estilização da página de mapa de ocorrências */
 
-/* Início da página de relatórios */
-.container {
-  width: 90%;
-  margin: 30px auto;
+/* Início da página de relatórios - Padronizado com report_manager */
+/* Os estilos já estão cobertos pelas classes .filters-section, .table, etc. */
+/* Fim da estilização da página de relatórios */
+
+/* Estilização da página de gerenciamento de denúncias (report_manager.html) */
+.filters-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.card {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 25px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.filter-row {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #e9ecef;
-}
-
-.filter-row label {
+.filters-section .form-label {
   font-weight: 600;
   color: #495057;
-  margin-right: -10px; /* Adjust spacing between label and input */
+  margin-bottom: 8px;
+  font-size: 0.9rem;
 }
 
-.filter-row select,
-.filter-row input[type="date"] {
-  padding: 10px 15px;
+.filters-section .form-select,
+.filters-section .form-control {
   border: 1px solid #ced4da;
   border-radius: 8px;
-  font-size: 0.95rem;
-  color: #495057;
-  background-color: #fff;
-  transition: all 0.2s ease-in-out;
-  min-width: 150px;
+  padding: 10px 15px;
+  transition: all 0.3s;
 }
 
-.filter-row select:focus,
-.filter-row input[type="date"]:focus {
-  border-color: var(--azul-principal);
-  outline: 0;
-  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+.filters-section .form-select:focus,
+.filters-section .form-control:focus {
+  border-color: #d62828;
+  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
+  outline: none;
+  transform: translateY(-1px);
 }
-
-.filter-row select:hover,
-.filter-row input[type="date"]:hover {
+.filters-section .form-select:hover,
+.filters-section .form-control:hover {
   border-color: #adb5bd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-button {
-  background-color: var(--azul-principal);
-  color: white;
-  border: none;
+.filters-section .btn {
   padding: 10px 20px;
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
-button:hover {
-  background-color: #0b5ed7;
+.filters-section .btn-danger {
+  background-color: #d62828;
+  border-color: #d62828;
+}
+
+.filters-section .btn-danger:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(214, 40, 40, 0.3);
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.table thead th {
+  background-color: #d62828;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 15px;
+  border: none;
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-left: 3px solid #d62828;
+}
+
+.table tbody td {
+  padding: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table .badge {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.btn-visualizar {
+  border-radius: 6px;
+  padding: 6px 15px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-visualizar:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
 }
 
-button:active {
+.pagination {
+  margin-top: 20px;
+}
+
+.pagination .page-link {
+  color: #d62828;
+  border-color: #dee2e6;
+  padding: 10px 15px;
+  transition: all 0.3s;
+}
+
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  border-color: #d62828;
+  color: #b71c1c;
+}
+
+.pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #d62828 0%, #b71c1c 100%);
+  border-color: #d62828;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(214, 40, 40, 0.3);
+  transform: scale(1.1);
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+#no-results {
+  padding: 60px 20px;
+}
+
+#no-results i {
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+.card.shadow-sm {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card.shadow-sm h2 {
+  color: #d62828;
+  font-weight: 700;
+}
+
+#total-denuncias {
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Efeitos hover adicionais para botões e elementos interativos */
+.btn {
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.btn:active {
   transform: translateY(0);
 }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table th {
-  background-color: #1976d2;
+.btn-outline-danger:hover {
+  background-color: #d62828;
+  border-color: #d62828;
   color: white;
-  padding: 8px;
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.3);
+}
+.btn-danger:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+  box-shadow: 0 4px 12px rgba(214, 40, 40, 0.3);
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-table td {
-  border-bottom: 1px solid #ddd;
-  padding: 8px;
+/* Hover para selects */
+.form-select {
+  transition: all 0.3s ease;
+}
+.form-select:hover {
+  border-color: #adb5bd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.form-select:focus {
+  border-color: #d62828;
+  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
 }
 
-.main-content,
-.content,
-.container,
-.dashboard-container {
-  margin-left: 240px;
-  padding: 20px;
+/* Hover para cards em geral */
+.card {
+  transition: all 0.3s ease;
 }
-/* Fim da estilização da página de relatórios */
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover para tabela de denúncias no dashboard */
+.tabela-denuncias tbody tr {
+  transition: all 0.3s ease;
+}
+.tabela-denuncias tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: translateX(3px);
+  border-left: 3px solid #d62828;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover para input de busca */
+.form-control {
+  transition: all 0.3s ease;
+}
+.form-control:hover {
+  border-color: #adb5bd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.form-control:focus {
+  border-color: #d62828;
+  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
+}
+
+/* Hover para botão de reset de filtros */
+#reset-filters-btn:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover para sidebar de detalhes */
+#sidebar-details {
+  transition: all 0.3s ease;
+}
+#sidebar-details:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
 
 /* Início da página de visualização de denúncia do servidor*/
