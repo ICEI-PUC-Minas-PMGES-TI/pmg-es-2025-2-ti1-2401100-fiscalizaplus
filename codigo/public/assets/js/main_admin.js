@@ -103,6 +103,11 @@ function renderTabela(denuncias, filtro) {
 `;
 
   });
+  
+  // Criar cards mobile após renderizar tabela
+  if (typeof window.criarCardsMobile === 'function') {
+    setTimeout(() => window.criarCardsMobile(), 100);
+  }
 }
 
 // ===============================
@@ -254,16 +259,19 @@ function initGraficoHorizontal(denuncias) {
     return acc;
   }, {});
 
+  // Limitar a 4 principais em mobile, 7 em desktop
+  const isMobile = window.innerWidth <= 767;
+  const limit = isMobile ? 4 : 7;
+
   const sortedData = Object.entries(contagem)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 7);
+    .slice(0, limit);
 
   const regioes = sortedData.map(([local]) => local);
   const valores = sortedData.map(([, qtd]) => qtd);
   const cores = generateChartColors(regioes.length);
 
   charts["horizontal"] = new Chart(ctx, {
-    // ... resto da configuração do gráfico horizontal
     type: "bar",
     data: {
       labels: regioes,
@@ -288,6 +296,10 @@ function initGraficoHorizontal(denuncias) {
     },
   });
 }
+
+// Expor função globalmente para poder ser chamada no resize
+window.initGraficoHorizontal = initGraficoHorizontal;
+window.allDenuncias = allDenuncias;
 
 /* 5️⃣ Gráfico de Área (Cumulativo Resolvidas) */
 function initGraficoArea(denuncias) {
@@ -349,12 +361,20 @@ function initGraficoArea(denuncias) {
 // INICIALIZAÇÃO
 async function loadDashboard() {
   allDenuncias = await fetchDenuncias();
+  window.allDenuncias = allDenuncias; // Expor globalmente
 
   if (allDenuncias.length === 0) {
     console.warn("Nenhuma denúncia carregada. Verifique o json-server.");
     renderTabela([], "all");
     return;
   }
+
+  // Ordenar denúncias por data (mais recente primeiro)
+  allDenuncias.sort((a, b) => {
+    const dataA = new Date(a.dataRegistro || 0);
+    const dataB = new Date(b.dataRegistro || 0);
+    return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+  });
 
   updateKPIs(allDenuncias);
   renderTabela(allDenuncias, "all");
@@ -365,6 +385,14 @@ async function loadDashboard() {
   initGraficoBarra(allDenuncias);
   initGraficoHorizontal(allDenuncias);
   initGraficoArea(allDenuncias);
+  
+  // Criar cards mobile após carregar dados
+  if (typeof window.criarCardsMobile === 'function') {
+    // Múltiplas tentativas para garantir que a tabela foi renderizada
+    setTimeout(() => window.criarCardsMobile(), 200);
+    setTimeout(() => window.criarCardsMobile(), 500);
+    setTimeout(() => window.criarCardsMobile(), 1000);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -372,9 +400,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const filtro = document.querySelector("#filtroStatus");
   if (filtro) {
-    filtro.addEventListener("change", e =>
-      renderTabela(allDenuncias, e.target.value)
-    );
+    filtro.addEventListener("change", e => {
+      renderTabela(allDenuncias, e.target.value);
+      // Recriar cards mobile após atualizar tabela
+      if (window.innerWidth <= 767 && typeof window.criarCardsMobile === 'function') {
+        setTimeout(() => window.criarCardsMobile(), 100);
+      }
+    });
   }
 
   const btnAtualizar = document.querySelector("#btnAtualizar");

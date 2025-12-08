@@ -15,9 +15,187 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
     <link rel="stylesheet" href="../../assets/css/servidor.css">
+    <style>
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      /* ========== RESPONSIVIDADE MOBILE - MAPA OCORRENCIAS ========== */
+      @media (max-width: 767px) {
+        body {
+          overflow-x: hidden;
+        }
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 280px;
+          position: fixed;
+          top: 0;
+          left: -280px;
+          z-index: 2000;
+          transition: left 0.3s ease;
+          height: 100vh;
+          overflow-y: auto;
+          box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .sidebar.show {
+          left: 0;
+        }
+
+        .mobile-menu-toggle {
+          position: fixed;
+          top: 15px;
+          left: 15px;
+          z-index: 2001;
+          background: #343a40;
+          color: white;
+          border: none;
+          padding: 12px 15px;
+          border-radius: 8px;
+          font-size: 1.5rem;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .main-content-map {
+          margin-left: 0 !important;
+          padding: 60px 10px 20px !important;
+          width: 100%;
+        }
+
+        .main-content-map h1 {
+          font-size: 1.5rem;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .dashboard-area {
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+
+        .card.estatistica {
+          min-width: 100%;
+          padding: 15px;
+        }
+
+        .card.estatistica h2 {
+          font-size: 0.7rem;
+        }
+
+        .card.estatistica .valor {
+          font-size: 1.75rem;
+        }
+
+        .row.mt-3.mb-3 {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .col-md-6,
+        .col-md-3 {
+          width: 100% !important;
+          margin-bottom: 10px;
+        }
+
+        .col-md-6.d-flex {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .form-select,
+        .form-control {
+          width: 100% !important;
+        }
+
+        .btn-secondary {
+          width: 100%;
+        }
+
+        .row:has(#map) {
+          flex-direction: column;
+        }
+
+        .col-md-9,
+        .col-md-3 {
+          width: 100% !important;
+          margin-bottom: 15px;
+        }
+
+        #map {
+          height: 400px !important;
+          width: 100%;
+          border-radius: 8px;
+        }
+
+        #sidebar-details {
+          height: auto !important;
+          max-height: 500px;
+          position: relative;
+        }
+
+        #sidebar-details .card-body {
+          padding: 15px;
+        }
+
+        #sidebar-details h4 {
+          font-size: 1.1rem;
+        }
+
+        #sidebar-details p {
+          font-size: 0.85rem;
+          margin-bottom: 10px;
+        }
+
+        #detail-imagens img {
+          height: 100px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .main-content-map {
+          padding: 60px 8px 15px !important;
+        }
+
+        .main-content-map h1 {
+          font-size: 1.25rem;
+        }
+
+        .card.estatistica .valor {
+          font-size: 1.5rem;
+        }
+
+        #map {
+          height: 350px !important;
+        }
+
+        #sidebar-details {
+          max-height: 400px;
+        }
+      }
+    </style>
 </head>
 
 <body>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <button class="mobile-menu-toggle d-md-none" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
     <div class="layout">
         <aside class="sidebar d-flex flex-column p-3">
             <a href="#" class="text-center mb-4">
@@ -182,6 +360,14 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+      }
+    </script>
     <script src="../../assets/js/mapa_ocorrencias.js"></script>
 </body>
 

@@ -20,6 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;        
     const itemsPerPage = 25;
 
+    // --- Função para ordenar denúncias por data (mais recente primeiro) ---
+    function ordenarPorData(denuncias) {
+        return denuncias.sort((a, b) => {
+            const dataA = new Date(a.dataRegistro || 0);
+            const dataB = new Date(b.dataRegistro || 0);
+            return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+        });
+    }
+
     // --- Função Principal: Busca os dados e inicializa a tabela ---
     async function init() {
         try {
@@ -28,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Falha ao carregar denúncias');
             }
             allDenuncias = await response.json();
+            allDenuncias = ordenarPorData(allDenuncias); // Ordenar após carregar
             filteredDenuncias = [...allDenuncias];
             
             atualizarContador();
@@ -95,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchStatus && matchTipo && matchData && matchId;
         });
 
+        filteredDenuncias = ordenarPorData(filteredDenuncias); // Ordenar após filtrar
         currentPage = 1; // Reset para primeira página
         atualizarContador();
         renderTable();
@@ -108,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterData.value = '';
         searchId.value = '';
         filteredDenuncias = [...allDenuncias];
+        filteredDenuncias = ordenarPorData(filteredDenuncias); // Garantir ordenação
         currentPage = 1;
         atualizarContador();
         renderTable();

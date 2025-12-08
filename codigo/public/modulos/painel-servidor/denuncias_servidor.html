@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciar Denúncia</title>
+  <title>FiscalizaPlus</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/servidor.css">
+  <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
   <style>
     .denuncia-container {
       max-width: 100%;
@@ -216,6 +217,615 @@
       margin: 0;
       font-size: 1.3rem;
       font-weight: 600;
+    }
+
+    /* =========================
+       RESPONSIVIDADE COMPLETA
+    ========================= */
+
+    /* ========== TABLETS (768px - 991px) ========== */
+    @media (min-width: 768px) and (max-width: 991px) {
+      .main-content-fullscreen {
+        padding: 20px;
+      }
+
+      .denuncia-container {
+        padding: 15px;
+      }
+
+      .denuncia-form,
+      .map-section,
+      .denuncia-detalhes {
+        padding: 25px;
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .map-container {
+        height: 400px;
+      }
+
+      .imagens-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .acoes-denuncia {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .btn-cancelar,
+      .btn-salvar {
+        flex: 1 1 auto;
+        min-width: 150px;
+      }
+
+      .info-card h3 {
+        font-size: 1.2rem;
+      }
+
+      .denuncia-container h1 {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* ========== MOBILE (até 767px) - LAYOUT COMPLETO REFORMULADO ========== */
+    @media (max-width: 767px) {
+      /* Reset e base */
+      .main-content-fullscreen {
+        padding: 0;
+        min-height: 100vh;
+        background-color: #f8f9fa;
+        padding-bottom: 100px; /* Espaço para botões fixos */
+      }
+
+      .denuncia-container {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      /* Header compacto */
+      .info-card {
+        padding: 12px 15px;
+        margin-bottom: 0;
+        border-radius: 0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .info-card h3 {
+        font-size: 0.95rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .info-card h3 i {
+        font-size: 1rem;
+        margin-right: 6px;
+      }
+
+      /* Cards em formato de lista compacta */
+      .denuncia-form,
+      .map-section,
+      .denuncia-detalhes {
+        background: white;
+        border-radius: 0;
+        padding: 15px;
+        margin-bottom: 10px;
+        box-shadow: none;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      /* Títulos colapsáveis */
+      .denuncia-form h2,
+      .map-section h2,
+      .denuncia-detalhes h2 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        color: #d62828;
+      }
+
+      .denuncia-form h2 i,
+      .map-section h2 i,
+      .denuncia-detalhes h2 i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+      }
+
+      /* Formulário em formato de lista */
+      .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #d62828;
+      }
+
+      .form-group label {
+        font-size: 0.75rem;
+        margin-bottom: 5px;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .form-group label i {
+        margin-right: 4px;
+        color: #d62828;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        padding: 10px;
+        font-size: 0.9rem;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+      }
+
+      .form-group input[readonly],
+      .form-group textarea[readonly] {
+        background: white;
+        color: #212529;
+        font-weight: 500;
+      }
+
+      .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+
+      /* Mapa compacto com botão de expandir */
+      .map-section {
+        position: relative;
+      }
+
+      .map-container {
+        height: 250px;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        position: relative;
+      }
+
+      /* Imagens em carrossel horizontal */
+      .imagens-problema {
+        margin-bottom: 15px;
+      }
+
+      .imagens-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        padding: 5px 0;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+      }
+
+      .imagens-grid::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .imagens-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      .imagens-grid::-webkit-scrollbar-thumb {
+        background: #d62828;
+        border-radius: 10px;
+      }
+
+      .imagem-item {
+        flex: 0 0 85%;
+        max-width: 85%;
+        scroll-snap-align: start;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .imagem-item img {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      /* Seções de feedback e status */
+      .feedback-section,
+      .status-section {
+        margin-bottom: 15px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .feedback-section label,
+      .status-section label {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        color: #495057;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+      }
+
+      .feedback-section label i,
+      .status-section label i {
+        margin-right: 6px;
+        color: #d62828;
+      }
+
+      .feedback-section textarea {
+        min-height: 100px;
+        font-size: 0.9rem;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+      }
+
+      .status-section select {
+        padding: 12px;
+        font-size: 0.9rem;
+        width: 100%;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: white;
+      }
+
+      /* Botões fixos no rodapé */
+      .acoes-denuncia {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 12px 15px;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        display: flex;
+        gap: 10px;
+        z-index: 1000;
+        border-top: 1px solid #e9ecef;
+        margin: 0;
+      }
+
+      .btn-cancelar,
+      .btn-salvar {
+        flex: 1;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-cancelar {
+        background-color: #6c757d;
+        color: white;
+      }
+
+      .btn-salvar {
+        background-color: #d62828;
+        color: white;
+      }
+
+      .btn-cancelar:active,
+      .btn-salvar:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+      }
+
+      /* Remover hover effects em mobile */
+      .btn-cancelar:hover,
+      .btn-salvar:hover {
+        transform: none;
+      }
+
+      .imagem-item:hover {
+        transform: none;
+      }
+
+      /* Ajustes de espaçamento e scroll */
+      .denuncia-detalhes {
+        margin-bottom: 0;
+      }
+
+      /* Garantir que os ícones dos botões sejam visíveis */
+      .btn-cancelar i,
+      .btn-salvar i {
+        margin-right: 6px;
+        font-size: 1rem;
+      }
+
+      /* Melhorar legibilidade dos campos readonly */
+      .form-group input[readonly]:focus,
+      .form-group textarea[readonly]:focus {
+        box-shadow: none;
+        border-color: #dee2e6;
+      }
+
+      /* Scroll suave */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Garantir que não haja overflow */
+      body {
+        overflow-x: hidden;
+        position: relative;
+      }
+    }
+
+    /* ========== MOBILE PEQUENO (até 576px) ========== */
+    @media (max-width: 576px) {
+      .info-card {
+        padding: 10px 12px;
+      }
+
+      .info-card h3 {
+        font-size: 0.85rem;
+      }
+
+      .denuncia-form,
+      .map-section,
+      .denuncia-detalhes {
+        padding: 12px;
+      }
+
+      .denuncia-form h2,
+      .map-section h2,
+      .denuncia-detalhes h2 {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+
+      .form-group {
+        padding: 8px;
+      }
+
+      .form-group label {
+        font-size: 0.7rem;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        padding: 8px;
+        font-size: 0.85rem;
+      }
+
+      .map-container {
+        height: 220px;
+      }
+
+      .imagem-item {
+        flex: 0 0 90%;
+        max-width: 90%;
+      }
+
+      .imagem-item img {
+        height: 180px;
+      }
+
+      .feedback-section,
+      .status-section {
+        padding: 10px;
+      }
+
+      .feedback-section textarea {
+        min-height: 90px;
+        font-size: 0.85rem;
+        padding: 8px;
+      }
+
+      .status-section select {
+        padding: 10px;
+        font-size: 0.85rem;
+      }
+
+      .acoes-denuncia {
+        padding: 10px 12px;
+        gap: 8px;
+      }
+
+      .btn-cancelar,
+      .btn-salvar {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* ========== MOBILE MUITO PEQUENO (até 400px) ========== */
+    @media (max-width: 400px) {
+      .info-card {
+        padding: 8px 10px;
+      }
+
+      .info-card h3 {
+        font-size: 0.8rem;
+      }
+
+      .info-card h3 i {
+        font-size: 0.9rem;
+      }
+
+      .denuncia-form,
+      .map-section,
+      .denuncia-detalhes {
+        padding: 10px;
+      }
+
+      .denuncia-form h2,
+      .map-section h2,
+      .denuncia-detalhes h2 {
+        font-size: 0.85rem;
+        padding: 8px;
+      }
+
+      .form-group {
+        padding: 8px;
+      }
+
+      .form-group label {
+        font-size: 0.65rem;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        padding: 8px;
+        font-size: 0.8rem;
+      }
+
+      .map-container {
+        height: 200px;
+      }
+
+      .imagem-item {
+        flex: 0 0 95%;
+        max-width: 95%;
+      }
+
+      .imagem-item img {
+        height: 160px;
+      }
+
+      .feedback-section textarea {
+        min-height: 80px;
+        font-size: 0.8rem;
+      }
+
+      .status-section select {
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+
+      .acoes-denuncia {
+        padding: 8px 10px;
+        gap: 6px;
+      }
+
+      .btn-cancelar,
+      .btn-salvar {
+        padding: 11px 14px;
+        font-size: 0.85rem;
+      }
+
+      .btn-cancelar i,
+      .btn-salvar i {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* ========== PREVENIR OVERFLOW HORIZONTAL ========== */
+    @media (max-width: 767px) {
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .main-content-fullscreen {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .denuncia-container {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      * {
+        max-width: 100%;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .imagem-item {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* ========== MELHORIAS DE TOQUE E ACESSIBILIDADE ========== */
+    @media (max-width: 767px) {
+      .btn-cancelar,
+      .btn-salvar,
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        -webkit-tap-highlight-color: rgba(214, 40, 40, 0.2);
+        touch-action: manipulation;
+      }
+
+      .btn-cancelar:active,
+      .btn-salvar:active {
+        transform: scale(0.98);
+      }
+
+      .imagem-item:active {
+        transform: scale(0.98);
+      }
+    }
+
+    /* ========== AJUSTES PARA ORIENTAÇÃO LANDSCAPE EM MOBILE ========== */
+    @media (max-width: 767px) and (orientation: landscape) {
+      .main-content-fullscreen {
+        padding-bottom: 90px;
+      }
+
+      .map-container {
+        height: 200px;
+      }
+
+      .imagens-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        overflow-x: visible;
+      }
+
+      .imagem-item {
+        flex: none;
+        max-width: 100%;
+      }
+
+      .acoes-denuncia {
+        padding: 10px 15px;
+      }
+
+      .btn-cancelar,
+      .btn-salvar {
+        padding: 12px 18px;
+      }
     }
   </style>
 </head>

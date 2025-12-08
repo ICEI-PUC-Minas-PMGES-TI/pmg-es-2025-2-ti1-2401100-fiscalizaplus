@@ -13,14 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnClearSearch = document.getElementById('btnClearSearch');
     const totalDenuncias = document.getElementById('total-denuncias');
     const noResults = document.getElementById('no-results');
-    const btnRelatorio = document.getElementById('btnRelatorio');
-    const btnEnviar = document.getElementById('btnEnviar');
 
     // --- Estado da Aplicação ---
     let allDenuncias = [];      
     let filteredDenuncias = [];
     let currentPage = 1;        
     const itemsPerPage = 10;  // 10 denúncias por página
+
+    // --- Função para ordenar denúncias por data (mais recente primeiro) ---
+    function ordenarPorData(denuncias) {
+        return denuncias.sort((a, b) => {
+            const dataA = new Date(a.dataRegistro || 0);
+            const dataB = new Date(b.dataRegistro || 0);
+            return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+        });
+    }
 
     // --- Função Principal: Busca os dados e inicializa a tabela ---
     async function init() {
@@ -30,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Falha ao carregar denúncias');
             }
             allDenuncias = await response.json();
+            allDenuncias = ordenarPorData(allDenuncias); // Ordenar após carregar
             filteredDenuncias = [...allDenuncias];
             
             atualizarContador();
@@ -97,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchStatus && matchTipo && matchData && matchId;
         });
 
+        filteredDenuncias = ordenarPorData(filteredDenuncias); // Ordenar após filtrar
         currentPage = 1; // Reset para primeira página
         atualizarContador();
         renderTable();
@@ -110,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterData.value = '';
         searchId.value = '';
         filteredDenuncias = [...allDenuncias];
+        filteredDenuncias = ordenarPorData(filteredDenuncias); // Garantir ordenação
         currentPage = 1;
         atualizarContador();
         renderTable();
@@ -131,8 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (noResults) {
                 noResults.classList.remove('d-none');
             }
-            return;
-        }
+      return;
+    }
 
         if (noResults) {
             noResults.classList.add('d-none');
@@ -168,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>
                 <td>${capitalizeFirst(item.tipoProblema) || 'N/A'}</td>
                 <td>${dataFormatada}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-success btn-enviar-relatorio" data-id="${item.id}" title="Enviar relatório por e-mail">
+                        <i class="bi bi-send me-1"></i> Enviar Relatório
+                    </button>
+                </td>
             `;
             tableBody.appendChild(tr);
         });
@@ -245,6 +260,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        // Botão Enviar Relatório
+        tableBody.addEventListener('click', (e) => {
+            const button = e.target.closest('.btn-enviar-relatorio');
+            if (button) {
+                const denunciaId = button.dataset.id;
+                enviarRelatorio(denunciaId);
+            }
+        });
+    }
+
+    // --- Função para abrir página de envio de relatório ---
+    function enviarRelatorio(id) {
+        if (!id) {
+            alert('ID da denúncia não encontrado.');
+            return;
+        }
+        // Abre a página de envio de relatório em uma nova aba/janela
+        window.open(`enviar_relatorio.html?id=${id}`, '_blank');
     }
 
     // --- Helper: Retorna uma classe de cor do Bootstrap com base no status ---
@@ -271,39 +305,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 
-    // --- Gerar Relatório PDF ---
-    btnRelatorio.addEventListener('click', () => {
+    // --- Gerar Relatório PDF (removido - não usado mais) ---
+    /* btnRelatorio.addEventListener('click', () => {
         const total = filteredDenuncias.length;
         const resolvidos = filteredDenuncias.filter(d => d.statusAtual === "Concluido").length;
         const andamento = filteredDenuncias.filter(d => d.statusAtual === "Em Andamento").length;
         const pendentes = filteredDenuncias.filter(d => d.statusAtual === "Pendente").length;
 
-        let degResolvidos = 0;
-        let degAndamento = 0;
-        let percResolvidos = 0;
+    let degResolvidos = 0;
+    let degAndamento = 0;
+    let percResolvidos = 0;
 
-        if (total > 0) {
-            degResolvidos = (resolvidos / total) * 360;
-            degAndamento = (andamento / total) * 360;
-            percResolvidos = Math.round((resolvidos / total) * 100);
-        }
+    if (total > 0) {
+      degResolvidos = (resolvidos / total) * 360;
+      degAndamento = (andamento / total) * 360;
+      percResolvidos = Math.round((resolvidos / total) * 100);
+    }
 
-        const printWindow = window.open('', '', 'width=900,height=650');
-        printWindow.document.write(`
-            <html>
-            <head>
+    const printWindow = window.open('', '', 'width=900,height=650');
+    printWindow.document.write(`
+      <html>
+      <head>
                 <title>Relatório de Denúncias</title>
-                <style>
+        <style>
                     body { font-family: Arial, sans-serif; padding: 20px; }
                     h2 { color: #d62828; }
-                    .donut { 
+          .donut { 
                         width: 160px; height: 160px; border-radius: 50%; margin: 20px auto; 
-                        background: conic-gradient(
+            background: conic-gradient(
                             #28A745 0 ${degResolvidos}deg,
                             #FFC107 ${degResolvidos}deg ${degResolvidos + degAndamento}deg,
-                            #E53935 ${degResolvidos + degAndamento}deg 360deg
-                        );
-                    }
+                #E53935 ${degResolvidos + degAndamento}deg 360deg
+            );
+          }
                     .center { 
                         width: 90px; height: 90px; border-radius: 50%; background: white;
                         display: grid; place-items: center; font-weight: bold; 
@@ -313,15 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
                     th { background-color: #d62828; color: white; }
                     tr:nth-child(even) { background-color: #f8f9fa; }
-                </style>
-            </head>
-            <body>
-                <h2>📊 Relatório de Denúncias</h2>
+        </style>
+      </head>
+      <body>
+        <h2>📊 Relatório de Denúncias</h2>
                 <p><strong>Total de Denúncias:</strong> ${total}</p>
                 <p><strong>Pendentes:</strong> ${pendentes} | <strong>Em Andamento:</strong> ${andamento} | <strong>Concluídas:</strong> ${resolvidos}</p>
-                <div class="donut">
-                    <div class="center">${percResolvidos}%</div>
-                </div>
+            <div class="donut">
+                <div class="center">${percResolvidos}%</div>
+            </div>
                 <table>
                     <thead>
                         <tr>
@@ -340,34 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             </tr>`).join('')}
                     </tbody>
                 </table>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-    });
-
-    // --- Botão Enviar para Equipe ---
-    if (btnEnviar) {
-        btnEnviar.addEventListener('click', () => {
-            const originalText = btnEnviar.innerHTML;
-            btnEnviar.disabled = true;
-            btnEnviar.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Enviando...';
-
-            setTimeout(() => {
-                btnEnviar.innerHTML = '<i class="bi bi-check-circle me-1"></i>Enviado para a equipe';
-                btnEnviar.classList.remove('btn-success');
-                btnEnviar.classList.add('btn-secondary');
-
-                setTimeout(() => {
-                    btnEnviar.innerHTML = originalText;
-                    btnEnviar.disabled = false;
-                    btnEnviar.classList.remove('btn-secondary');
-                    btnEnviar.classList.add('btn-success');
-                }, 3000);
-            }, 1500);
-        });
-    }
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+    }); */
 
     // Inicia a aplicação
     init();

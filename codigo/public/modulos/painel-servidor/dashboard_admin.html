@@ -9,9 +9,288 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/css/servidor.css">
+    <style>
+      /* ========== OVERLAY PARA SIDEBAR MOBILE ========== */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      /* ========== RESPONSIVIDADE MOBILE - DASHBOARD COMPLETO ========== */
+      @media (max-width: 767px) {
+        body {
+          overflow-x: hidden;
+        }
+
+        .layout {
+          flex-direction: column;
+          position: relative;
+        }
+
+        .sidebar {
+          width: 280px;
+          position: fixed;
+          top: 0;
+          left: -280px;
+          z-index: 2000;
+          transition: left 0.3s ease;
+          height: 100vh;
+          overflow-y: auto;
+          box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .sidebar.show {
+          left: 0;
+        }
+
+        .mobile-menu-toggle {
+          position: fixed;
+          top: 15px;
+          left: 15px;
+          z-index: 2001;
+          background: #343a40;
+          color: white;
+          border: none;
+          padding: 12px 15px;
+          border-radius: 8px;
+          font-size: 1.5rem;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .admin-dashboard {
+          margin-left: 0 !important;
+          padding: 70px 12px 20px !important;
+          width: 100%;
+        }
+
+        .topbar {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        .topbar h1 {
+          font-size: 1.4rem;
+          margin-bottom: 5px;
+        }
+
+        .topbar p {
+          font-size: 0.8rem;
+          color: #6c757d;
+        }
+
+        /* Cards de estatísticas em grid 2x2 */
+        .dashboard-area {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+
+        .card.estatistica {
+          min-width: auto;
+          padding: 15px 12px;
+          text-align: center;
+        }
+
+        .card.estatistica h2 {
+          font-size: 0.7rem;
+          margin-bottom: 8px;
+          line-height: 1.2;
+        }
+
+        .card.estatistica .valor {
+          font-size: 1.5rem;
+          line-height: 1;
+        }
+
+        /* Gráficos - ocultar alguns em mobile */
+        .graficos-container {
+          gap: 15px;
+        }
+
+        .graficos-linha {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .grafico-item {
+          min-width: 100% !important;
+          height: 250px !important;
+          padding: 12px;
+        }
+
+        .grafico-item.full-width-chart {
+          height: 250px !important;
+        }
+
+        .grafico-item h2 {
+          font-size: 0.9rem;
+          margin-bottom: 8px;
+        }
+
+        /* Ocultar alguns gráficos em mobile muito pequeno */
+        .grafico-item:nth-child(n+3) {
+          display: none;
+        }
+
+        /* Tabela transformada em cards */
+        .tabela-area {
+          padding: 0 !important;
+        }
+
+        .tabela-area > .p-3 {
+          padding: 15px !important;
+        }
+
+        .tabela-area h2 {
+          font-size: 1.1rem;
+        }
+
+        .tabela-denuncias {
+          display: none !important;
+        }
+        
+        /* Container para cards mobile */
+        .tabela-area {
+          position: relative;
+        }
+        
+        .denuncia-card-mobile {
+          display: block !important;
+        }
+
+        /* Cards de denúncia para mobile */
+        .denuncia-card-mobile {
+          display: block;
+          background: white;
+          border-radius: 10px;
+          padding: 15px;
+          margin-bottom: 12px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          border-left: 4px solid #d62828;
+        }
+
+        .denuncia-card-mobile .denuncia-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: start;
+          margin-bottom: 10px;
+        }
+
+        .denuncia-card-mobile .denuncia-id {
+          font-weight: 700;
+          color: #d62828;
+          font-size: 0.9rem;
+        }
+
+        .denuncia-card-mobile .denuncia-status {
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .denuncia-card-mobile .denuncia-titulo {
+          font-weight: 600;
+          margin-bottom: 8px;
+          font-size: 0.95rem;
+          color: #212529;
+        }
+
+        .denuncia-card-mobile .denuncia-info {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          font-size: 0.8rem;
+          color: #6c757d;
+        }
+
+        .denuncia-card-mobile .denuncia-info span {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .d-flex.justify-content-between {
+          flex-direction: column;
+          gap: 12px;
+          padding: 15px !important;
+        }
+
+        .d-flex.justify-content-between > div {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        #filtroStatus {
+          width: 100% !important;
+          margin-bottom: 10px;
+        }
+
+        .btn-sm {
+          flex: 1;
+          min-width: calc(50% - 4px);
+          font-size: 0.8rem;
+          padding: 8px 12px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .admin-dashboard {
+          padding: 70px 10px 15px !important;
+        }
+
+        .dashboard-area {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .card.estatistica .valor {
+          font-size: 1.75rem;
+        }
+
+        .grafico-item {
+          height: 220px !important;
+        }
+
+        .grafico-item.full-width-chart {
+          height: 220px !important;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .card.estatistica {
+          padding: 12px 10px;
+        }
+
+        .card.estatistica h2 {
+          font-size: 0.65rem;
+        }
+
+        .card.estatistica .valor {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
 
 </head>
 <body>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <button class="mobile-menu-toggle d-md-none" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
     <div class="layout">
         <aside class="sidebar d-flex flex-column p-3">
             <a href="#" class="text-center mb-4">
@@ -148,8 +427,7 @@
                         <option value="Concluido">Concluído</option>
                     </select>
                     <div>
-                         <button id="btnAtualizar" class="btn btn-sm btn-outline-danger me-2"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-download"></i> Baixar Relatório</button>
+                         <button id="btnAtualizar" class="btn btn-sm btn-outline-danger"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
                     </div>
                 </div>
 
@@ -175,6 +453,129 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+      }
+      
+      // Criar cards mobile para denúncias (apenas 5 últimas)
+      function criarCardsMobile() {
+        const tbody = document.getElementById('tabela-corpo');
+        const tabela = document.querySelector('.tabela-denuncias');
+        const tabelaArea = document.querySelector('.tabela-area');
+        
+        if (!tbody || !tabelaArea || !tabela) return;
+        
+        if (window.innerWidth <= 767) {
+          // Limpar cards existentes
+          const cardsExistentes = document.querySelectorAll('.denuncia-card-mobile');
+          cardsExistentes.forEach(card => card.remove());
+          
+          // Pegar apenas as 5 primeiras linhas da tabela (já ordenadas por data)
+          const linhas = Array.from(tbody.children).slice(0, 5);
+          
+          if (linhas.length === 0) {
+            console.log('Nenhuma linha na tabela para criar cards');
+            return;
+          }
+          
+          // Criar container para os cards se não existir
+          let cardsContainer = tabelaArea.querySelector('.cards-mobile-container');
+          if (!cardsContainer) {
+            cardsContainer = document.createElement('div');
+            cardsContainer.className = 'cards-mobile-container';
+            cardsContainer.style.padding = '0 15px 15px';
+            tabelaArea.insertBefore(cardsContainer, tabela);
+          }
+          
+          // Criar cards
+          linhas.forEach(tr => {
+            const cells = tr.cells;
+            if (cells.length < 5) return;
+            
+            const id = cells[0]?.textContent.trim() || '';
+            const titulo = cells[1]?.textContent.trim() || '';
+            const statusPill = cells[2]?.querySelector('.status-pill');
+            const status = statusPill?.textContent.trim() || '';
+            const statusClass = statusPill?.className.match(/status-\w+/)?.[0] || 'status-Pendente';
+            const data = cells[3]?.textContent.trim() || '';
+            const regiao = cells[4]?.textContent.trim() || 'N/A';
+            
+            const card = document.createElement('div');
+            card.className = 'denuncia-card-mobile';
+            
+            card.innerHTML = `
+              <div class="denuncia-header">
+                <span class="denuncia-id">${id}</span>
+                <span class="denuncia-status ${statusClass}">${status}</span>
+              </div>
+              <div class="denuncia-titulo">${titulo}</div>
+              <div class="denuncia-info">
+                <span><i class="bi bi-calendar"></i> ${data}</span>
+                <span><i class="bi bi-geo-alt"></i> ${regiao}</span>
+              </div>
+            `;
+            
+            // Inserir no container de cards
+            cardsContainer.appendChild(card);
+          });
+          
+          // Ocultar tabela
+          tabela.style.display = 'none';
+        } else {
+          // Mostrar tabela em desktop e remover container de cards
+          tabela.style.display = 'table';
+          const cardsContainer = tabelaArea.querySelector('.cards-mobile-container');
+          if (cardsContainer) {
+            cardsContainer.remove();
+          }
+        }
+      }
+      
+      // Observar mudanças de tamanho da tela e recriar cards
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          criarCardsMobile();
+          // Recriar gráfico horizontal com limite correto
+          if (window.allDenuncias && window.initGraficoHorizontal) {
+            window.initGraficoHorizontal(window.allDenuncias);
+          }
+        }, 250);
+      });
+      
+      // Criar cards quando a página carregar (com múltiplas tentativas)
+      let tentativas = 0;
+      const tentarCriarCards = () => {
+        tentativas++;
+        const tbody = document.getElementById('tabela-corpo');
+        if (tbody && tbody.children.length > 0) {
+          criarCardsMobile();
+        } else if (tentativas < 10) {
+          setTimeout(tentarCriarCards, 300);
+        }
+      };
+      
+      // Primeira tentativa após 500ms
+      setTimeout(tentarCriarCards, 500);
+      
+      // Observar mudanças na tabela (quando filtros mudarem)
+      const observer = new MutationObserver(() => {
+        criarCardsMobile();
+      });
+      
+      const tbody = document.getElementById('tabela-corpo');
+      if (tbody) {
+        observer.observe(tbody, { childList: true });
+      }
+      
+      // Tornar função global para ser chamada do main_admin.js
+      window.criarCardsMobile = criarCardsMobile;
+    </script>
     <script src="../../assets/js/main_admin.js"></script>
 </body>
 </html>

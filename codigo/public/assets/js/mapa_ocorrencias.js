@@ -150,6 +150,13 @@ async function carregarDenuncias() {
         todasDenuncias = await response.json();
         console.log("Denúncias carregadas com sucesso:", todasDenuncias);
 
+        // Ordenar denúncias por data (mais recente primeiro)
+        todasDenuncias.sort((a, b) => {
+            const dataA = new Date(a.dataRegistro || 0);
+            const dataB = new Date(b.dataRegistro || 0);
+            return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+        });
+
         updateDashboardStats(todasDenuncias);
         aplicarFiltros();
 
@@ -192,6 +199,14 @@ function aplicarFiltros() {
             d.codigoOcorrencia && d.codigoOcorrencia.toUpperCase().includes(searchTerm)
         );
     }
+
+    // Ordenar denúncias filtradas por data (mais recente primeiro)
+    denunciasFiltradas.sort((a, b) => {
+        const dataA = new Date(a.dataRegistro || 0);
+        const dataB = new Date(b.dataRegistro || 0);
+        return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+    });
+
     renderizarCamadaDoMapa(denunciasFiltradas);
 }
 
