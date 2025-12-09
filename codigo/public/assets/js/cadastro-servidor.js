@@ -184,6 +184,7 @@ async function handleSubmit(event) {
         email: formData.get('email'),
         estado: formData.get('estado'),
         cidade: formData.get('cidade'),
+        matricula: formData.get('matricula'),
         orgaoId: orgaoId ? parseInt(orgaoId) : null,
         senhaHash: formData.get('senha'), // Por enquanto mantém a senha como está, pode ser convertida para hash depois
         dataCadastro: new Date().toISOString()
@@ -293,6 +294,7 @@ function validateField(event) {
         case 'estado':
         case 'cidade':
         case 'orgao':
+        case 'matricula':
             if (!value) {
                 isValid = false;
                 errorMessage = 'Este campo é obrigatório';
