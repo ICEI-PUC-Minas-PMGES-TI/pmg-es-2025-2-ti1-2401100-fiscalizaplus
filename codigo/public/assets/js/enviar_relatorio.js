@@ -101,9 +101,25 @@ async function carregarDenuncia(id) {
 }
 
 // Função para enviar relatório por e-mail
-async function enviarRelatorio() {
+async function enviarRelatorio(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
     const btnEnviar = document.getElementById("btnEnviarRelatorio");
-    const id = btnEnviar?.dataset.id;
+    if (!btnEnviar) {
+        console.error("Botão de enviar relatório não encontrado!");
+        mostrarMensagem("Erro: Botão não encontrado.", "error");
+        return;
+    }
+    
+    // Tentar obter ID do dataset do botão ou da URL
+    let id = btnEnviar?.dataset.id;
+    if (!id) {
+        id = getUrlParameter("id");
+    }
+    
     const emailDestinatario = document.getElementById("emailDestinatario")?.value.trim();
     const mensagem = document.getElementById("mensagemDestinatario")?.value.trim();
 
@@ -311,11 +327,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCancelar = document.querySelector(".btn-cancelar");
 
     if (btnEnviar) {
-        btnEnviar.addEventListener("click", enviarRelatorio);
+        // Garantir que o botão esteja habilitado
+        btnEnviar.disabled = false;
+        btnEnviar.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            enviarRelatorio(e);
+        });
+    } else {
+        console.error("Botão btnEnviarRelatorio não encontrado no DOM!");
     }
 
     if (btnCancelar) {
-        btnCancelar.addEventListener("click", () => {
+        btnCancelar.addEventListener("click", (e) => {
+            e.preventDefault();
             window.close();
         });
     }

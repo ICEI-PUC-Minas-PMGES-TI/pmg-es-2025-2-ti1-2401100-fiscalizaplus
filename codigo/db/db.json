@@ -3640,6 +3640,39 @@
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true,
       "id": "JJMpJle"
+    },
+    {
+      "id": "b405",
+      "titulo": "Buraco na avenida",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Buraco na avenida atrapalhando o transito",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0127",
+      "cidadaoId": "6cf7",
+      "endereco": {
+        "rua": "Rua Hércules",
+        "numero": "",
+        "bairro": "São Benedito",
+        "cidade": "Santa Luzia",
+        "estado": "Minas Gerais",
+        "cep": "33125-080",
+        "latitude": -19.7869649,
+        "longitude": -43.9454577
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "medio",
+      "dataRegistro": "2025-12-11T17:14:23.987Z",
+      "autorCidadao": "Italo Eduardo Carneiro da Silva",
+      "isAnonimo": false,
+      "statusAtual": "Concluido",
+      "dataUltimaAtualizacaoStatus": "2025-12-11T17:15:17.576Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "contatoitalocnr@gmail.com",
+      "recebeNotificacoes": true
     }
   ],
   "admin": {
@@ -3706,6 +3739,15 @@
       "author": "Italo Eduardo Carneiro da Silva",
       "createdAt": "2025-12-02T01:16:49.207Z",
       "votes": 68
+    },
+    {
+      "id": "07eb",
+      "title": "Postes com luzes queimadas frequentemente",
+      "category": "todas",
+      "excerpt": "Olá pessoal, gostaria de relatar que ultimamente esta tendo muitos postes com luzes queimadas nas ruas próximas a PUC Minas Coração Eucarístico oque está gerando grande desconforto para a comunidade local. Se puderem votar para alavancar a causa, agradeço!",
+      "author": "Italo Eduardo Carneiro da Silva",
+      "createdAt": "2025-12-11T17:16:43.483Z",
+      "votes": 1
     }
   ]
 }

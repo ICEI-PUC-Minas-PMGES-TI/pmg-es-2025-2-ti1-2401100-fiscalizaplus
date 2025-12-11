@@ -116,32 +116,54 @@ const bhBounds = L.latLngBounds(
 
 // Função de inicialização do mapa usando o Leaflet
 function initMap() {
-    map = L.map('map', {
-        center: bhCenter,
-        zoom: 13,
-        maxBoundsViscosity: 1.0,
-        zoomControl: true,
-        scrollWheelZoom: true,
-        doubleClickZoom: true,
-        boxZoom: true,
-        keyboard: true,
-        dragging: true,
-        touchZoom: true,
-    }).setView(bhCenter, 13);
+    const mapElement = document.getElementById('map');
+    if (!mapElement) {
+        console.error('Elemento #map não encontrado no DOM!');
+        return;
+    }
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 18,
-        minZoom: 10
-    }).addTo(map);
+    // Verifica se o mapa já foi inicializado
+    if (map) {
+        try {
+            map.remove();
+        } catch (e) {
+            console.warn('Erro ao remover mapa anterior:', e);
+        }
+    }
 
-    L.rectangle(bhBounds, {
-        color: '#ce2828',
-        weight: 2,
-        fillColor: 'transparent',
-        fillOpacity: 0,
-        dashArray: '5, 5'
-    }).addTo(map);
+    try {
+        map = L.map('map', {
+            center: bhCenter,
+            zoom: 13,
+            maxBoundsViscosity: 1.0,
+            zoomControl: true,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            boxZoom: true,
+            keyboard: true,
+            dragging: true,
+            touchZoom: true,
+        }).setView(bhCenter, 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18,
+            minZoom: 10
+        }).addTo(map);
+
+        L.rectangle(bhBounds, {
+            color: '#ce2828',
+            weight: 2,
+            fillColor: 'transparent',
+            fillOpacity: 0,
+            dashArray: '5, 5'
+        }).addTo(map);
+
+        console.log('Mapa inicializado com sucesso');
+    } catch (error) {
+        console.error('Erro ao inicializar mapa:', error);
+        alert('Erro ao carregar o mapa. Por favor, recarregue a página.');
+    }
 
     map.on('click', function (e) {
         const lat = e.latlng.lat;
@@ -467,12 +489,33 @@ async function gerarCodigoOcorrencia() {
 
 // ATUALIZADA: FUNÇÃO DE ENVIO DO FORMULÁRIO (Usa addressDetails e gera codigoOcorrencia)
 async function handleSubmit(event) {
-    event.preventDefault();
-
-    if (!selectedLocation) {
-        alert("Por favor, selecione a localização exata do problema no mapa antes de enviar.");
-        return;
+    console.log('handleSubmit chamado', event);
+    
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
     }
+
+    // Desabilitar botão e mostrar loading
+    const submitButton = document.querySelector('#reportForm button[type="submit"]');
+    const originalButtonText = submitButton?.innerHTML || '';
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enviando...';
+    }
+
+    try {
+        console.log('Verificando localização selecionada...');
+        if (!selectedLocation) {
+            alert("Por favor, selecione a localização exata do problema no mapa antes de enviar.");
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
+            return;
+        }
+        
+        console.log('Localização OK, gerando código de ocorrência...');
 
     // --- GERA O CÓDIGO DE OCORRÊNCIA AQUI ---
     const novoCodigoOcorrencia = await gerarCodigoOcorrencia();
@@ -482,6 +525,10 @@ async function handleSubmit(event) {
     // Verifica se há usuário logado
     if (!currentUser || !currentUser.id) {
         alert('Você precisa estar logado para reportar uma ocorrência. Por favor, faça login primeiro.');
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
         window.location.href = '../../modulos/login/login.html';
         return;
     }
@@ -512,11 +559,28 @@ async function handleSubmit(event) {
         }
     }
 
+    // Coleta os dados do formulário de forma segura
+    const tituloEl = document.getElementById('titulo');
+    const categoriaEl = document.getElementById('categoria');
+    const descricaoEl = document.getElementById('descricao');
+    const observacoesEl = document.getElementById('observacoes');
+    const contatoEl = document.getElementById('contato');
+
+    if (!tituloEl || !categoriaEl || !descricaoEl) {
+        console.error('Campos obrigatórios não encontrados no formulário!');
+        alert('Erro: Alguns campos do formulário não foram encontrados. Por favor, recarregue a página.');
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+        return;
+    }
+
     const reportData = {
-        titulo: document.getElementById('titulo').value,
-        tipoProblema: document.getElementById('categoria').value,
-        descricaoCompleta: document.getElementById('descricao').value,
-        informacoesAdicionaisCidadao: document.getElementById('observacoes').value,
+        titulo: tituloEl.value.trim(),
+        tipoProblema: categoriaEl.value,
+        descricaoCompleta: descricaoEl.value.trim(),
+        informacoesAdicionaisCidadao: observacoesEl?.value?.trim() || '',
         
         // --- ADICIONADO O CAMPO codigoOcorrencia ---
         codigoOcorrencia: novoCodigoOcorrencia, 
@@ -539,9 +603,9 @@ async function handleSubmit(event) {
             longitude: selectedLocation.lng
         },
         imagens: uploadedImageUrls, 
-        prioridadeCidadao: document.getElementById('prioridade').value,
-        urgenciaCidadao: document.getElementById('urgencia').value,
-        impactoComunidade: document.getElementById('impacto').value,
+        prioridadeCidadao: document.getElementById('prioridade')?.value || 'media',
+        urgenciaCidadao: document.getElementById('urgencia')?.value || 'media',
+        impactoComunidade: document.getElementById('impacto')?.value || 'medio',
         dataRegistro: new Date().toISOString(),
         autorCidadao: autorCidadao,
         isAnonimo: isAnonimo,
@@ -551,77 +615,199 @@ async function handleSubmit(event) {
         observacoesInternasServidor: '',
         servidorResponsavelId: null,
         
-        contatoCidadao: document.getElementById('contato').value || currentUser.email || '',
+        contatoCidadao: contatoEl?.value?.trim() || currentUser?.email || '',
         recebeNotificacoes: recebeNotificacoes
     };
 
     console.log("Dados do relatório para envio (com URLs de imagens):", reportData);
     console.log("[Nova Denúncia] cidadaoId sendo salvo:", reportData.cidadaoId, "tipo:", typeof reportData.cidadaoId, "currentUser.id:", currentUser.id);
-    console.log("[Nova Denúncia] cidadaoId sendo salvo:", reportData.cidadaoId, "tipo:", typeof reportData.cidadaoId, "currentUser.id:", currentUser.id);
 
-    try {
-        const response = await fetch(DENUNCIAS_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reportData)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Erro ao enviar relatório: ${response.status} - ${errorData.message || response.statusText}`);
+    // Validação dos campos obrigatórios
+    if (!reportData.titulo || !reportData.titulo.trim()) {
+        alert("Por favor, preencha o título do problema.");
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
         }
+        return;
+    }
 
-        const result = await response.json();
-        console.log("Relato enviado com sucesso para o json-server:", result);
-        alert(`Relato ${result.codigoOcorrencia} enviado com sucesso, obrigado por denunciar!`); // Alerta com o código
-        
-        document.getElementById('reportForm').reset();
-        resetMap(); 
-        
-        selectedFilesList = [];
-        selectedFileDataUrls = []; 
-        renderPreview();
+    if (!reportData.tipoProblema || !reportData.tipoProblema.trim()) {
+        alert("Por favor, selecione uma categoria.");
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+        return;
+    }
+
+    if (!reportData.descricaoCompleta || !reportData.descricaoCompleta.trim()) {
+        alert("Por favor, preencha a descrição do problema.");
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+        return;
+    }
+
+    console.log("Enviando dados para:", DENUNCIAS_ENDPOINT);
+    console.log("Dados que serão enviados:", JSON.stringify(reportData, null, 2));
+    
+    const response = await fetch(DENUNCIAS_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reportData)
+    });
+
+    console.log("Resposta recebida:", response.status, response.statusText);
+
+    if (!response.ok) {
+        let errorMessage = `Erro ao enviar relatório: ${response.status}`;
+        let errorDetails = '';
+        try {
+            const errorData = await response.json();
+            errorMessage += ` - ${errorData.message || response.statusText}`;
+            errorDetails = JSON.stringify(errorData, null, 2);
+            console.error("Detalhes do erro:", errorDetails);
+        } catch (e) {
+            errorMessage += ` - ${response.statusText}`;
+            try {
+                const text = await response.text();
+                console.error("Resposta de erro (texto):", text);
+            } catch (e2) {
+                console.error("Não foi possível ler a resposta de erro");
+            }
+        }
+        throw new Error(errorMessage);
+    }
+
+    const result = await response.json();
+    console.log("Relato enviado com sucesso para o json-server:", result);
+    alert(`Relato ${result.codigoOcorrencia || novoCodigoOcorrencia} enviado com sucesso, obrigado por denunciar!`);
+    
+    // Resetar formulário
+    const form = document.getElementById('reportForm');
+    if (form) {
+        form.reset();
+    }
+    resetMap(); 
+    
+    selectedFilesList = [];
+    selectedFileDataUrls = []; 
+    renderPreview();
+    
+    // Reabilitar botão após sucesso
+    if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
 
     } catch (error) {
         console.error("Erro ao enviar relatório:", error);
-        alert("Ocorreu um erro ao enviar o relatório. Por favor, tente novamente.");
+        alert(`Erro ao enviar o relatório: ${error.message}\n\nPor favor, verifique se o servidor está rodando e tente novamente.`);
+    } finally {
+        // Reabilitar botão em caso de erro
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
     }
 }
 
 // ORQUESTRAÇÃO DE INICIALIZAÇÃO
 
 async function initializeApp() {
-    await loadUserData(); 
-    initMap();
+    try {
+        await loadUserData(); 
+        
+        // Aguarda um pouco para garantir que o DOM está totalmente carregado
+        setTimeout(() => {
+            initMap();
+        }, 100);
 
-    const form = document.getElementById('reportForm');
-    if (form) {
-        form.addEventListener('submit', handleSubmit);
-    }
+        const form = document.getElementById('reportForm');
+        if (form) {
+            // Remove event listeners anteriores se existirem (usando uma flag)
+            if (form._submitHandlerAttached) {
+                form.removeEventListener('submit', form._submitHandler);
+            }
+            
+            // Cria o handler e armazena referência
+            form._submitHandler = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+            };
+            
+            // Adiciona o event listener no formulário
+            form.addEventListener('submit', form._submitHandler);
+            form._submitHandlerAttached = true;
+            console.log('Event listener de submit anexado ao formulário');
+            
+            // Também adiciona event listener no botão de submit como backup
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                // Garante que o botão não esteja desabilitado
+                submitButton.disabled = false;
+                
+                submitButton.addEventListener('click', (e) => {
+                    console.log('Botão de submit clicado');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSubmit(e);
+                });
+                console.log('Event listener de submit também anexado ao botão');
+            } else {
+                console.error('Botão de submit não encontrado no formulário!');
+            }
+        } else {
+            console.error('Formulário reportForm não encontrado!');
+        }
 
-    const fileInput = document.querySelector("#imagens");
-    if (fileInput) {
-        fileInput.addEventListener('change', (e) => previewImages(e.target));
-    }
-    
-    // Adiciona event listener para o botão de buscar (searchAdress)
-    const buscarBtn = document.querySelector('#buscar-btn');
-    if (buscarBtn) {
-        buscarBtn.addEventListener('click', searchAdress);
-    }
+        const fileInput = document.querySelector("#imagens");
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => previewImages(e.target));
+        }
+        
+        // Adiciona event listener para o botão de buscar (searchAdress)
+        const buscarBtn = document.querySelector('#buscar-btn');
+        if (buscarBtn) {
+            buscarBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchAdress();
+            });
+        }
 
-    // Adiciona event listener para o botão de localização atual
-    const localizarBtn = document.querySelector('.map-controls .btn-outline-primary');
-    if (localizarBtn) {
-        localizarBtn.addEventListener('click', getCurrentLocation);
-    }
+        // Adiciona event listener para o botão de localização atual
+        const localizarBtn = document.querySelector('.map-controls .btn-outline-primary');
+        if (localizarBtn) {
+            localizarBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                getCurrentLocation();
+            });
+        }
 
-    // Adiciona event listener para o botão de resetar mapa
-    const resetBtn = document.querySelector('.map-controls .btn-outline-secondary');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', resetMap);
+        // Adiciona event listener para o botão de resetar mapa
+        const resetBtn = document.querySelector('.map-controls .btn-outline-secondary');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetMap();
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao inicializar aplicação:', error);
     }
 }
-initializeApp();
+
+// Aguarda o DOM estar completamente carregado antes de inicializar
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initializeApp, 200);
+    });
+} else {
+    // DOM já está carregado, mas aguarda um pouco para garantir que tudo está pronto
+    setTimeout(initializeApp, 200);
+}
