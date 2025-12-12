@@ -49,7 +49,7 @@
   function initMap() {
     const container = document.getElementById(MAP_ID);
     if (!container) {
-      console.error('Container do mapa não encontrado:', MAP_ID);
+      // Retorna silenciosamente se o elemento não existir (página não usa o mapa)
       return;
     }
 
@@ -228,9 +228,7 @@
   function startMap() {
     const container = document.getElementById(MAP_ID);
     if (!container) {
-      console.warn('Container do mapa não encontrado:', MAP_ID);
-      // Tentar novamente após um delay
-      setTimeout(startMap, 200);
+      // Retorna silenciosamente se o elemento não existir (página não usa o mapa)
       return;
     }
 

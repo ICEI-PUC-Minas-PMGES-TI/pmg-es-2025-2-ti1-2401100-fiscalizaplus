@@ -26,10 +26,8 @@
             themeIconMobile.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
         
-        // Atualizar logo
-        const navbarLogo = document.getElementById('navbarLogo');
-        if (navbarLogo) {
-            // Detectar o caminho correto baseado na localização atual
+        // Função auxiliar para calcular o caminho da logo
+        function getLogoPath() {
             const currentPath = window.location.pathname;
             let logoPath = '';
             
@@ -58,6 +56,9 @@
                 } else {
                     logoPath = '../../assets/images/';
                 }
+            } else if (currentPath.includes('/modulos/guia/')) {
+                // Página de guia
+                logoPath = '../../assets/images/';
             } else {
                 // Fallback para outros casos
                 logoPath = '../../assets/images/';
@@ -68,13 +69,32 @@
                 logoPath += '/';
             }
             
-            // Atualizar logo baseado no tema
+            return logoPath;
+        }
+        
+        // Atualizar logo da navbar
+        const navbarLogo = document.getElementById('navbarLogo');
+        if (navbarLogo) {
+            const logoPath = getLogoPath();
             const logoFileName = isDark ? 'logo_modo_escuro.png' : 'logo.png';
             const newLogoSrc = logoPath + logoFileName;
             
             // Só atualizar se o caminho mudou ou se for a primeira vez
             if (navbarLogo.src !== new URL(newLogoSrc, window.location.href).href) {
                 navbarLogo.src = newLogoSrc;
+            }
+        }
+        
+        // Atualizar logo da sidebar
+        const sidebarLogo = document.getElementById('sidebarLogo');
+        if (sidebarLogo) {
+            const logoPath = getLogoPath();
+            const logoFileName = isDark ? 'logo_modo_escuro.png' : 'logo.png';
+            const newLogoSrc = logoPath + logoFileName;
+            
+            // Só atualizar se o caminho mudou ou se for a primeira vez
+            if (sidebarLogo.src !== new URL(newLogoSrc, window.location.href).href) {
+                sidebarLogo.src = newLogoSrc;
             }
         }
     }

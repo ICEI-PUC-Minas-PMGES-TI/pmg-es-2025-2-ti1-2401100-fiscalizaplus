@@ -16,19 +16,34 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg" style="padding: 0.75rem 0; margin: 0;">
-        <div class="container-fluid" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <!-- Logo - oculto no mobile -->
+            <a class="navbar-brand d-flex align-items-center d-none d-lg-flex" href="#">
                 <img src="../../assets/images/logo.png" alt="Logo" class="navbar-logo" id="navbarLogo">
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- Navbar Mobile com Ícones -->
+            <div class="navbar-mobile-icons d-lg-none">
+                <a href="index.html" class="nav-icon-link" data-page="home" title="Home">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <a href="comunidade/comunidade.html" class="nav-icon-link" data-page="comunidade" title="Comunidade">
+                    <i class="fa-solid fa-users"></i>
+                </a>
+                <a href="dashboard_cidadao/dashboard_cliente.html" class="nav-icon-link" data-page="dashboard" title="Dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="../guia/guia-cidadao.html" class="nav-icon-link" data-page="guia" title="Guia do Cidadão">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <button class="nav-icon-link user-icon-mobile" id="openUserSidebar" title="Meu Perfil">
+                    <i class="fa-solid fa-circle-user"></i>
+                </button>
+            </div>
 
+            <!-- Desktop Navbar -->
             <div class="collapse navbar-collapse" id="navbarMenuLg">
-
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.html">Home</a>
@@ -63,51 +78,50 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </nav>
 
-            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">FiscalizaPlus</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body d-flex flex-column">
-                    <ul class="navbar-nav flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="index.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../comunidade/comunidade.html">Comunidade</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="dashboard_cidadao/dashboard_cliente.html">Dashboard de
-                                Ocorrências</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../guia/guia-cidadao.html">Guia do Cidadão</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="painel-de-usuario/index.html">Painel do
-                                Usuário</a>
-                        </li>
-                    </ul>
-
-                    <div class="navbar-user d-flex align-items-center justify-content-between mt-auto border-top pt-3">
-                        <div class="d-flex align-items-center">
-                            <span class="name-user me-2" id="name-user-offcanvas" style="white-space: nowrap;">Olá,
-                                Joãozinho</span>
-                            <a href="#" class="user-icon-link">
-                                <i class="fa-solid fa-circle-user user-icon"></i>
-                            </a>
-                        </div>
-                        <button class="theme-toggle-btn" id="themeToggleMobile" aria-label="Alternar tema">
-                            <i class="fa-solid fa-moon" id="themeIconMobile"></i>
-                        </button>
+    <!-- Sidebar do Usuário Mobile -->
+    <div class="user-sidebar" id="userSidebar">
+        <div class="user-sidebar-overlay" id="sidebarOverlay"></div>
+        <div class="user-sidebar-content">
+            <div class="user-sidebar-header">
+                <img src="../../assets/images/logo.png" alt="FiscalizaPlus" class="sidebar-logo" id="sidebarLogo">
+                <button class="sidebar-close-btn" id="closeUserSidebar">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="user-sidebar-body">
+                <div class="user-sidebar-profile">
+                    <div class="user-sidebar-avatar">
+                        <i class="fa-solid fa-circle-user"></i>
                     </div>
+                    <div class="user-sidebar-welcome">
+                        <span class="welcome-text">Bem vindo,</span>
+                        <span class="user-name" id="sidebar-user-name">Usuário</span>
+                    </div>
+                </div>
+                <div class="user-sidebar-links">
+                    <a href="meu-perfil/index.html" class="sidebar-link">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Meu Perfil</span>
+                    </a>
+                    <a href="painel-de-usuario/index.html" class="sidebar-link">
+                        <i class="fa-solid fa-file-circle-exclamation"></i>
+                        <span>Minhas Denúncias</span>
+                    </a>
+                    <a href="#" class="sidebar-link" id="sidebar-theme-toggle">
+                        <i class="fa-solid fa-moon" id="sidebar-theme-icon"></i>
+                        <span id="sidebar-theme-text">Modo Escuro</span>
+                    </a>
+                    <a href="#" class="sidebar-link" id="sidebar-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Sair</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
 
 
     <main>
@@ -229,6 +243,7 @@
     <script type="module" src="../../assets/js/forum-highlights.js"></script>
     <script src="../../assets/js/tema.js"></script>
     <script src="../../assets/js/current-user.js"></script>
+    <script src="../../assets/js/mobile-navbar.js"></script>
     <div class="modal fade" id="impact-detail-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content impact-modal">

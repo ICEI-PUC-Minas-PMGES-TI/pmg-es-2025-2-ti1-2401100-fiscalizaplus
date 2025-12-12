@@ -82,6 +82,12 @@
       }
     });
 
+    // Atualiza nome na sidebar do usuário mobile
+    const sidebarUserName = document.getElementById('sidebar-user-name');
+    if (sidebarUserName) {
+      sidebarUserName.textContent = nomeCompleto;
+    }
+
     // Atualiza elementos por classe (para elementos que não têm ID)
     const nameUserElements = document.querySelectorAll('.name-user');
     nameUserElements.forEach(element => {
@@ -149,6 +155,7 @@
         
         // Atualiza elementos HTML
         updateUserElements(completeUser);
+        updateMobileSidebar(); // Atualiza sidebar mobile após carregar dados do usuário
         
         console.log('[Current User] Dados do usuário carregados:', completeUser);
       } else {
@@ -163,6 +170,7 @@
       if (user) {
         updateUserElements(user);
       }
+      updateMobileSidebar(); // Atualiza sidebar mobile mesmo em caso de erro
     }
   }
 
@@ -181,27 +189,55 @@
     console.log('[Logout] Usuário deslogado com sucesso');
     
     // Determina o caminho correto para a página de login
-    // Estrutura: /modulos/painel-cidadao/... -> /modulos/login/login.html
-    const currentPath = window.location.pathname;
+    // Usa uma abordagem mais robusta que sempre funciona
+    const currentUrl = new URL(window.location.href);
+    const currentPath = currentUrl.pathname;
+    
+    // Calcula o caminho relativo baseado na estrutura de pastas
     let loginPath = '';
     
-    if (currentPath.includes('/painel-cidadao/')) {
-      // Se está em uma subpasta do painel-cidadao (comunidade, dashboard, etc)
-      if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
-        // Ex: /modulos/painel-cidadao/comunidade/comunidade.html -> ../../login/login.html
-        loginPath = '../../login/login.html';
-      } else {
-        // Ex: /modulos/painel-cidadao/index.html -> ../login/login.html
+    // Conta quantos níveis de profundidade estamos (após /modulos/)
+    // Ex: /modulos/painel-cidadao/index.html -> 1 nível -> ../login/login.html
+    // Ex: /modulos/painel-cidadao/comunidade/comunidade.html -> 2 níveis -> ../../login/login.html
+    const pathParts = currentPath.split('/').filter(p => p);
+    const modulosIndex = pathParts.indexOf('modulos');
+    
+    if (modulosIndex !== -1) {
+      // Conta quantas pastas há após 'modulos'
+      const depth = pathParts.length - modulosIndex - 2; // -2 porque não conta 'modulos' nem o arquivo HTML
+      
+      if (depth === 0) {
+        // Estamos em /modulos/algum-arquivo.html -> ../login/login.html
         loginPath = '../login/login.html';
+      } else if (depth === 1) {
+        // Estamos em /modulos/painel-cidadao/index.html -> ../login/login.html
+        loginPath = '../login/login.html';
+      } else {
+        // Estamos em /modulos/painel-cidadao/comunidade/comunidade.html -> ../../login/login.html
+        loginPath = '../'.repeat(depth) + 'login/login.html';
       }
     } else {
-      // Para outras páginas, tenta caminho padrão
-      loginPath = '../modulos/login/login.html';
+      // Fallback: se não encontrar 'modulos', tenta caminho padrão
+      loginPath = '../login/login.html';
     }
     
+    console.log('[Logout] Redirecionando para:', loginPath, 'de', currentPath);
+    
     // Redireciona para a página de login
-    window.location.href = loginPath;
+    try {
+      window.location.href = loginPath;
+    } catch (error) {
+      console.error('[Logout] Erro ao redirecionar:', error);
+      // Fallback: tenta usar caminho absoluto
+      const baseUrl = currentUrl.origin;
+      const loginUrl = baseUrl + '/modulos/login/login.html';
+      console.log('[Logout] Tentando caminho absoluto:', loginUrl);
+      window.location.href = loginUrl;
+    }
   }
+  
+  // Expõe a função globalmente para uso em outros scripts
+  window.logoutUser = logoutUser;
 
   /**
    * Atualiza o dropdown do menu do usuário baseado no estado de login
@@ -348,6 +384,181 @@
   }
 
   /**
+   * Atualiza a sidebar mobile baseada no estado de login
+   */
+  function updateMobileSidebar() {
+    const user = getUsuarioCorrente();
+    const sidebarLinks = document.querySelector('.user-sidebar-links');
+    
+    if (!sidebarLinks) {
+      return; // Sidebar não existe nesta página
+    }
+    
+    const currentPath = window.location.pathname;
+    let loginPath = '';
+    let cadastroPath = '';
+    let painelUsuarioPath = '';
+    let meuPerfilPath = '';
+    
+    // Calcula caminhos baseado na localização atual
+    if (currentPath.includes('/painel-cidadao/')) {
+      if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
+        // Subpasta: comunidade, dashboard, etc
+        loginPath = '../../login/login.html';
+        cadastroPath = '../../cadastro/cadastro-cidadao.html';
+        painelUsuarioPath = '../painel-de-usuario/index.html';
+        meuPerfilPath = '../meu-perfil/index.html';
+      } else {
+        // Pasta principal: painel-cidadao/index.html
+        loginPath = '../login/login.html';
+        cadastroPath = '../cadastro/cadastro-cidadao.html';
+        painelUsuarioPath = 'painel-de-usuario/index.html';
+        meuPerfilPath = 'meu-perfil/index.html';
+      }
+    } else if (currentPath.includes('/guia/')) {
+      loginPath = '../login/login.html';
+      cadastroPath = '../cadastro/cadastro-cidadao.html';
+      painelUsuarioPath = '../painel-cidadao/painel-de-usuario/index.html';
+      meuPerfilPath = '../painel-cidadao/meu-perfil/index.html';
+    } else {
+      loginPath = '../login/login.html';
+      cadastroPath = '../cadastro/cadastro-cidadao.html';
+      painelUsuarioPath = '../painel-cidadao/painel-de-usuario/index.html';
+      meuPerfilPath = '../painel-cidadao/meu-perfil/index.html';
+    }
+    
+    if (!user || !user.id) {
+      // Se não há usuário logado (visitante), mostra opções de login/cadastro
+      sidebarLinks.innerHTML = `
+        <a href="${loginPath}" class="sidebar-link">
+          <i class="fa-solid fa-sign-in-alt"></i>
+          <span>Entrar</span>
+        </a>
+        <a href="${cadastroPath}" class="sidebar-link">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Registrar-se</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebar-theme-toggle">
+          <i class="fa-solid fa-moon" id="sidebar-theme-icon"></i>
+          <span id="sidebar-theme-text">Modo Escuro</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebar-logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sair</span>
+        </a>
+      `;
+      
+      // Adiciona event listener para logout quando for visitante
+      const logoutLink = sidebarLinks.querySelector('#sidebar-logout');
+      if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (confirm('Tem certeza que deseja sair?')) {
+            logoutUser();
+          }
+        });
+      }
+      
+      // Re-inicializa o toggle de tema
+      initSidebarThemeToggle();
+    } else {
+      // Se há usuário logado, mostra menu normal
+      sidebarLinks.innerHTML = `
+        <a href="${meuPerfilPath}" class="sidebar-link">
+          <i class="fa-solid fa-user"></i>
+          <span>Meu Perfil</span>
+        </a>
+        <a href="${painelUsuarioPath}" class="sidebar-link">
+          <i class="fa-solid fa-file-circle-exclamation"></i>
+          <span>Minhas Denúncias</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebar-theme-toggle">
+          <i class="fa-solid fa-moon" id="sidebar-theme-icon"></i>
+          <span id="sidebar-theme-text">Modo Escuro</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebar-logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sair</span>
+        </a>
+      `;
+      
+      // Adiciona event listener para logout
+      const logoutLink = sidebarLinks.querySelector('#sidebar-logout');
+      if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (confirm('Tem certeza que deseja sair?')) {
+            logoutUser();
+          }
+        });
+      }
+      
+      // Re-inicializa o toggle de tema
+      initSidebarThemeToggle();
+    }
+  }
+  
+  /**
+   * Inicializa o toggle de tema na sidebar
+   */
+  function initSidebarThemeToggle() {
+    const sidebarThemeToggle = document.getElementById('sidebar-theme-toggle');
+    const sidebarThemeIcon = document.getElementById('sidebar-theme-icon');
+    const sidebarThemeText = document.getElementById('sidebar-theme-text');
+    const themeToggle = document.getElementById('themeToggle');
+    
+    if (sidebarThemeToggle && sidebarThemeIcon && sidebarThemeText) {
+      // Atualizar texto e ícone baseado no tema atual
+      function updateSidebarThemeButton() {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const isDark = currentTheme === 'dark';
+        
+        sidebarThemeIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        sidebarThemeText.textContent = isDark ? 'Modo Claro' : 'Modo Escuro';
+      }
+      
+      // Atualizar ao carregar
+      updateSidebarThemeButton();
+      
+      // Remove listeners anteriores para evitar duplicação
+      // Cria um novo elemento para remover todos os listeners
+      const newToggle = sidebarThemeToggle.cloneNode(true);
+      sidebarThemeToggle.parentNode.replaceChild(newToggle, sidebarThemeToggle);
+      
+      // Adiciona novo listener
+      const newToggleEl = document.getElementById('sidebar-theme-toggle');
+      if (newToggleEl) {
+        newToggleEl.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (window.toggleTheme) {
+            window.toggleTheme();
+          } else if (themeToggle) {
+            themeToggle.click();
+          }
+          setTimeout(updateSidebarThemeButton, 100);
+        });
+      }
+      
+      // Observar mudanças no atributo data-theme para atualizar o botão
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            updateSidebarThemeButton();
+          }
+        });
+      });
+      
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+    }
+  }
+  
+  /**
    * Inicializa os event listeners para os botões de logout
    * NOTA: Esta função não é mais necessária pois os listeners são adicionados
    * diretamente em updateUserDropdown() para evitar duplicação.
@@ -422,12 +633,17 @@
     cleanInvalidSessionData();
     loadUserData();
     updateUserDropdown();
+    updateMobileSidebar(); // Atualiza a sidebar mobile
     // initLogoutButtons() é chamado como fallback para elementos que não têm IDs específicos
     // mas agora verifica se já tem listener para evitar duplicação
     setTimeout(() => {
       initLogoutButtons();
+      updateMobileSidebar(); // Atualiza novamente após um delay para garantir que tudo está carregado
     }, 100); // Pequeno delay para garantir que updateUserDropdown() já executou
   }
+
+  // Expõe a função para atualizar a sidebar mobile globalmente
+  window.updateMobileSidebar = updateMobileSidebar;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
