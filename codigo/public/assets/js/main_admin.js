@@ -45,11 +45,27 @@ async function fetchDenuncias() {
 // CARDS
 function updateKPIs(denuncias) {
   const total = denuncias.length;
-  const concluido = denuncias.filter(d => d.statusAtual === "Concluido").length;
+  const concluido = denuncias.filter(d => d.statusAtual === "Concluido" || d.statusAtual === "Concluído").length;
   const pendente = denuncias.filter(d => d.statusAtual === "Pendente").length;
   const emAndamento = denuncias.filter(d => d.statusAtual === "Em Andamento").length;
 
-  const tempoMedioTexto = "--";
+  // Calcula tempo médio de resposta
+  const denunciasAtendidas = denuncias.filter(denuncia => {
+    const dataRegistro = new Date(denuncia.dataRegistro);
+    const dataAtualizacao = new Date(denuncia.dataUltimaAtualizacaoStatus || denuncia.dataRegistro);
+    return denuncia.statusAtual !== 'Pendente' && dataAtualizacao > dataRegistro;
+  });
+
+  let tempoMedioTexto = "--";
+  if (denunciasAtendidas.length > 0) {
+    const temposResposta = denunciasAtendidas.map(d => {
+      const dataRegistro = new Date(d.dataRegistro);
+      const dataAtualizacao = new Date(d.dataUltimaAtualizacaoStatus);
+      return dataAtualizacao - dataRegistro;
+    });
+    const tempoMedioMs = temposResposta.reduce((a, b) => a + b, 0) / temposResposta.length;
+    tempoMedioTexto = formatarTempoResumo(tempoMedioMs);
+  }
 
   const taxaResolucao = total > 0 ? ((concluido / total) * 100).toFixed(1) : 0;
 
@@ -59,7 +75,25 @@ function updateKPIs(denuncias) {
   document.querySelector("#pendentesAdmin").textContent = pendente;
   document.querySelector("#andamentoAdmin").textContent = emAndamento;
   // Card de tempo médio
-  document.querySelector("#tempoMedioAdmin").textContent = tempoMedioTexto;
+  const tempoMedioElement = document.querySelector("#tempoMedioAdmin");
+  if (tempoMedioElement) {
+    tempoMedioElement.textContent = tempoMedioTexto;
+  }
+}
+
+// Função auxiliar para formatar tempo de forma resumida
+function formatarTempoResumo(ms) {
+  const dias = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (dias > 0) {
+    return `${dias}d ${horas}h`;
+  } else if (horas > 0) {
+    return `${horas}h`;
+  } else {
+    const minutos = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    return `${minutos}m`;
+  }
 }
 
 // TABELA

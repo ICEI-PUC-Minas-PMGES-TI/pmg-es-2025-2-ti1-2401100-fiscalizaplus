@@ -54,7 +54,6 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         border-left: 4px solid #d62828;
         transition: all 0.3s;
-        cursor: pointer;
       }
 
       .notification-card:hover {
@@ -143,6 +142,23 @@
         font-size: 4rem;
         margin-bottom: 20px;
         opacity: 0.5;
+      }
+
+      .mark-read-btn {
+        border: 1px solid #6c757d;
+        background: transparent;
+        color: #6c757d;
+        transition: all 0.2s;
+      }
+
+      .mark-read-btn:hover {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+      }
+
+      .notification-card.read {
+        opacity: 0.85;
       }
 
       /* ========== RESPONSIVIDADE MOBILE ========== */
@@ -243,8 +259,8 @@
                     aria-expanded="false" style="color: white; cursor: pointer;">
                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do Usuário"
                         class="user-img mb-2">
-                    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
-                    <p class="text-white-50 small">paulo@prefeitura.com</p>
+                    <p class="mb-0 fw-semibold"></p>
+                    <p class="text-white-50 small"></p>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark mx-auto text-start" style="width: 250px;">
                     <li class="dropdown-header text-uppercase small">Conta & Sistema</li>
@@ -318,57 +334,7 @@
                 </div>
 
                 <div id="notifications-list">
-                    <div class="notification-card unread important">
-                        <div class="notification-header">
-                            <div>
-                                <div class="notification-title">Nova denúncia registrada</div>
-                                <div class="notification-time"><i class="bi bi-clock me-1"></i>Há 2 horas</div>
-                            </div>
-                            <span class="notification-badge badge-danger">Urgente</span>
-                        </div>
-                        <div class="notification-message">
-                            Uma nova denúncia foi registrada no bairro Centro. Requer atenção imediata.
-                        </div>
-                    </div>
-
-                    <div class="notification-card unread">
-                        <div class="notification-header">
-                            <div>
-                                <div class="notification-title">Denúncia atualizada</div>
-                                <div class="notification-time"><i class="bi bi-clock me-1"></i>Há 5 horas</div>
-                            </div>
-                            <span class="notification-badge badge-info">Informação</span>
-                        </div>
-                        <div class="notification-message">
-                            A denúncia OCOR-0001 teve seu status alterado para "Em Andamento".
-                        </div>
-                    </div>
-
-                    <div class="notification-card">
-                        <div class="notification-header">
-                            <div>
-                                <div class="notification-title">Relatório semanal gerado</div>
-                                <div class="notification-time"><i class="bi bi-clock me-1"></i>Ontem</div>
-                            </div>
-                            <span class="notification-badge badge-success">Sucesso</span>
-                        </div>
-                        <div class="notification-message">
-                            O relatório semanal de denúncias foi gerado com sucesso e está disponível para download.
-                        </div>
-                    </div>
-
-                    <div class="notification-card">
-                        <div class="notification-header">
-                            <div>
-                                <div class="notification-title">Sistema atualizado</div>
-                                <div class="notification-time"><i class="bi bi-clock me-1"></i>Há 3 dias</div>
-                            </div>
-                            <span class="notification-badge badge-info">Sistema</span>
-                        </div>
-                        <div class="notification-message">
-                            O sistema foi atualizado com novas funcionalidades. Verifique as novidades.
-                        </div>
-                    </div>
+                    <!-- Notificações serão carregadas dinamicamente -->
                 </div>
 
                 <div class="empty-state d-none" id="empty-notifications">
@@ -388,14 +354,9 @@
         sidebar.classList.toggle('show');
         overlay.classList.toggle('show');
       }
-
-      // Marcar notificação como lida ao clicar
-      document.querySelectorAll('.notification-card').forEach(card => {
-        card.addEventListener('click', function() {
-          this.classList.remove('unread');
-        });
-      });
     </script>
+    <script src="../../assets/js/current-user-servidor.js"></script>
+    <script src="../../assets/js/notificacoes-servidor.js"></script>
 </body>
 </html>
 

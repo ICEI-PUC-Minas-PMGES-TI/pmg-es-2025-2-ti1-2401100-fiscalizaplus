@@ -104,6 +104,12 @@
     try {
       const user = getUsuarioCorrente();
       
+      // Se o usuário for servidor, não processa (deixa para current-user-servidor.js)
+      if (user && user.tipo === 'servidor') {
+        console.log('[Current User] Usuário é servidor, ignorando processamento');
+        return;
+      }
+      
       // Verifica se é administrador ou dados inválidos
       const isAdmin = user && (
         user.id === 'admin' || user.id === 'administrador' || user.id === 1 ||

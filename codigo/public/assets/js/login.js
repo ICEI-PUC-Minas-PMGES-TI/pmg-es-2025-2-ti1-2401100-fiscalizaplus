@@ -118,8 +118,7 @@ async function loginUser (emailOuLogin, senha) {
 
     console.log('Tentativa de login:', { emailOuLogin: emailOuLoginNormalizado, loginExtraido, senhaLength: senha.length });
 
-    // Verifica todos os itens do banco de dados de usuarios 
-    // para localizar o usuário informado no formulario de login
+    // Primeiro tenta encontrar em cidadãos
     for (var i = 0; i < db_usuarios.length; i++) {
         var usuario = db_usuarios[i];
 
@@ -154,6 +153,7 @@ async function loginUser (emailOuLogin, senha) {
                     usuarioCorrente.nomeCompleto = data.nomeCompleto || data.nome || usuario.nome;
                     usuarioCorrente.estado = data.estado || null;
                     usuarioCorrente.cidade = data.cidade || null;
+                    usuarioCorrente.tipo = 'cidadao'; // Define tipo como cidadão
                 } else {
                     throw new Error('Usuário não encontrado no servidor');
                 }
@@ -165,6 +165,7 @@ async function loginUser (emailOuLogin, senha) {
                 usuarioCorrente.email = usuario.email;
                 usuarioCorrente.nome = usuario.nome;
                 usuarioCorrente.nomeCompleto = usuario.nome;
+                usuarioCorrente.tipo = 'cidadao'; // Define tipo como cidadão
             }
 
             // Remove flag de visitante ao fazer login
@@ -177,6 +178,45 @@ async function loginUser (emailOuLogin, senha) {
 
             return true;
         }
+    }
+
+    // Se não encontrou em cidadãos, busca em servidores
+    try {
+        const servidoresResponse = await fetch(`${API_BASE}/servidores`);
+        const servidores = await servidoresResponse.json();
+        
+        if (Array.isArray(servidores)) {
+            for (const servidor of servidores) {
+                const emailLower = (servidor.email || '').toLowerCase();
+                const emailMatch = emailLower === emailOuLoginNormalizado;
+                const senhaMatch = senha === (servidor.senhaHash || servidor.senha || '');
+                
+                if (emailMatch && senhaMatch) {
+                    // Usuário encontrado como servidor
+                    usuarioCorrente.id = servidor.id;
+                    usuarioCorrente.email = servidor.email;
+                    usuarioCorrente.nome = servidor.nome || servidor.nomeCompleto || 'Servidor';
+                    usuarioCorrente.nomeCompleto = servidor.nomeCompleto || servidor.nome || 'Servidor';
+                    usuarioCorrente.estado = servidor.estado || null;
+                    usuarioCorrente.cidade = servidor.cidade || null;
+                    usuarioCorrente.orgaoId = servidor.orgaoId || null;
+                    usuarioCorrente.tipo = 'servidor'; // Define tipo como servidor
+                    
+                    // Remove flag de visitante ao fazer login
+                    sessionStorage.removeItem('isGuest');
+                    
+                    const userJson = JSON.stringify(usuarioCorrente);
+                    sessionStorage.setItem('usuarioCorrente', userJson);
+                    sessionStorage.setItem('fp_user', userJson);
+                    sessionStorage.setItem('user', userJson);
+                    
+                    console.log('Login de servidor bem-sucedido:', usuarioCorrente);
+                    return true;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao buscar servidores:', error);
     }
 
     return false;

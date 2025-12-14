@@ -44,7 +44,6 @@
         height: 120px;
         border-radius: 50%;
         border: 5px solid white;
-        object-fit: cover;
         margin-bottom: 20px;
       }
 
@@ -225,8 +224,8 @@
                     aria-expanded="false" style="color: white; cursor: pointer;">
                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do Usuário"
                         class="user-img mb-2">
-                    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
-                    <p class="text-white-50 small">paulo@prefeitura.com</p>
+                    <p class="mb-0 fw-semibold"></p>
+                    <p class="text-white-50 small"></p>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark mx-auto text-start" style="width: 250px;">
                     <li class="dropdown-header text-uppercase small">Conta & Sistema</li>
@@ -263,8 +262,8 @@
         <main class="admin-dashboard">
             <div class="profile-container">
                 <div class="profile-header">
-                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" class="profile-avatar">
-                    <h1 class="mb-2">Paulo Cardoso</h1>
+                    <div id="profile-avatar" class="profile-avatar" style="display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); font-size: 3rem; font-weight: bold; color: white;"></div>
+                    <h1 id="profile-nome-completo" class="mb-2">Carregando...</h1>
                     <p class="mb-0 opacity-75">Servidor Público</p>
                 </div>
 
@@ -275,13 +274,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nome Completo</label>
-                                    <input type="text" class="form-control" value="Paulo Cardoso" readonly>
+                                    <input id="profile-input-nome-completo" type="text" class="form-control" value="" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>E-mail</label>
-                                    <input type="email" class="form-control" value="paulo@prefeitura.com" readonly>
+                                    <input id="profile-input-email" type="email" class="form-control" value="" readonly>
                                 </div>
                             </div>
                         </div>
@@ -289,13 +288,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Matrícula</label>
-                                    <input type="text" class="form-control" value="SER-2024-001" readonly>
+                                    <input id="profile-input-matricula" type="text" class="form-control" value="" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Órgão</label>
-                                    <input type="text" class="form-control" value="Secretaria de Obras" readonly>
+                                    <input id="profile-input-orgao" type="text" class="form-control" value="" readonly>
                                 </div>
                             </div>
                         </div>
@@ -304,20 +303,20 @@
 
                 <div class="profile-card">
                     <h3><i class="bi bi-shield-lock me-2"></i>Segurança</h3>
-                    <form>
+                    <form id="form-alterar-senha">
                         <div class="form-group">
                             <label>Senha Atual</label>
-                            <input type="password" class="form-control" placeholder="Digite sua senha atual">
+                            <input id="senha-atual" type="password" class="form-control" placeholder="Digite sua senha atual" required>
                         </div>
                         <div class="form-group">
                             <label>Nova Senha</label>
-                            <input type="password" class="form-control" placeholder="Digite sua nova senha">
+                            <input id="nova-senha" type="password" class="form-control" placeholder="Digite sua nova senha" required>
                         </div>
                         <div class="form-group">
                             <label>Confirmar Nova Senha</label>
-                            <input type="password" class="form-control" placeholder="Confirme sua nova senha">
+                            <input id="confirmar-senha" type="password" class="form-control" placeholder="Confirme sua nova senha" required>
                         </div>
-                        <button type="button" class="btn btn-save">
+                        <button type="button" id="btn-alterar-senha" class="btn btn-save">
                             <i class="bi bi-key me-1"></i>Alterar Senha
                         </button>
                     </form>
@@ -368,6 +367,8 @@
         overlay.classList.toggle('show');
       }
     </script>
+    <script src="../../assets/js/current-user-servidor.js"></script>
+    <script src="../../assets/js/perfil-servidor.js"></script>
 </body>
 </html>
 

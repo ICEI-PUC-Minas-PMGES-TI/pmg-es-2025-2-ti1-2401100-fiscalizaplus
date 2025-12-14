@@ -805,8 +805,21 @@
                             const success = await loginUser(email, senha);
                             if (success) {
                                 alert('Login realizado com sucesso!');
-                                // Redireciona para o painel do cidadão
-                                window.location.href = '../../index.html';
+                                // Verifica o tipo de usuário para redirecionar corretamente
+                                const usuarioCorrenteJSON = sessionStorage.getItem('usuarioCorrente');
+                                if (usuarioCorrenteJSON) {
+                                    const usuarioCorrente = JSON.parse(usuarioCorrenteJSON);
+                                    if (usuarioCorrente.tipo === 'servidor') {
+                                        // Redireciona para o painel do servidor
+                                        window.location.href = '../painel-servidor/dashboard_admin.html';
+                                    } else {
+                                        // Redireciona para o painel do cidadão
+                                        window.location.href = '../../index.html';
+                                    }
+                                } else {
+                                    // Fallback: redireciona para cidadão
+                                    window.location.href = '../../index.html';
+                                }
                             } else {
                                 alert('Email ou senha incorretos. Verifique os dados e tente novamente.');
                             }

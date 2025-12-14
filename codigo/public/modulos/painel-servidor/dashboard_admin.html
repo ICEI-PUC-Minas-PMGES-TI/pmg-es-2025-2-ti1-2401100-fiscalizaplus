@@ -303,8 +303,8 @@
                     aria-expanded="false" style="color: white; cursor: pointer;">
                     <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do Usuário Paulo Cardoso"
                         class="user-img mb-2">
-                    <p class="mb-0 fw-semibold">Paulo Cardoso</p>
-                    <p class="text-white-50 small">paulo@prefeitura.com</p>
+                    <p class="mb-0 fw-semibold"></p>
+                    <p class="text-white-50 small"></p>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark mx-auto text-start" style="width: 250px;">
                     <li class="dropdown-header text-uppercase small">Conta & Sistema</li>
@@ -361,9 +361,10 @@
                     <h2>Denúncias Em Andamento</h2>
                     <p class="valor" id="andamentoAdmin">0</p>
                 </div>
-                <div class="card estatistica destaque-informacao">
+                <div class="card estatistica destaque-informacao" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalTempoMedio" onclick="calcularTempoMedio()">
                     <h2>Tempo Médio de Resolução</h2>
                     <p class="valor" id="tempoMedioAdmin">--</p>
+                    <small style="font-size: 0.75rem; opacity: 0.8;">Clique para detalhes</small>
                 </div>
                 <div class="card estatistica destaque-sucesso">
                     <h2>Taxa de Resolução</h2>
@@ -576,6 +577,35 @@
       // Tornar função global para ser chamada do main_admin.js
       window.criarCardsMobile = criarCardsMobile;
     </script>
+    <!-- Modal Tempo Médio de Resposta -->
+    <div class="modal fade" id="modalTempoMedio" tabindex="-1" aria-labelledby="modalTempoMedioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTempoMedioLabel">
+                        <i class="bi bi-clock-history me-2"></i>Tempo Médio de Resposta
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="tempo-medio-content">
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                            <p class="mt-3 text-muted">Calculando tempo médio...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../../assets/js/main_admin.js"></script>
+    <script src="../../assets/js/tempo-medio-resposta.js"></script>
+    <script src="../../assets/js/current-user-servidor.js"></script>
 </body>
 </html>
