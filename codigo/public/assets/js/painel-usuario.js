@@ -1122,15 +1122,15 @@
           if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
             // Subpasta: comunidade, dashboard, etc
             loginPath = '../../login/login.html';
-            cadastroPath = '../../cadastro/cadastro-cidadao.html';
+            cadastroPath = '../../cadastro/escolher-tipo.html';
           } else {
             // Pasta principal: painel-cidadao/index.html
             loginPath = '../login/login.html';
-            cadastroPath = '../cadastro/cadastro-cidadao.html';
+            cadastroPath = '../cadastro/escolher-tipo.html';
           }
         } else {
           loginPath = '../modulos/login/login.html';
-          cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+          cadastroPath = '../modulos/cadastro/escolher-tipo.html';
         }
         ultimasDenunciasContainer.innerHTML = `
           <div class="text-center p-3">
@@ -1153,15 +1153,15 @@
           if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
             // Subpasta: comunidade, dashboard, etc
             loginPath = '../../login/login.html';
-            cadastroPath = '../../cadastro/cadastro-cidadao.html';
+            cadastroPath = '../../cadastro/escolher-tipo.html';
           } else {
             // Pasta principal: painel-cidadao/index.html
             loginPath = '../login/login.html';
-            cadastroPath = '../cadastro/cadastro-cidadao.html';
+            cadastroPath = '../cadastro/escolher-tipo.html';
           }
         } else {
           loginPath = '../modulos/login/login.html';
-          cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+          cadastroPath = '../modulos/cadastro/escolher-tipo.html';
         }
         userImpactBody.innerHTML = `
           <div class="text-center p-3">
@@ -1187,19 +1187,24 @@
       let loginPath = '';
       let cadastroPath = '';
       
-      if (currentPath.includes('/painel-cidadao/')) {
+      // Verifica se está na raiz (index.html)
+      if (currentPath === '/' || currentPath === '/index.html' || (currentPath.endsWith('/index.html') && !currentPath.includes('/modulos/'))) {
+        // Está na raiz do projeto
+        loginPath = 'modulos/login/login.html';
+        cadastroPath = 'modulos/cadastro/escolher-tipo.html';
+      } else if (currentPath.includes('/painel-cidadao/')) {
         if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
           // Subpasta: comunidade, dashboard, etc
           loginPath = '../../login/login.html';
-          cadastroPath = '../../cadastro/cadastro-cidadao.html';
+          cadastroPath = '../../cadastro/escolher-tipo.html';
         } else {
           // Pasta principal: painel-cidadao/index.html
           loginPath = '../login/login.html';
-          cadastroPath = '../cadastro/cadastro-cidadao.html';
+          cadastroPath = '../cadastro/escolher-tipo.html';
         }
       } else {
-        loginPath = '../modulos/login/login.html';
-        cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+        loginPath = 'modulos/login/login.html';
+        cadastroPath = 'modulos/cadastro/escolher-tipo.html';
       }
       
       // Bloqueia o botão de reportar e adiciona aviso

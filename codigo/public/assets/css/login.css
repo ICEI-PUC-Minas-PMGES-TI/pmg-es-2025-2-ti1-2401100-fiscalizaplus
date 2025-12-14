@@ -13,6 +13,7 @@ body {
 
 .login-container {
     height: 100vh;
+    min-height: 100vh;
 }
 
 /* --- LADO ESQUERDO (FORMULÁRIO) --- */
@@ -183,14 +184,455 @@ body {
     background: linear-gradient(135deg, rgba(214, 40, 40, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
 }
 
-/* Responsividade */
+/* Responsividade - Mobile First Approach */
+
+/* Tablets e telas médias (768px - 1024px) */
+@media (max-width: 1024px) {
+    .login-form-side {
+        padding: 0 6%;
+    }
+    
+    .logo-text {
+        font-size: 1.6rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Tablets pequenos e mobile landscape (481px - 768px) */
 @media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    .login-container {
+        height: auto;
+        min-height: 100vh;
+    }
+    
     .login-image-side {
         display: none;
-        /* Esconde a imagem em celulares */
     }
-
+    
     .login-form-side {
-        padding: 2rem;
+        padding: 2rem 1.5rem;
+        min-height: 100vh;
+        justify-content: flex-start;
+        padding-top: 2rem;
+    }
+    
+    .logo-area {
+        margin-bottom: 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 1.5rem;
+    }
+    
+    .welcome-text {
+        margin-bottom: 1.5rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .welcome-text p {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1rem !important;
+    }
+    
+    .btn-login,
+    .btn-login-guest {
+        padding: 11px;
+        font-size: 0.95rem;
+    }
+    
+    .divider-container {
+        margin: 1.5rem 0 !important;
+    }
+    
+    .register-text {
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile (até 480px) */
+@media (max-width: 480px) {
+    body {
+        overflow-y: auto;
+    }
+    
+    .login-container {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .login-form-side {
+        padding: 1.5rem 1.25rem;
+        padding-top: 1.5rem;
+        padding-bottom: 2rem;
+    }
+    
+    .logo-area {
+        margin-bottom: 1.25rem;
+    }
+    
+    .logo-area .d-flex {
+        gap: 0.5rem !important;
+    }
+    
+    .logo-area img {
+        width: 50px !important;
+    }
+    
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    .welcome-text {
+        margin-bottom: 1.25rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0.35rem;
+        line-height: 1.3;
+    }
+    
+    .welcome-text p {
+        font-size: 0.85rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.4;
+    }
+    
+    .form-floating {
+        margin-bottom: 0.875rem !important;
+    }
+    
+    .form-floating>.form-control {
+        padding-left: 0.875rem;
+        font-size: 16px; /* Previne zoom no iOS */
+        padding-top: 1.625rem;
+        padding-bottom: 0.625rem;
+        height: calc(3.5rem + 2px);
+    }
+    
+    .form-floating>label {
+        padding-left: 0.875rem;
+        font-size: 0.875rem;
+        padding-top: 1.625rem;
+    }
+    
+    .form-floating>.form-control:focus~label,
+    .form-floating>.form-control:not(:placeholder-shown)~label {
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        padding-top: 0.5rem;
+    }
+    
+    /* Ajuste do ícone de senha */
+    #togglePassword {
+        right: 0.75rem !important;
+        font-size: 1.1rem;
+    }
+    
+    /* Lembrar de mim e Esqueceu senha */
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem !important;
+    }
+    
+    .form-check-label {
+        font-size: 0.85rem;
+    }
+    
+    .link-esqueceu {
+        font-size: 0.85rem;
+        align-self: flex-end;
+    }
+    
+    .btn-login,
+    .btn-login-guest {
+        padding: 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+    
+    .divider-container {
+        margin: 1.25rem 0 !important;
+        gap: 0.75rem;
+    }
+    
+    .divider-text {
+        font-size: 0.85rem;
+    }
+    
+    .register-text {
+        margin-top: 1.25rem;
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    
+    /* Modal responsivo */
+    .modal-dialog {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+    
+    .modal-content {
+        border-radius: 12px;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+/* Mobile muito pequeno (até 360px) */
+@media (max-width: 360px) {
+    .login-form-side {
+        padding: 1.25rem 1rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1.75rem;
+    }
+    
+    .logo-area img {
+        width: 45px !important;
+    }
+    
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.15rem;
+    }
+    
+    .welcome-text p {
+        font-size: 0.8rem;
+    }
+    
+    .form-floating>.form-control {
+        padding-left: 0.75rem;
+        font-size: 16px;
+    }
+    
+    .form-floating>label {
+        padding-left: 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-login,
+    .btn-login-guest {
+        padding: 11px;
+        font-size: 0.85rem;
+    }
+    
+    .register-text {
+        font-size: 0.75rem;
+    }
+}
+
+/* Landscape mobile (orientação horizontal) */
+@media (max-width: 768px) and (orientation: landscape) {
+    body {
+        overflow-y: auto;
+    }
+    
+    .login-container {
+        height: auto;
+        min-height: auto;
+    }
+    
+    .login-form-side {
+        padding: 1.5rem 2rem;
+        min-height: auto;
+        justify-content: center;
+    }
+    
+    .logo-area {
+        margin-bottom: 1rem;
+    }
+    
+    .logo-area img {
+        width: 45px !important;
+    }
+    
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    .welcome-text {
+        margin-bottom: 1rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .welcome-text p {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .d-flex.justify-content-between {
+        margin-bottom: 1rem !important;
+    }
+    
+    .divider-container {
+        margin: 1rem 0 !important;
+    }
+    
+    .register-text {
+        margin-top: 1rem;
+    }
+}
+
+/* Ajustes para inputs em iOS */
+@supports (-webkit-touch-callout: none) {
+    @media (max-width: 480px) {
+        .form-floating>.form-control {
+            font-size: 16px; /* Previne zoom automático no iOS */
+        }
+    }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Estilos adicionais para modal em mobile */
+@media (max-width: 480px) {
+    .modal-dialog-centered {
+        min-height: calc(100% - 2rem);
+        display: flex;
+        align-items: center;
+    }
+    
+    .modal-content {
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-body .form-floating {
+        margin-bottom: 1rem !important;
+    }
+    
+    .modal-body .form-floating>.form-control {
+        font-size: 16px; /* Previne zoom no iOS */
+        padding-left: 0.875rem;
+    }
+    
+    .modal-body .form-floating>label {
+        padding-left: 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    .modal-body p.text-muted {
+        font-size: 0.875rem;
+        margin-bottom: 1rem !important;
+    }
+    
+    .modal-body small.text-muted {
+        font-size: 0.75rem;
+    }
+    
+    .modal-footer {
+        border-top: 1px solid #dee2e6;
+    }
+    
+    .modal-footer .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .alert {
+        font-size: 0.8rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Ajustes para inputs do modal em mobile muito pequeno */
+@media (max-width: 360px) {
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    .modal-header {
+        padding: 0.75rem;
+    }
+    
+    .modal-title {
+        font-size: 1rem;
+    }
+    
+    .modal-body {
+        padding: 0.75rem;
+    }
+    
+    .modal-footer {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .modal-footer .btn {
+        font-size: 0.85rem;
+        padding: 0.45rem 0.75rem;
+    }
+}
+
+/* Ajustes para telas muito grandes */
+@media (min-width: 1400px) {
+    .login-form-side {
+        padding: 0 10%;
+    }
+    
+    .logo-text {
+        font-size: 2rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 2rem;
     }
 }

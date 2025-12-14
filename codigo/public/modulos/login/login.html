@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>FiscalizaPlus</title>
     
     <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
@@ -90,11 +90,7 @@
 
                     <!-- Cadastre-se -->
                     <div class="register-text">
-                        Não tem uma conta? <a href="#">Cadastre-se</a>
-                        <div class="mt-2">
-                            <a href="../cadastro/cadastro-cidadao.html" class="small text-secondary" style="font-weight: 400;">Sou um Cidadão</a> | 
-                            <a href="../cadastro/token-servidor.html" class="small text-secondary" style="font-weight: 400;">Sou Servidor</a>
-                        </div>
+                        Não tem uma conta? <a href="../cadastro/escolher-tipo.html">Cadastre-se</a>
                     </div>
 
                 </form>
@@ -205,7 +201,7 @@
                     sessionStorage.setItem('isGuest', 'true');
                     
                     // Redireciona para o painel do cidadão sem criar sessão de usuário
-                    window.location.href = '../painel-cidadao/index.html';
+                    window.location.href = '../../index.html';
                 });
             }
 
@@ -810,7 +806,7 @@
                             if (success) {
                                 alert('Login realizado com sucesso!');
                                 // Redireciona para o painel do cidadão
-                                window.location.href = '../painel-cidadao/index.html';
+                                window.location.href = '../../index.html';
                             } else {
                                 alert('Email ou senha incorretos. Verifique os dados e tente novamente.');
                             }

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>FiscalizaPlus - Escolher Tipo de Registro</title>
+    <link rel="stylesheet" href="../../assets/css/cadastro.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    <style>
+        .tipo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .tipo-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            background: white;
+        }
+        .tipo-card:hover {
+            border-color: #c1121f;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(193, 18, 31, 0.2);
+        }
+        .tipo-card:active {
+            transform: translateY(-2px);
+        }
+        .tipo-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+        }
+        .tipo-card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .tipo-icon {
+            font-size: 32px;
+            color: #c1121f;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #c1121f;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+            transform: translateX(-3px);
+        }
+        
+        /* Responsive para escolher-tipo */
+        @media (max-width: 768px) {
+            .tipo-container {
+                gap: 16px;
+                margin-top: 24px;
+            }
+            .tipo-card {
+                padding: 24px 20px;
+                border-radius: 10px;
+            }
+            .tipo-card h3 {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+            .tipo-card p {
+                font-size: 14px;
+            }
+            .tipo-icon {
+                font-size: 28px;
+            }
+            .back-link {
+                margin-top: 16px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tipo-container {
+                gap: 12px;
+                margin-top: 20px;
+            }
+            .tipo-card {
+                padding: 20px 16px;
+                border-radius: 8px;
+                border-width: 1.5px;
+            }
+            .tipo-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(193, 18, 31, 0.15);
+            }
+            .tipo-card h3 {
+                font-size: 16px;
+                margin-bottom: 6px;
+                flex-wrap: wrap;
+            }
+            .tipo-card p {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+            .tipo-icon {
+                font-size: 24px;
+            }
+            .back-link {
+                margin-top: 16px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .tipo-card {
+                padding: 16px 14px;
+            }
+            .tipo-card h3 {
+                font-size: 15px;
+            }
+            .tipo-card p {
+                font-size: 12px;
+            }
+            .tipo-icon {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="logo">
+                <img src="../../assets/images/logo.png" alt="" class="logo-icon">
+            </div>
+
+            <div class="form-header">
+                <h2 class="form-title">Escolha seu tipo de registro</h2>
+                <p class="form-subtitle">Selecione como deseja se registrar na plataforma</p>
+            </div>
+
+            <div class="tipo-container">
+                <a href="cadastro-cidadao.html" class="tipo-card">
+                    <h3>
+                        <i class="fa-solid fa-user tipo-icon"></i>
+                        Sou Cidadão
+                    </h3>
+                    <p>Registre-se como cidadão para reportar problemas nas vias públicas e acompanhar denúncias</p>
+                </a>
+
+                <a href="cadastro-servidor.html" class="tipo-card">
+                    <h3>
+                        <i class="fa-solid fa-briefcase tipo-icon"></i>
+                        Sou Servidor
+                    </h3>
+                    <p>Registre-se como servidor público para gerenciar e responder às denúncias da comunidade</p>
+                </a>
+            </div>
+
+            <div class="login-link">
+                <span>Já possui uma conta? </span>
+                <a href="../login/login.html" class="login-text">Entrar</a>
+            </div>
+
+            <a href="../../index.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i>
+                Voltar para Home
+            </a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>
+

@@ -52,6 +52,7 @@ server.post('/upload', upload.array('imagens', 5), (req, res) => {
   const urls = files.map(f => `/uploads/${f.filename}`)
   return res.json({ urls })
 })
+
 server.use(router)
 
 server.listen(3000, () => {

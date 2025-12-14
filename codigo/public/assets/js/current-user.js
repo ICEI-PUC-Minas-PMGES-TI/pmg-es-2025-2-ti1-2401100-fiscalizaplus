@@ -196,29 +196,35 @@
     // Calcula o caminho relativo baseado na estrutura de pastas
     let loginPath = '';
     
-    // Conta quantos níveis de profundidade estamos (após /modulos/)
-    // Ex: /modulos/painel-cidadao/index.html -> 1 nível -> ../login/login.html
-    // Ex: /modulos/painel-cidadao/comunidade/comunidade.html -> 2 níveis -> ../../login/login.html
-    const pathParts = currentPath.split('/').filter(p => p);
-    const modulosIndex = pathParts.indexOf('modulos');
-    
-    if (modulosIndex !== -1) {
-      // Conta quantas pastas há após 'modulos'
-      const depth = pathParts.length - modulosIndex - 2; // -2 porque não conta 'modulos' nem o arquivo HTML
-      
-      if (depth === 0) {
-        // Estamos em /modulos/algum-arquivo.html -> ../login/login.html
-        loginPath = '../login/login.html';
-      } else if (depth === 1) {
-        // Estamos em /modulos/painel-cidadao/index.html -> ../login/login.html
-        loginPath = '../login/login.html';
-      } else {
-        // Estamos em /modulos/painel-cidadao/comunidade/comunidade.html -> ../../login/login.html
-        loginPath = '../'.repeat(depth) + 'login/login.html';
-      }
+    // Verifica se está na raiz (index.html)
+    if (currentPath === '/' || currentPath === '/index.html' || (currentPath.endsWith('/index.html') && !currentPath.includes('/modulos/'))) {
+      // Está na raiz do projeto
+      loginPath = 'modulos/login/login.html';
     } else {
-      // Fallback: se não encontrar 'modulos', tenta caminho padrão
-      loginPath = '../login/login.html';
+      // Conta quantos níveis de profundidade estamos (após /modulos/)
+      // Ex: /modulos/painel-cidadao/index.html -> 1 nível -> ../login/login.html
+      // Ex: /modulos/painel-cidadao/comunidade/comunidade.html -> 2 níveis -> ../../login/login.html
+      const pathParts = currentPath.split('/').filter(p => p);
+      const modulosIndex = pathParts.indexOf('modulos');
+      
+      if (modulosIndex !== -1) {
+        // Conta quantas pastas há após 'modulos'
+        const depth = pathParts.length - modulosIndex - 2; // -2 porque não conta 'modulos' nem o arquivo HTML
+        
+        if (depth === 0) {
+          // Estamos em /modulos/algum-arquivo.html -> ../login/login.html
+          loginPath = '../login/login.html';
+        } else if (depth === 1) {
+          // Estamos em /modulos/painel-cidadao/index.html -> ../login/login.html
+          loginPath = '../login/login.html';
+        } else {
+          // Estamos em /modulos/painel-cidadao/comunidade/comunidade.html -> ../../login/login.html
+          loginPath = '../'.repeat(depth) + 'login/login.html';
+        }
+      } else {
+        // Fallback: se não encontrar 'modulos', tenta caminho padrão
+        loginPath = 'modulos/login/login.html';
+      }
     }
     
     console.log('[Logout] Redirecionando para:', loginPath, 'de', currentPath);
@@ -251,26 +257,31 @@
         // Se não há usuário logado, mostra opções de login/cadastro
         const currentPath = window.location.pathname;
         let loginPath = '';
-        let cadastroPath = '';
+        let escolherTipoPath = '';
         
-        if (currentPath.includes('/painel-cidadao/')) {
+        // Verifica se está na raiz (index.html)
+        if (currentPath === '/' || currentPath === '/index.html' || currentPath.endsWith('/index.html') && !currentPath.includes('/modulos/')) {
+          // Está na raiz do projeto
+          loginPath = 'modulos/login/login.html';
+          escolherTipoPath = 'modulos/cadastro/escolher-tipo.html';
+        } else if (currentPath.includes('/painel-cidadao/')) {
           if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
             // Subpasta: comunidade, dashboard, etc
             loginPath = '../../login/login.html';
-            cadastroPath = '../../cadastro/cadastro-cidadao.html';
+            escolherTipoPath = '../../cadastro/escolher-tipo.html';
           } else {
             // Pasta principal: painel-cidadao/index.html
             loginPath = '../login/login.html';
-            cadastroPath = '../cadastro/cadastro-cidadao.html';
+            escolherTipoPath = '../cadastro/escolher-tipo.html';
           }
         } else {
-          loginPath = '../modulos/login/login.html';
-          cadastroPath = '../modulos/cadastro/cadastro-cidadao.html';
+          loginPath = 'modulos/login/login.html';
+          escolherTipoPath = 'modulos/cadastro/escolher-tipo.html';
         }
         
         menu.innerHTML = `
           <li><a class="dropdown-item" href="${loginPath}"><i class="fa-solid fa-sign-in-alt me-2"></i>Entrar</a></li>
-          <li><a class="dropdown-item" href="${cadastroPath}"><i class="fa-solid fa-user-plus me-2"></i>Registrar-se</a></li>
+          <li><a class="dropdown-item" href="${escolherTipoPath}"><i class="fa-solid fa-user-plus me-2"></i>Registrar-se</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#" id="logout-link-guest"><i class="fa-solid fa-sign-out-alt me-2"></i>Sair</a></li>
         `;
@@ -295,7 +306,13 @@
         let meuPerfilPath = '';
         
         // Calcula caminhos baseado na localização atual
-        if (currentPath.includes('/painel-cidadao/')) {
+        // Verifica se está na raiz (index.html)
+        if (currentPath === '/' || currentPath === '/index.html' || (currentPath.endsWith('/index.html') && !currentPath.includes('/modulos/'))) {
+          // Está na raiz do projeto
+          loginPath = 'modulos/login/login.html';
+          painelUsuarioPath = 'modulos/painel-cidadao/painel-de-usuario/index.html';
+          meuPerfilPath = 'modulos/painel-cidadao/meu-perfil/index.html';
+        } else if (currentPath.includes('/painel-cidadao/')) {
           // Está dentro de /modulos/painel-cidadao/
           if (currentPath.includes('/meu-perfil/')) {
             // Está em meu-perfil
@@ -401,30 +418,37 @@
     let meuPerfilPath = '';
     
     // Calcula caminhos baseado na localização atual
-    if (currentPath.includes('/painel-cidadao/')) {
+    // Verifica se está na raiz (index.html)
+    if (currentPath === '/' || currentPath === '/index.html' || (currentPath.endsWith('/index.html') && !currentPath.includes('/modulos/'))) {
+      // Está na raiz do projeto
+      loginPath = 'modulos/login/login.html';
+      escolherTipoPath = 'modulos/cadastro/escolher-tipo.html';
+      painelUsuarioPath = 'modulos/painel-cidadao/painel-de-usuario/index.html';
+      meuPerfilPath = 'modulos/painel-cidadao/meu-perfil/index.html';
+    } else if (currentPath.includes('/painel-cidadao/')) {
       if (currentPath.match(/\/painel-cidadao\/[^\/]+\//)) {
         // Subpasta: comunidade, dashboard, etc
         loginPath = '../../login/login.html';
-        cadastroPath = '../../cadastro/cadastro-cidadao.html';
+        escolherTipoPath = '../../cadastro/escolher-tipo.html';
         painelUsuarioPath = '../painel-de-usuario/index.html';
         meuPerfilPath = '../meu-perfil/index.html';
       } else {
         // Pasta principal: painel-cidadao/index.html
         loginPath = '../login/login.html';
-        cadastroPath = '../cadastro/cadastro-cidadao.html';
+        escolherTipoPath = '../cadastro/escolher-tipo.html';
         painelUsuarioPath = 'painel-de-usuario/index.html';
         meuPerfilPath = 'meu-perfil/index.html';
       }
     } else if (currentPath.includes('/guia/')) {
       loginPath = '../login/login.html';
-      cadastroPath = '../cadastro/cadastro-cidadao.html';
+      escolherTipoPath = '../cadastro/escolher-tipo.html';
       painelUsuarioPath = '../painel-cidadao/painel-de-usuario/index.html';
       meuPerfilPath = '../painel-cidadao/meu-perfil/index.html';
     } else {
-      loginPath = '../login/login.html';
-      cadastroPath = '../cadastro/cadastro-cidadao.html';
-      painelUsuarioPath = '../painel-cidadao/painel-de-usuario/index.html';
-      meuPerfilPath = '../painel-cidadao/meu-perfil/index.html';
+      loginPath = 'modulos/login/login.html';
+      escolherTipoPath = 'modulos/cadastro/escolher-tipo.html';
+      painelUsuarioPath = 'modulos/painel-cidadao/painel-de-usuario/index.html';
+      meuPerfilPath = 'modulos/painel-cidadao/meu-perfil/index.html';
     }
     
     if (!user || !user.id) {
@@ -434,7 +458,7 @@
           <i class="fa-solid fa-sign-in-alt"></i>
           <span>Entrar</span>
         </a>
-        <a href="${cadastroPath}" class="sidebar-link">
+        <a href="${escolherTipoPath}" class="sidebar-link">
           <i class="fa-solid fa-user-plus"></i>
           <span>Registrar-se</span>
         </a>
