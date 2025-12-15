@@ -13,10 +13,8 @@
   // 2) Bases e rotas candidatas
   const bases = [
     window.FP_API_BASE || "", // permite override: window.FP_API_BASE="http://localhost:3333"
-    "http://localhost:3000/api",
-    "http://127.0.0.1:3000/api",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    `${window.location.origin}/api`,
+    `${window.location.origin}`
   ].filter(Boolean);
 
   const collections = ["/comunidade", "/posts"]; // com routes.json / sem routes.json

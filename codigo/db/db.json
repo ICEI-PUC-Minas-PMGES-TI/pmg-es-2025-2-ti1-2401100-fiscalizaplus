@@ -3796,6 +3796,39 @@
       "servidorResponsavelId": null,
       "contatoCidadao": "contatoitalocnr@gmail.com",
       "recebeNotificacoes": true
+    },
+    {
+      "titulo": "Buraco na rua",
+      "tipoProblema": "infraestrutura",
+      "descricaoCompleta": "Tem um buraco na rua",
+      "informacoesAdicionaisCidadao": "",
+      "codigoOcorrencia": "OCOR-0128",
+      "cidadaoId": "6cf7",
+      "endereco": {
+        "rua": "Rua Natividade",
+        "numero": "",
+        "bairro": "Estrela do Oriente",
+        "cidade": "Belo Horizonte",
+        "estado": "Minas Gerais",
+        "cep": "30580-250",
+        "latitude": -19.964007820277086,
+        "longitude": -43.98698074427943
+      },
+      "imagens": [],
+      "prioridadeCidadao": "media",
+      "urgenciaCidadao": "media",
+      "impactoComunidade": "medio",
+      "dataRegistro": "2025-12-15T01:22:07.213Z",
+      "autorCidadao": "Italo Eduardo Carneiro da Silva",
+      "isAnonimo": false,
+      "statusAtual": "Pendente",
+      "dataUltimaAtualizacaoStatus": "2025-12-15T01:22:07.213Z",
+      "prioridadeInterna": null,
+      "observacoesInternasServidor": "",
+      "servidorResponsavelId": null,
+      "contatoCidadao": "contatoitalocnr@gmail.com",
+      "recebeNotificacoes": true,
+      "id": "zajSRTT"
     }
   ],
   "admin": {

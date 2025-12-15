@@ -15,7 +15,7 @@ let addressDetails = {
 };
 
 // --- CONFIGURAÇÃO DA API ---
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = window.location.origin;
 const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
 const CIDADAOS_ENDPOINT = `${API_BASE_URL}/cidadaos`;
 const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';

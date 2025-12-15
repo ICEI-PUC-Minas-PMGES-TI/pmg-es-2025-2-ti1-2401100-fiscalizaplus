@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/denuncias";
+const API_URL = `${window.location.origin}/denuncias`;
 
 // Função para obter parâmetros da URL
 function getUrlParameter(name) {
@@ -67,7 +67,7 @@ async function carregarDenuncia(id) {
                     
                     const img = document.createElement("img");
                     // Se a URL não começar com http, adicionar o caminho base
-                    img.src = url.startsWith('http') ? url : `http://localhost:3000${url}`;
+                    img.src = url.startsWith('http') ? url : `${window.location.origin}${url}`;
                     img.alt = `Imagem ${index + 1} da denúncia`;
                     img.className = "img-thumbnail";
                     img.style.cursor = "pointer";

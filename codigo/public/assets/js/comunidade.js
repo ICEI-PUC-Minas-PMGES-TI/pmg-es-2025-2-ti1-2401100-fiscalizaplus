@@ -1,5 +1,5 @@
 // codigo/public/assets/js/comunidade.js
-const API_URL = "http://localhost:3000/comunidade";
+const API_URL = `${window.location.origin}/comunidade`;
 
 let posts = [];
 let currentCategory = "todas";
@@ -80,7 +80,7 @@ async function loadPosts() {
     cardsEl.innerHTML = `
       <p class="mt-3 text-danger">
         Erro ao carregar discussões. Verifique se o <code>json-server</code>
-        está rodando em <code>http://localhost:3000</code>.
+        está rodando corretamente.
       </p>
     `;
     alert("Não consegui falar com o servidor. Verifique se o json-server está rodando.");

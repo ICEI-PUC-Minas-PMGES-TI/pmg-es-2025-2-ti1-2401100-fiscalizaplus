@@ -3,7 +3,7 @@
   const MAP_ID = 'occurrence-map-canvas';
 
   // Configuração do JSON Server (igual ao mapa_ocorrencias.js)
-  const API_BASE_URL = 'http://localhost:3000';
+  const API_BASE_URL = window.location.origin;
   const DENUNCIAS_ENDPOINT = `${API_BASE_URL}/denuncias`;
 
   let map;

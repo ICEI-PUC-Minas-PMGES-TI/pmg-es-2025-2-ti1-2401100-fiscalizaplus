@@ -14,7 +14,7 @@
 const LOGIN_URL = "/index.html";
 let RETURN_URL = "/index.html";
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = window.location.origin;
 
 const API_URL = `${API_BASE}/cidadaos`;
 

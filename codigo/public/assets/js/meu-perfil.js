@@ -2,7 +2,7 @@
 (function() {
   'use strict';
   
-  const API_BASE = 'http://localhost:3000';
+  const API_BASE = window.location.origin;
   const CIDADAOS_ENDPOINT = `${API_BASE}/cidadaos`;
   
   // Dados das cidades por estado

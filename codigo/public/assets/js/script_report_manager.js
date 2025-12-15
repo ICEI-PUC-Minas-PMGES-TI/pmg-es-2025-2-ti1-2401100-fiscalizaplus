@@ -1,4 +1,4 @@
-const URL_BASE = "http://localhost:3000/denuncias";
+const URL_BASE = `${window.location.origin}/denuncias`;
 
 document.addEventListener('DOMContentLoaded', () => {
 

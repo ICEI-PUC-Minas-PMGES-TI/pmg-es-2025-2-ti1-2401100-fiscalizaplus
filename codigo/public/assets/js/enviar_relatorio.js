@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/denuncias";
+const API_URL = `${window.location.origin}/denuncias`;
 
 // Função para obter parâmetros da URL
 function getUrlParameter(name) {
@@ -59,7 +59,7 @@ async function carregarDenuncia(id) {
                     imgContainer.className = "imagem-item";
                     
                     const img = document.createElement("img");
-                    img.src = url.startsWith('http') ? url : `http://localhost:3000${url}`;
+                    img.src = url.startsWith('http') ? url : `${window.location.origin}${url}`;
                     img.alt = `Imagem ${index + 1} da denúncia`;
                     img.className = "img-thumbnail";
                     img.style.cursor = "pointer";
@@ -264,7 +264,7 @@ function gerarRelatorioHTML(denuncia, mensagemPersonalizada) {
                         <h2>Imagens</h2>
                         <div class="imagens">
                             ${denuncia.imagens.map(img => `
-                                <img src="${img.startsWith('http') ? img : `http://localhost:3000${img}`}" alt="Imagem da denúncia">
+                                <img src="${img.startsWith('http') ? img : `${window.location.origin}${img}`}" alt="Imagem da denúncia">
                             `).join('')}
                         </div>
                     </div>

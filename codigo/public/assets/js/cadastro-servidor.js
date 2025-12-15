@@ -9,7 +9,7 @@ let form, estadoSelect, cidadeSelect;
 const URL_CADASTRO = '../../modulos/cadastro/cadastro-servidor.html';
 const URL_TOKEN = '../../modulos/cadastro/token-servidor.html';
 const URL_LOGIN = '../login/login.html';
-const API_BASE = 'http://localhost:3000';
+const API_BASE = window.location.origin;
 
 // Mapeamento de órgãos do formulário para nomes no banco
 const orgaoNomeMapping = {
