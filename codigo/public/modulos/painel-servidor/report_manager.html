@@ -217,6 +217,15 @@
         width: 100%;
         padding: 10px;
         font-size: 0.9rem;
+        touch-action: manipulation;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .denuncia-card-mobile .card-actions {
+        position: relative;
+        z-index: 1;
       }
     }
 
@@ -399,17 +408,30 @@
 
     // Criar cards mobile
     function criarCardsMobileDenuncias() {
-      if (window.innerWidth > 767) return;
+      if (window.innerWidth > 767) {
+        // Se voltou para desktop, mostrar tabela e remover cards
+        const table = document.querySelector('.table');
+        const cardsExistentes = document.querySelectorAll('.denuncia-card-mobile');
+        if (table) table.style.display = '';
+        cardsExistentes.forEach(card => card.remove());
+        return;
+      }
       
       const tbody = document.querySelector('.table tbody');
       const table = document.querySelector('.table');
       const tableResponsive = document.querySelector('.table-responsive');
       
-      if (!tbody || !table) return;
+      if (!tbody || !table || !tableResponsive) return;
       
       // Limpar cards existentes
       const cardsExistentes = document.querySelectorAll('.denuncia-card-mobile');
       cardsExistentes.forEach(card => card.remove());
+      
+      // Se não há linhas na tabela, não criar cards
+      if (tbody.children.length === 0) {
+        table.style.display = '';
+        return;
+      }
       
       // Criar cards
       Array.from(tbody.children).forEach(tr => {
@@ -423,12 +445,26 @@
         const tipo = cells[1]?.textContent.trim() || '';
         const status = cells[2]?.textContent.trim() || '';
         const data = cells[3]?.textContent.trim() || '';
-        const acoes = cells[4]?.innerHTML || '';
+        
+        // Extrair o botão e seu data-id corretamente
+        const acoesCell = cells[4];
+        const button = acoesCell?.querySelector('.btn-visualizar');
+        let buttonHTML = '';
+        
+        if (button) {
+          // Preservar o data-id do botão
+          const denunciaId = button.getAttribute('data-id') || '';
+          const buttonClasses = button.className || '';
+          const buttonTitle = button.getAttribute('title') || 'Visualizar denúncia';
+          const iconHTML = button.querySelector('i')?.outerHTML || '<i class="bi bi-eye me-1"></i>';
+          buttonHTML = `<button class="${buttonClasses} btn-visualizar" data-id="${denunciaId}" title="${buttonTitle}">${iconHTML} Visualizar</button>`;
+        }
         
         const statusClass = {
           'Pendente': 'status-Pendente',
           'Em Andamento': 'status-Em-Andamento',
-          'Concluido': 'status-Concluido'
+          'Concluido': 'status-Concluido',
+          'Concluído': 'status-Concluido'
         }[status] || 'status-Pendente';
         
         card.innerHTML = `
@@ -443,7 +479,7 @@
             <i class="bi bi-calendar me-1"></i>${data}
           </div>
           <div class="card-actions">
-            ${acoes}
+            ${buttonHTML}
           </div>
         `;
         
@@ -454,11 +490,15 @@
       table.style.display = 'none';
     }
 
-    // Observar mudanças
-    window.addEventListener('resize', criarCardsMobileDenuncias);
+    // Observar mudanças de tamanho da janela
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(criarCardsMobileDenuncias, 250);
+    });
     
-    // Executar após carregar dados
-    setTimeout(criarCardsMobileDenuncias, 1000);
+    // Executar após carregar dados (com delay maior para garantir que a tabela foi renderizada)
+    setTimeout(criarCardsMobileDenuncias, 1500);
   </script>
   <script src="../../assets/js/script_report_manager.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -178,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             tableBody.appendChild(tr);
         });
+        
+        // Recriar cards móveis após renderizar a tabela
+        if (typeof criarCardsMobileDenuncias === 'function') {
+            setTimeout(() => criarCardsMobileDenuncias(), 100);
+        }
     }
 
     // --- Cria e renderiza os controles de paginação ---
@@ -253,10 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Botão Visualizar
-        tableBody.addEventListener('click', (e) => {
+        // Botão Visualizar - usando event delegation no cardElement para funcionar tanto na tabela quanto nos cards móveis
+        cardElement.addEventListener('click', (e) => {
             const button = e.target.closest('.btn-visualizar');
             if (button) {
+                e.preventDefault();
+                e.stopPropagation();
                 const denunciaId = button.dataset.id;
                 visualizarDenuncia(denunciaId);
             }
@@ -270,7 +277,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         // Abre a página de visualização em uma nova aba/janela
-        window.open(`denuncias_servidor.html?id=${id}`, '_blank');
+        // Em dispositivos móveis, tenta abrir na mesma janela se popup for bloqueado
+        try {
+            const newWindow = window.open(`denuncias_servidor.html?id=${id}`, '_blank');
+            // Se popup foi bloqueado, abre na mesma janela
+            if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                window.location.href = `denuncias_servidor.html?id=${id}`;
+            }
+        } catch (e) {
+            // Fallback: abre na mesma janela
+            window.location.href = `denuncias_servidor.html?id=${id}`;
+        }
     }
 
     // --- Helper: Retorna uma classe de cor do Bootstrap com base no status ---
