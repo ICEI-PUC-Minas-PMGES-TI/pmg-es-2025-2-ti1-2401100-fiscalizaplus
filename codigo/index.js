@@ -19,7 +19,9 @@ const fs = require('fs')
 const multer = require('multer')
 
 const server = jsonServer.create()
-const router = jsonServer.router('db/db.json')
+// Usa caminho absoluto para garantir que funcione no Render
+const dbPath = path.join(__dirname, 'db', 'db.json')
+const router = jsonServer.router(dbPath)
   
 // Para permitir que os dados sejam alterados, altere a linha abaixo
 // colocando o atributo readOnly como false.

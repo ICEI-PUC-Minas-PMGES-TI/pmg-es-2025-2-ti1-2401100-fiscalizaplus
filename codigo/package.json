@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "json-server": "json-server --watch db/db.json --port $PORT"
   },
   "keywords": [
     "fiscalização",

@@ -2,6 +2,7 @@ services:
   - type: web
     name: fiscalizaplus
     env: node
+    rootDir: codigo
     buildCommand: npm install
     startCommand: npm start
     envVars:
