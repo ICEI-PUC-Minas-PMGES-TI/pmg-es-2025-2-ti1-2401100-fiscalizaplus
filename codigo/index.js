@@ -23,8 +23,25 @@ const router = jsonServer.router('db/db.json')
   
 // Para permitir que os dados sejam alterados, altere a linha abaixo
 // colocando o atributo readOnly como false.
-const middlewares = jsonServer.defaults({ static: 'public', noCors: true })
+// Configuração de CORS para produção (Render)
+const middlewares = jsonServer.defaults({ 
+  static: 'public', 
+  noCors: process.env.NODE_ENV === 'production' ? false : true 
+})
 server.use(middlewares)
+
+// Adiciona headers CORS manualmente para produção
+if (process.env.NODE_ENV === 'production') {
+  server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200)
+    }
+    next()
+  })
+}
 
 // Configuração de upload local (sem validações avançadas)
 const UPLOAD_DIR = path.join(__dirname, 'public', 'uploads')
@@ -55,6 +72,9 @@ server.post('/upload', upload.array('imagens', 5), (req, res) => {
 
 server.use(router)
 
-server.listen(3000, () => {
-  console.log(`JSON Server is running em http://localhost:3000`)
+// Porta configurável para produção (Render) ou desenvolvimento
+const PORT = process.env.PORT || 3000
+
+server.listen(PORT, () => {
+  console.log(`JSON Server is running em http://localhost:${PORT}`)
 })

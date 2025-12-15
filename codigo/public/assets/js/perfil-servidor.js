@@ -3,7 +3,8 @@
  */
 
 (function() {
-  const API_BASE = 'http://localhost:3000';
+  // Usa URL dinâmica baseada no host atual (funciona em localhost e produção)
+  const API_BASE = window.location.origin;
   const SERVIDORES_ENDPOINT = `${API_BASE}/servidores`;
 
   /**

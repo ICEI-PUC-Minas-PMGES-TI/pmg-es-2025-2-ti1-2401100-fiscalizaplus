@@ -1,4 +1,5 @@
-const URL_BASE = "http://localhost:3000/denuncias";
+// Usa URL dinâmica baseada no host atual (funciona em localhost e produção)
+const URL_BASE = `${window.location.origin}/denuncias`;
 
 document.addEventListener('DOMContentLoaded', () => {
 
