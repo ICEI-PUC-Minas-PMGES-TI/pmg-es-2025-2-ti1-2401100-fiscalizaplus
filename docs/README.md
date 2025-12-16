@@ -4,6 +4,7 @@ Informações básicas do projeto.
 
 * **Projeto:** [FizcalizaPlus]
 * **Repositório GitHub:** [https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-2-ti1-2401100-fiscalizaplus]
+* **Link de acesso FiscalizaPlus:** [https://fiscalizaplus.onrender.com/index.html]
 * **Membros da equipe:**
 
   * [Ítalo Eduardo Carneiro da Silva](https://github.com/italocnr)
@@ -269,6 +270,8 @@ Relação de ferramentas empregadas pelo grupo durante o projeto.
 | **npm (Node Package Manager)** | Gerenciador de pacotes utilizado para instalar dependências do projeto (json-server, multer) | Incluído com Node.js |
 | **Git** | Sistema de controle de versão distribuído utilizado para gerenciar o código-fonte | [https://git-scm.com/](https://git-scm.com/) |
 | **GitHub** | Plataforma de hospedagem de código e controle de versão baseada em Git | [https://github.com/](https://github.com/) |
+| **Render** | Plataforma de hospedagem de código  | [https://render.com/](https://render.com/) |
+
 
 ### Ferramentas de Design e Prototipação
 
